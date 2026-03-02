@@ -663,7 +663,7 @@ extends Module {
                                 slotxxx = InventoryUtil.findItemInventorySlot(class_1802.field_8803);
                                 InventoryUtil.inventorySwap(slotxxx, Bot.mc.field_1724.method_31548().field_7545);
                                 Alien.ROTATION.snapAt(Alien.ROTATION.getLastYaw(), 89.0f);
-                                Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$22(int ), (I)Lnet/minecraft/class_2596;)());
+                                Bot.sendSequencedPacket(id -> new class_2886(class_1268.field_5808, id, Alien.ROTATION.getLastYaw(), Alien.ROTATION.getLastPitch()));
                                 InventoryUtil.inventorySwap(slotxxx, Bot.mc.field_1724.method_31548().field_7545);
                                 return;
                             }
@@ -982,7 +982,8 @@ extends Module {
                         if (Bot.mc.field_1724.field_7512 instanceof class_1714 && Bot.mc.field_1755 != null) {
                             Bot.mc.field_1755.method_25419();
                         }
-                        if ((sands = InventoryUtil.getItemCount(class_1802.field_8858)) < 1728) ** GOTO lbl571
+                        lbl571: {
+                        if ((sands = InventoryUtil.getItemCount(class_1802.field_8858)) < 1728) break lbl571;
                         for (slot1 = 9; slot1 < 36; ++slot1) {
                             stack = Bot.mc.field_1724.method_31548().method_5438(slot1);
                             if (stack.method_7960() || !((turtlex = stack.method_7909()) instanceof class_1747) || (blockItem = (class_1747)turtlex).method_7711() != sandBlock || stack.method_7947() >= stack.method_7914()) continue;
@@ -1057,9 +1058,8 @@ extends Module {
                         } else {
                             BlockUtil.clickBlock((class_2338)shulker, BlockUtil.getClickSide((class_2338)shulker), this.rotate.getValue());
                             break;
-lbl571:
-                            // 1 sources
-
+                        }
+                        }
                             if (this.storageSand) {
                                 shulker = Bot.mc.field_1724.field_7512;
                                 if (shulker instanceof class_1733) {
@@ -1137,16 +1137,15 @@ lbl571:
                                         if (sandBlock != Bot.mc.field_1687.method_8320(sand).method_26204() || (side = BlockUtil.getClickSideStrict(sand)) == null) continue;
                                         PlaceRender.INSTANCE.create(sand);
                                         Alien.ROTATION.snapAt(sand.method_46558());
-                                        Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$23(net.minecraft.class_2338 net.minecraft.class_2350 int ), (I)Lnet/minecraft/class_2596;)((class_2338)sand, (class_2350)side));
-                                        Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$24(net.minecraft.class_2338 net.minecraft.class_2350 int ), (I)Lnet/minecraft/class_2596;)((class_2338)sand, (class_2350)side));
-                                        Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$25(net.minecraft.class_2338 net.minecraft.class_2350 int ), (I)Lnet/minecraft/class_2596;)((class_2338)sand, (class_2350)side));
+                                        Bot.sendSequencedPacket(id -> new class_2846(class_2846.class_2847.field_12973, sand, side, id));
+                                        Bot.sendSequencedPacket(id -> new class_2846(class_2846.class_2847.field_12968, sand, side, id));
+                                        Bot.sendSequencedPacket(id -> new class_2846(class_2846.class_2847.field_12973, sand, side, id));
                                         Alien.ROTATION.snapBack();
                                         if (!((double)(++b) >= this.breaks.getValue())) continue;
                                         return;
                                     }
                                 }
                             }
-                        }
                         break block197;
                     }
                     case 8: {
@@ -1218,7 +1217,7 @@ lbl571:
                 }
                 Bot.mc.field_1690.field_1904.method_23481(true);
                 this.endEat = true;
-                Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$26(int ), (I)Lnet/minecraft/class_2596;)());
+                Bot.sendSequencedPacket(id -> new class_2886(class_1268.field_5808, id, Alien.ROTATION.getLastYaw(), Alien.ROTATION.getLastPitch()));
             }
             BaritoneUtil.cancelEverything();
         }

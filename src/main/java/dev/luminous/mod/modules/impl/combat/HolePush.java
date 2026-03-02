@@ -286,7 +286,7 @@ extends Module {
                     }
                 }
             } else {
-                void var9_24;
+                int var9_24 = 0;
                 class_2350 powerFacing = null;
                 class_2350[] side = class_2350.values();
                 old = side.length;

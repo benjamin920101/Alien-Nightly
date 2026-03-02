@@ -318,7 +318,7 @@ extends Module {
      * WARNING - void declaration
      */
     private boolean fakeMove() {
-        void var6_11;
+        int var6_11 = 0;
         double[] offsets = new double[]{1.0, 0.0, -1.0};
         ArrayList<BlockPosX> offList = new ArrayList<BlockPosX>();
         class_2338 playerPos = Burrow.mc.field_1724.method_24515();
