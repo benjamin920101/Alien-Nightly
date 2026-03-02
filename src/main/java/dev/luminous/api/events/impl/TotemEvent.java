@@ -1,17 +1,27 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1657
+ */
 package dev.luminous.api.events.impl;
 
-import dev.luminous.api.events.Event;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.class_1657;
 
-public class TotemEvent extends Event {
-    private final PlayerEntity player;
+public class TotemEvent {
+    private static final TotemEvent INSTANCE = new TotemEvent();
+    private class_1657 player;
 
-    public TotemEvent(PlayerEntity player) {
-        super(Stage.Post);
-        this.player = player;
+    private TotemEvent() {
     }
 
-    public PlayerEntity getPlayer() {
+    public static TotemEvent get(class_1657 player) {
+        TotemEvent.INSTANCE.player = player;
+        return INSTANCE;
+    }
+
+    public class_1657 getPlayer() {
         return this.player;
     }
 }
+

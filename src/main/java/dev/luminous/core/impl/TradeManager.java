@@ -1,60 +1,86 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1802
+ *  org.apache.commons.io.IOUtils
+ */
 package dev.luminous.core.impl;
 
-import dev.luminous.Alien;
 import dev.luminous.core.Manager;
-import net.minecraft.item.Items;
-import org.apache.commons.io.IOUtils;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.class_1802;
+import org.apache.commons.io.IOUtils;
 
-public class TradeManager extends Manager {
+public class TradeManager
+extends Manager {
+    private final ArrayList<String> list = new ArrayList();
+
     public TradeManager() {
-        read();
+        this.read();
     }
-    public final ArrayList<String> list = new ArrayList<>();
+
+    public ArrayList<String> getList() {
+        return this.list;
+    }
+
+    public void clear() {
+        this.list.clear();
+    }
+
     public boolean inWhitelist(String name) {
-        return list.contains(name);
+        return this.list.contains(name) || this.list.contains(name.replace("block.minecraft.", "").replace("item.minecraft.", ""));
     }
+
     public void remove(String name) {
-        list.remove(name);
+        name = name.replace("block.minecraft.", "").replace("item.minecraft.", "");
+        this.list.remove(name);
     }
+
     public void add(String name) {
-        if (!list.contains(name)) {
-            list.add(name);
+        if (!this.list.contains(name = name.replace("block.minecraft.", "").replace("item.minecraft.", ""))) {
+            this.list.add(name);
         }
     }
 
     public void read() {
         try {
-            File friendFile = getFile("trades.txt");
+            File friendFile = TradeManager.getFile("trades.txt");
             if (!friendFile.exists()) {
-                add(Items.ENCHANTED_BOOK.getTranslationKey());
-                add(Items.DIAMOND_BLOCK.getTranslationKey());
+                this.add(class_1802.field_8598.method_7876());
+                this.add(class_1802.field_8603.method_7876());
                 return;
             }
-            List<String> list = IOUtils.readLines(new FileInputStream(friendFile), StandardCharsets.UTF_8);
-            
-            for (String s : list) {
-                add(s);
+            for (String s : IOUtils.readLines((InputStream)new FileInputStream(friendFile), (Charset)StandardCharsets.UTF_8)) {
+                this.add(s);
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        }
+        catch (Exception var5) {
+            var5.printStackTrace();
         }
     }
-    
+
     public void save() {
         try {
-            File friendFile = getFile("trades.txt");
-            PrintWriter printwriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(friendFile), StandardCharsets.UTF_8));
-            for (String str : list) {
+            File friendFile = TradeManager.getFile("trades.txt");
+            PrintWriter printwriter = new PrintWriter(new OutputStreamWriter((OutputStream)new FileOutputStream(friendFile), StandardCharsets.UTF_8));
+            for (String str : this.list) {
                 printwriter.println(str);
             }
             printwriter.close();
-        } catch (Exception exception) {
-            System.out.println("[" + Alien.NAME + "] Failed to save tradess");
+        }
+        catch (Exception var5) {
+            var5.printStackTrace();
         }
     }
 }
+

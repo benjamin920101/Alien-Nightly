@@ -1,22 +1,31 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1959
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
+ */
 package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.impl.render.Ambience;
-import net.minecraft.world.biome.Biome;
+import java.awt.Color;
+import net.minecraft.class_1959;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.awt.*;
-
-@Mixin(Biome.class)
+@Mixin(value={class_1959.class})
 public class MixinBiome {
-
-    @Inject(method = "getFogColor", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method={"method_24376"}, at={@At(value="HEAD")}, cancellable=true)
     private void hookGetFogColor(CallbackInfoReturnable<Integer> cir) {
         if (Ambience.INSTANCE.isOn() && Ambience.INSTANCE.dimensionColor.booleanValue) {
             Color color = Ambience.INSTANCE.dimensionColor.getValue();
-            cir.setReturnValue(color.getRGB());
+            cir.setReturnValue((Object)color.getRGB());
         }
     }
 }
+

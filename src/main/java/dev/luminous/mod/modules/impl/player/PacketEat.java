@@ -1,34 +1,52 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2596
+ *  net.minecraft.class_2846
+ *  net.minecraft.class_2846$class_2847
+ *  net.minecraft.class_2886
+ *  net.minecraft.class_9334
+ */
 package dev.luminous.mod.modules.impl.player;
 
-import dev.luminous.api.events.eventbus.EventHandler;
+import dev.luminous.Alien;
+import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.PacketEvent;
+import dev.luminous.api.events.impl.UpdateEvent;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
-import net.minecraft.util.Hand;
+import net.minecraft.class_2596;
+import net.minecraft.class_2846;
+import net.minecraft.class_2886;
+import net.minecraft.class_9334;
 
-public class PacketEat extends Module {
-	public static PacketEat INSTANCE;
-	private final BooleanSetting deSync =
-			add(new BooleanSetting("DeSync", false));
-	public PacketEat() {
-		super("PacketEat", Category.Player);
-		setChinese("发包进食");
-		INSTANCE = this;
-	}
+public class PacketEat
+extends Module {
+    public static PacketEat INSTANCE;
+    private final BooleanSetting deSync = this.add(new BooleanSetting("DeSync", false));
+    private final BooleanSetting noRelease = this.add(new BooleanSetting("NoRelease", true));
 
-    @Override
-    public void onUpdate() {
-		if (deSync.getValue() && mc.player.isUsingItem() && mc.player.getActiveItem().getItem().isFood()){
-			Module.sendSequencedPacket(id -> new PlayerInteractItemC2SPacket(Hand.MAIN_HAND, id));
-		}
-	}
+    public PacketEat() {
+        super("PacketEat", Module.Category.Player);
+        this.setChinese("\u53d1\u5305\u8fdb\u98df");
+        INSTANCE = this;
+    }
 
-	@EventHandler
-	public void onPacket(PacketEvent.Send event) {
-		if (event.getPacket() instanceof PlayerActionC2SPacket packet && packet.getAction() == PlayerActionC2SPacket.Action.RELEASE_USE_ITEM && mc.player.getActiveItem().getItem().isFood()) {
-			event.cancel();
-		}
-	}
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        if (this.deSync.getValue() && PacketEat.mc.field_1724.method_6115() && PacketEat.mc.field_1724.method_6030().method_7909().method_57347().method_57832(class_9334.field_50075)) {
+            Module.sendSequencedPacket(id -> new class_2886(PacketEat.mc.field_1724.method_6058(), id, Alien.ROTATION.getLastYaw(), Alien.ROTATION.getLastPitch()));
+        }
+    }
+
+    @EventListener
+    public void onPacket(PacketEvent.Send event) {
+        class_2846 packet;
+        class_2596<?> class_25962;
+        if (this.noRelease.getValue() && (class_25962 = event.getPacket()) instanceof class_2846 && (packet = (class_2846)class_25962).method_12363() == class_2846.class_2847.field_12974 && PacketEat.mc.field_1724.method_6030().method_7909().method_57347().method_57832(class_9334.field_50075)) {
+            event.cancel();
+        }
+    }
 }
+

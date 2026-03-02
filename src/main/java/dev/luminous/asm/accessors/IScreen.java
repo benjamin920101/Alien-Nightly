@@ -1,14 +1,23 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_4068
+ *  net.minecraft.class_437
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.gen.Accessor
+ */
 package dev.luminous.asm.accessors;
 
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.screen.Screen;
+import java.util.List;
+import net.minecraft.class_4068;
+import net.minecraft.class_437;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import java.util.List;
-
-@Mixin(Screen.class)
+@Mixin(value={class_437.class})
 public interface IScreen {
-    @Accessor("drawables")
-    List<Drawable> getDrawables();
+    @Accessor(value="field_33816")
+    public List<class_4068> getDrawables();
 }
+

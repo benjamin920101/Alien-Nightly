@@ -1,266 +1,279 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1297
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_1770
+ *  net.minecraft.class_1799
+ *  net.minecraft.class_2246
+ *  net.minecraft.class_2292
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2350
+ *  net.minecraft.class_238
+ *  net.minecraft.class_2382
+ *  net.minecraft.class_243
+ *  net.minecraft.class_3532
+ */
 package dev.luminous.mod.modules.impl.combat;
 
 import dev.luminous.Alien;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.UpdateEvent;
 import dev.luminous.api.utils.combat.CombatUtil;
-import dev.luminous.api.utils.entity.EntityUtil;
-import dev.luminous.api.utils.entity.InventoryUtil;
+import dev.luminous.api.utils.math.PredictUtil;
 import dev.luminous.api.utils.math.Timer;
+import dev.luminous.api.utils.player.EntityUtil;
+import dev.luminous.api.utils.player.InventoryUtil;
+import dev.luminous.api.utils.world.BlockPosX;
 import dev.luminous.api.utils.world.BlockUtil;
 import dev.luminous.mod.modules.Module;
-import dev.luminous.mod.modules.impl.client.AntiCheat;
 import dev.luminous.mod.modules.impl.exploit.Blink;
-import dev.luminous.mod.modules.settings.Placement;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ConcretePowderBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-
 import java.util.ArrayList;
+import net.minecraft.class_1297;
+import net.minecraft.class_1657;
+import net.minecraft.class_1770;
+import net.minecraft.class_1799;
+import net.minecraft.class_2246;
+import net.minecraft.class_2292;
+import net.minecraft.class_2338;
+import net.minecraft.class_2350;
+import net.minecraft.class_238;
+import net.minecraft.class_2382;
+import net.minecraft.class_243;
+import net.minecraft.class_3532;
 
 public class AutoTrap
-        extends Module {
-    final Timer timer = new Timer();
-    public final SliderSetting delay =
-            add(new SliderSetting("Delay", 100, 0, 500).setSuffix("ms"));
-    private final SliderSetting placeRange =
-            add(new SliderSetting("PlaceRange", 4.0f, 1.0f, 6.0f).setSuffix("m"));
-    private final SliderSetting blocksPer = add(new SliderSetting("BlocksPer", 1, 1, 8));
-    private final BooleanSetting rotate =
-            add(new BooleanSetting("Rotate", true));
-    private final BooleanSetting autoDisable =
-            add(new BooleanSetting("AutoDisable", true));
-    private final SliderSetting range =
-            add(new SliderSetting("Range", 5.0f, 1.0f, 8.0f).setSuffix("m"));
-    private final EnumSetting<TargetMode> targetMod =
-            add(new EnumSetting<>("TargetMode", TargetMode.Single));
-    private final BooleanSetting checkMine =
-            add(new BooleanSetting("DetectMining", false));
-    private final BooleanSetting helper =
-            add(new BooleanSetting("Helper", true));
-    private final BooleanSetting inventory =
-            add(new BooleanSetting("InventorySwap", true));
-    private final BooleanSetting extend =
-            add(new BooleanSetting("Extend", true));
-    private final BooleanSetting antiStep =
-            add(new BooleanSetting("AntiStep", false));
-    private final BooleanSetting onlyBreak =
-            add(new BooleanSetting("OnlyBreak", false, () -> antiStep.getValue()));
-    private final BooleanSetting head =
-            add(new BooleanSetting("Head", true));
-    private final BooleanSetting headExtend =
-            add(new BooleanSetting("HeadExtend", true));
-
-    private final EnumSetting<Mode> headMode = add(new EnumSetting<>("BlockForHead", Mode.Anchor));
-    private final BooleanSetting chestUp =
-            add(new BooleanSetting("ChestUp", true));
-    private final BooleanSetting onlyBreaking =
-            add(new BooleanSetting("OnlyBreaking", false, () -> chestUp.getValue()));
-    private final BooleanSetting chest =
-            add(new BooleanSetting("Chest", true));
-    private final BooleanSetting onlyGround =
-            add(new BooleanSetting("OnlyGround", false, () -> chest.getValue()));
-    private final BooleanSetting legs =
-            add(new BooleanSetting("Legs", false));
-    private final BooleanSetting legAnchor =
-            add(new BooleanSetting("LegAnchor", true));
-    private final BooleanSetting down =
-            add(new BooleanSetting("Down", false));
-    private final BooleanSetting onlyHole =
-            add(new BooleanSetting("OnlyHole", false));
-    private final BooleanSetting breakCrystal =
-            add(new BooleanSetting("Break", true));
-    private final BooleanSetting usingPause = add(new BooleanSetting("UsingPause", true));
-    private final BooleanSetting selfGround = add(new BooleanSetting("SelfGround", true));
-    public PlayerEntity target;
+extends Module {
     public static AutoTrap INSTANCE;
+    public final SliderSetting delay = this.add(new SliderSetting("Delay", 100, 0, 500).setSuffix("ms"));
+    private final EnumSetting<TargetMode> targetMod = this.add(new EnumSetting<TargetMode>("TargetMode", TargetMode.Single));
+    private final EnumSetting<Mode> headMode = this.add(new EnumSetting<Mode>("BlockForHead", Mode.Anchor));
+    final ArrayList<class_2338> trapList = new ArrayList();
+    final ArrayList<class_2338> placeList = new ArrayList();
+    private final Timer timer = new Timer();
+    private final SliderSetting placeRange = this.add(new SliderSetting("PlaceRange", 4.0, 1.0, 6.0).setSuffix("m"));
+    private final SliderSetting blocksPer = this.add(new SliderSetting("BlocksPer", 1, 1, 8));
+    public final SliderSetting predictTicks = this.add(new SliderSetting("PredictTicks", 2.0, 0.0, 50.0, 1.0));
+    private final BooleanSetting rotate = this.add(new BooleanSetting("Rotate", true));
+    private final BooleanSetting autoDisable = this.add(new BooleanSetting("AutoDisable", true));
+    private final SliderSetting range = this.add(new SliderSetting("Range", 5.0, 1.0, 8.0).setSuffix("m"));
+    private final BooleanSetting checkMine = this.add(new BooleanSetting("DetectMining", false));
+    private final BooleanSetting helper = this.add(new BooleanSetting("Helper", true));
+    private final BooleanSetting inventory = this.add(new BooleanSetting("InventorySwap", true));
+    private final BooleanSetting onlyCrawling = this.add(new BooleanSetting("OnlyCrawling", false));
+    private final BooleanSetting checkElytra = this.add(new BooleanSetting("CheckElytra", false));
+    private final BooleanSetting extend = this.add(new BooleanSetting("Extend", true));
+    private final BooleanSetting antiStep = this.add(new BooleanSetting("AntiStep", false));
+    private final BooleanSetting onlyBreak = this.add(new BooleanSetting("OnlyBreak", false, this.antiStep::getValue));
+    private final BooleanSetting head = this.add(new BooleanSetting("Head", true));
+    private final BooleanSetting headExtend = this.add(new BooleanSetting("HeadExtend", true));
+    private final BooleanSetting chestUp = this.add(new BooleanSetting("ChestUp", true));
+    private final BooleanSetting onlyBreaking = this.add(new BooleanSetting("OnlyBreaking", false, this.chestUp::getValue));
+    private final BooleanSetting chest = this.add(new BooleanSetting("Chest", true));
+    private final BooleanSetting onlyGround = this.add(new BooleanSetting("OnlyGround", false, this.chest::getValue));
+    private final BooleanSetting ignoreCrawling = this.add(new BooleanSetting("IgnoreCrawling", false, this.chest::getValue));
+    private final BooleanSetting legs = this.add(new BooleanSetting("Legs", false));
+    private final BooleanSetting legAnchor = this.add(new BooleanSetting("LegAnchor", true));
+    private final BooleanSetting down = this.add(new BooleanSetting("Down", false));
+    private final BooleanSetting onlyHole = this.add(new BooleanSetting("OnlyHole", false));
+    private final BooleanSetting breakCrystal = this.add(new BooleanSetting("Break", true));
+    private final BooleanSetting usingPause = this.add(new BooleanSetting("UsingPause", true));
+    private final BooleanSetting selfGround = this.add(new BooleanSetting("SelfGround", true));
+    public class_1657 target;
+    int progress = 0;
 
     public AutoTrap() {
-        super("AutoTrap", Category.Combat);
-        setChinese("自动困住");
+        super("AutoTrap", Module.Category.Combat);
+        this.setChinese("\u81ea\u52a8\u56f0\u4f4f");
         INSTANCE = this;
     }
 
-    public enum TargetMode {
-        Single, Multi
-    }
-
-    int progress = 0;
-    private final ArrayList<BlockPos> trapList = new ArrayList<>();
-    private final ArrayList<BlockPos> placeList = new ArrayList<>();
-
-    @Override
-    public void onUpdate() {
-        trapList.clear();
-        placeList.clear();
-        progress = 0;
-        if (selfGround.getValue() && !mc.player.isOnGround()) {
-            target = null;
-            return;
-        }
-        if (Blink.INSTANCE.isOn() && Blink.INSTANCE.pauseModule.getValue()) return;
-        if (usingPause.getValue() && mc.player.isUsingItem()) {
-            target = null;
-            return;
-        }
-        if (!timer.passedMs((long) delay.getValue())) {
-            return;
-        }
-        if (targetMod.getValue() == TargetMode.Single) {
-            target = CombatUtil.getClosestEnemy(range.getValue());
-            if (target == null) {
-                if (autoDisable.getValue()) disable();
-                return;
-            }
-            trapTarget(target);
-        } else if (targetMod.getValue() == TargetMode.Multi) {
-            boolean found = false;
-            for (PlayerEntity player : CombatUtil.getEnemies(range.getValue())) {
-                found = true;
-                target = player;
-                trapTarget(target);
-            }
-            if (!found) {
-                if (autoDisable.getValue()) disable();
-                target = null;
-            }
-        }
-    }
-
-    private void trapTarget(PlayerEntity target) {
-        if (onlyHole.getValue() && !Alien.HOLE.isHole(EntityUtil.getEntityPos(target))) return;
-        doTrap(EntityUtil.getEntityPos(target, true));
-    }
-
-    private void doTrap(BlockPos pos) {
-        if (pos == null) return;
-        if (trapList.contains(pos)) return;
-        trapList.add(pos);
-        if (legs.getValue()) {
-            for (Direction i : Direction.values()) {
-                if (i == Direction.DOWN || i == Direction.UP) continue;
-                BlockPos offsetPos = pos.offset(i);
-                tryPlaceBlock(offsetPos, legAnchor.getValue(), false, false);
-                if (BlockUtil.getPlaceSide(offsetPos) == null && BlockUtil.clientCanPlace(offsetPos, breakCrystal.getValue()) && getHelper(offsetPos) != null)
-                    tryPlaceObsidian(getHelper(offsetPos));
-            }
-        }
-        if (headExtend.getValue()) {
-            for (int x : new int[]{1, 0, -1}) {
-                for (int z : new int[]{1, 0, -1}) {
-                    BlockPos offsetPos = pos.add(z, 0, x);
-                    if (checkEntity(new BlockPos(offsetPos))) tryPlaceBlock(offsetPos.up(2), headMode.getValue() == Mode.Anchor, headMode.getValue() == Mode.Concrete, headMode.getValue() == Mode.Web);
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        this.trapList.clear();
+        this.placeList.clear();
+        this.progress = 0;
+        this.target = null;
+        if (!(this.selfGround.getValue() && !AutoTrap.mc.field_1724.method_24828() || this.inventory.getValue() && !EntityUtil.inInventory() || Blink.INSTANCE.isOn() && Blink.INSTANCE.pauseModule.getValue() || this.usingPause.getValue() && AutoTrap.mc.field_1724.method_6115() || !this.timer.passed((long)this.delay.getValue()))) {
+            if (this.targetMod.getValue() == TargetMode.Single) {
+                this.target = CombatUtil.getClosestEnemy(this.range.getValue());
+                if (this.target == null) {
+                    if (this.autoDisable.getValue()) {
+                        this.disable();
+                    }
+                    return;
+                }
+                this.trapTarget(this.target);
+            } else if (this.targetMod.getValue() == TargetMode.Multi) {
+                boolean found = false;
+                for (class_1657 player : CombatUtil.getEnemies(this.range.getValue())) {
+                    found = true;
+                    this.target = player;
+                    this.trapTarget(this.target);
+                }
+                if (!found) {
+                    if (this.autoDisable.getValue()) {
+                        this.disable();
+                    }
+                    this.target = null;
                 }
             }
         }
-        if (head.getValue()) {
-            if (BlockUtil.clientCanPlace(pos.up(2), breakCrystal.getValue())) {
-                if (BlockUtil.getPlaceSide(pos.up(2)) == null) {
-                    boolean trapChest = helper.getValue();
-                    if (getHelper(pos.up(2)) != null) {
-                        tryPlaceObsidian(getHelper(pos.up(2)));
+    }
+
+    private void trapTarget(class_1657 target) {
+        if ((!this.onlyHole.getValue() || Alien.HOLE.isHole(EntityUtil.getEntityPos((class_1297)target))) && (!this.onlyCrawling.getValue() || target.method_20448() || this.checkElytra.getValue() && ((class_1799)target.method_31548().field_7548.get(2)).method_7909() instanceof class_1770 && (!(AutoTrap.mc.field_1724.method_23318() < target.method_23318() + 1.0) || target.method_6128()))) {
+            class_243 playerPos = this.predictTicks.getValue() > 0.0 ? PredictUtil.getPos(target, this.predictTicks.getValueInt()) : target.method_19538();
+            this.doTrap(target, new BlockPosX(playerPos.method_10216(), playerPos.method_10214(), playerPos.method_10215()));
+        }
+    }
+
+    private void doTrap(class_1657 player, class_2338 pos) {
+        if (pos != null && !this.trapList.contains(pos)) {
+            class_2338 offsetPos;
+            Object offsetPos2;
+            int n;
+            int n2;
+            Object[] objectArray;
+            int chestOffset;
+            this.trapList.add(pos);
+            int headOffset = player.method_20448() ? 1 : 2;
+            int n3 = chestOffset = player.method_20448() ? 0 : 1;
+            if (this.legs.getValue()) {
+                objectArray = class_2350.values();
+                n2 = objectArray.length;
+                for (n = 0; n < n2; ++n) {
+                    class_2350 i = objectArray[n];
+                    if (i == class_2350.field_11033 || i == class_2350.field_11036) continue;
+                    offsetPos2 = pos.method_10093(i);
+                    this.tryPlaceBlock((class_2338)offsetPos2, this.legAnchor.getValue(), false, false);
+                    if (BlockUtil.getPlaceSide(offsetPos2) != null || !BlockUtil.clientCanPlace(offsetPos2, this.breakCrystal.getValue()) || this.getHelper((class_2338)offsetPos2) == null) continue;
+                    this.tryPlaceObsidian(this.getHelper((class_2338)offsetPos2));
+                }
+            }
+            if (this.headExtend.getValue()) {
+                objectArray = new int[]{1, 0, -1};
+                n2 = objectArray.length;
+                for (n = 0; n < n2; ++n) {
+                    class_2350 x = objectArray[n];
+                    offsetPos2 = new int[]{1, 0, -1};
+                    int n4 = ((class_2338)offsetPos2).length;
+                    for (int i = 0; i < n4; ++i) {
+                        class_2338 z = offsetPos2[i];
+                        offsetPos = pos.method_10069((int)z, 0, (int)x);
+                        if (!this.checkEntity(new class_2338((class_2382)offsetPos))) continue;
+                        this.tryPlaceBlock(offsetPos.method_10086(headOffset), this.headMode.getValue() == Mode.Anchor, this.headMode.getValue() == Mode.Concrete, this.headMode.getValue() == Mode.Web);
+                    }
+                }
+            }
+            if (this.head.getValue() && BlockUtil.clientCanPlace(pos.method_10086(headOffset), this.breakCrystal.getValue())) {
+                if (BlockUtil.getPlaceSide(pos.method_10086(headOffset)) == null) {
+                    boolean trapChest = this.helper.getValue();
+                    if (this.getHelper(pos.method_10086(headOffset)) != null) {
+                        this.tryPlaceObsidian(this.getHelper(pos.method_10086(headOffset)));
                         trapChest = false;
                     }
                     if (trapChest) {
-                        for (Direction i : Direction.values()) {
-                            if (i == Direction.DOWN || i == Direction.UP) continue;
-                            BlockPos offsetPos = pos.offset(i).up();
-                            if (BlockUtil.clientCanPlace(offsetPos.up(), breakCrystal.getValue())) {
-                                if (BlockUtil.canPlace(offsetPos, placeRange.getValue(), breakCrystal.getValue())) {
-                                    tryPlaceObsidian(offsetPos);
-                                    trapChest = false;
+                        int x;
+                        class_2350[] class_2350Array = class_2350.values();
+                        n = class_2350Array.length;
+                        for (x = 0; x < n; ++x) {
+                            class_2350 ix = class_2350Array[x];
+                            if (ix == class_2350.field_11033 || ix == class_2350.field_11036) continue;
+                            class_2338 offsetPos3 = pos.method_10093(ix).method_10086(chestOffset);
+                            if (!BlockUtil.isStrictDirection(pos.method_10093(ix).method_10084(), ix.method_10153()) || !BlockUtil.clientCanPlace(offsetPos3.method_10086(chestOffset), this.breakCrystal.getValue()) || !BlockUtil.canPlace(offsetPos3, this.placeRange.getValue(), this.breakCrystal.getValue())) continue;
+                            this.tryPlaceObsidian(offsetPos3);
+                            trapChest = false;
+                            break;
+                        }
+                        if (trapChest) {
+                            class_2350Array = class_2350.values();
+                            n = class_2350Array.length;
+                            for (x = 0; x < n; ++x) {
+                                class_2350 ixx = class_2350Array[x];
+                                if (ixx == class_2350.field_11033 || ixx == class_2350.field_11036) continue;
+                                class_2338 offsetPos4 = pos.method_10093(ixx).method_10086(chestOffset);
+                                if (!BlockUtil.isStrictDirection(pos.method_10093(ixx).method_10084(), ixx.method_10153()) || !BlockUtil.clientCanPlace(offsetPos4.method_10086(chestOffset), this.breakCrystal.getValue()) || BlockUtil.getPlaceSide(offsetPos4) != null || !BlockUtil.clientCanPlace(offsetPos4, this.breakCrystal.getValue()) || this.getHelper(offsetPos4) == null) continue;
+                                this.tryPlaceObsidian(this.getHelper(offsetPos4));
+                                trapChest = false;
+                                break;
+                            }
+                            if (trapChest) {
+                                class_2350Array = class_2350.values();
+                                n = class_2350Array.length;
+                                for (x = 0; x < n; ++x) {
+                                    class_2350 ixxx = class_2350Array[x];
+                                    if (ixxx == class_2350.field_11033 || ixxx == class_2350.field_11036) continue;
+                                    class_2338 offsetPos5 = pos.method_10093(ixxx).method_10086(chestOffset);
+                                    if (!BlockUtil.isStrictDirection(pos.method_10093(ixxx).method_10084(), ixxx.method_10153()) || !BlockUtil.clientCanPlace(offsetPos5.method_10086(chestOffset), this.breakCrystal.getValue()) || BlockUtil.getPlaceSide(offsetPos5) != null || !BlockUtil.clientCanPlace(offsetPos5, this.breakCrystal.getValue()) || this.getHelper(offsetPos5) == null || BlockUtil.getPlaceSide(offsetPos5.method_10074()) != null || !BlockUtil.clientCanPlace(offsetPos5.method_10074(), this.breakCrystal.getValue()) || this.getHelper(offsetPos5.method_10074()) == null) continue;
+                                    this.tryPlaceObsidian(this.getHelper(offsetPos5.method_10074()));
                                     break;
                                 }
                             }
                         }
-                        if (trapChest) {
-                            for (Direction i : Direction.values()) {
-                                if (i == Direction.DOWN || i == Direction.UP) continue;
-                                BlockPos offsetPos = pos.offset(i).up();
-                                if (BlockUtil.clientCanPlace(offsetPos.up(), breakCrystal.getValue())) {
-                                    if (BlockUtil.getPlaceSide(offsetPos) == null && BlockUtil.clientCanPlace(offsetPos, breakCrystal.getValue()) && getHelper(offsetPos) != null) {
-                                        tryPlaceObsidian(getHelper(offsetPos));
-                                        trapChest = false;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (trapChest) {
-                                for (Direction i : Direction.values()) {
-                                    if (i == Direction.DOWN || i == Direction.UP) continue;
-                                    BlockPos offsetPos = pos.offset(i).up();
-                                    if (BlockUtil.clientCanPlace(offsetPos.up(), breakCrystal.getValue())) {
-                                        if (BlockUtil.getPlaceSide(offsetPos) == null && BlockUtil.clientCanPlace(offsetPos, breakCrystal.getValue()) && getHelper(offsetPos) != null) {
-                                            if (BlockUtil.getPlaceSide(offsetPos.down()) == null && BlockUtil.clientCanPlace(offsetPos.down(), breakCrystal.getValue()) && getHelper(offsetPos.down()) != null) {
-                                                tryPlaceObsidian(getHelper(offsetPos.down()));
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
-                tryPlaceBlock(pos.up(2), headMode.getValue() == Mode.Anchor, headMode.getValue() == Mode.Concrete, headMode.getValue() == Mode.Web);
+                this.tryPlaceBlock(pos.method_10086(headOffset), this.headMode.getValue() == Mode.Anchor, this.headMode.getValue() == Mode.Concrete, this.headMode.getValue() == Mode.Web);
             }
-        }
-        if (antiStep.getValue() && (Alien.BREAK.isMining(pos.up(2)) || !onlyBreak.getValue())) {
-            if (BlockUtil.getPlaceSide(pos.up(3)) == null && BlockUtil.clientCanPlace(pos.up(3), breakCrystal.getValue())) {
-                if (getHelper(pos.up(3), Direction.DOWN) != null) {
-                    tryPlaceObsidian(getHelper(pos.up(3)));
+            if (this.antiStep.getValue() && (Alien.BREAK.isMining(pos.method_10086(headOffset)) || !this.onlyBreak.getValue())) {
+                if (BlockUtil.getPlaceSide(pos.method_10086(3)) == null && BlockUtil.clientCanPlace(pos.method_10086(3), this.breakCrystal.getValue()) && this.getHelper(pos.method_10086(3), class_2350.field_11033) != null) {
+                    this.tryPlaceObsidian(this.getHelper(pos.method_10086(3)));
+                }
+                this.tryPlaceObsidian(pos.method_10086(3));
+            }
+            if (this.down.getValue()) {
+                class_2338 offsetPos6 = pos.method_10074();
+                this.tryPlaceObsidian(offsetPos6);
+                if (BlockUtil.getPlaceSide(offsetPos6) == null && BlockUtil.clientCanPlace(offsetPos6, this.breakCrystal.getValue()) && this.getHelper(offsetPos6) != null) {
+                    this.tryPlaceObsidian(this.getHelper(offsetPos6));
                 }
             }
-            tryPlaceObsidian(pos.up(3));
-        }
-        if (down.getValue()) {
-            BlockPos offsetPos = pos.down();
-            tryPlaceObsidian(offsetPos);
-            if (BlockUtil.getPlaceSide(offsetPos) == null && BlockUtil.clientCanPlace(offsetPos, breakCrystal.getValue()) && getHelper(offsetPos) != null)
-                tryPlaceObsidian(getHelper(offsetPos));
-        }
-        if (chestUp.getValue()) {
-            for (Direction i : Direction.values()) {
-                if (i == Direction.DOWN || i == Direction.UP) continue;
-                BlockPos offsetPos = pos.offset(i).up(2);
-                if (!onlyBreaking.getValue() || Alien.BREAK.isMining(pos.up(2))) {
-                    tryPlaceObsidian(offsetPos);
-                    if (BlockUtil.getPlaceSide(offsetPos) == null && BlockUtil.clientCanPlace(offsetPos, breakCrystal.getValue())) {
-                        if (getHelper(offsetPos) != null) {
-                            tryPlaceObsidian(getHelper(offsetPos));
-                        } else if (BlockUtil.getPlaceSide(offsetPos.down()) == null && BlockUtil.clientCanPlace(offsetPos.down(), breakCrystal.getValue()) && getHelper(offsetPos.down()) != null) {
-                            tryPlaceObsidian(getHelper(offsetPos.down()));
-                        }
+            if (this.chestUp.getValue()) {
+                class_2350[] class_2350Array = class_2350.values();
+                int n5 = class_2350Array.length;
+                for (n = 0; n < n5; ++n) {
+                    class_2350 ixxxx = class_2350Array[n];
+                    if (ixxxx == class_2350.field_11033 || ixxxx == class_2350.field_11036) continue;
+                    offsetPos2 = pos.method_10093(ixxxx).method_10086(headOffset);
+                    if (this.onlyBreaking.getValue() && !Alien.BREAK.isMining(pos.method_10086(headOffset))) continue;
+                    this.tryPlaceObsidian((class_2338)offsetPos2);
+                    if (BlockUtil.getPlaceSide(offsetPos2) != null || !BlockUtil.clientCanPlace(offsetPos2, this.breakCrystal.getValue())) continue;
+                    if (this.getHelper((class_2338)offsetPos2) != null) {
+                        this.tryPlaceObsidian(this.getHelper((class_2338)offsetPos2));
+                        continue;
                     }
+                    if (BlockUtil.getPlaceSide(offsetPos2.method_10074()) != null || !BlockUtil.clientCanPlace(offsetPos2.method_10074(), this.breakCrystal.getValue()) || this.getHelper(offsetPos2.method_10074()) == null) continue;
+                    this.tryPlaceObsidian(this.getHelper(offsetPos2.method_10074()));
                 }
             }
-        }
-        if (chest.getValue() && (!onlyGround.getValue() || target.isOnGround())) {
-            for (Direction i : Direction.values()) {
-                if (i == Direction.DOWN || i == Direction.UP) continue;
-                BlockPos offsetPos = pos.offset(i).up();
-                tryPlaceObsidian(offsetPos);
-                if (BlockUtil.getPlaceSide(offsetPos) == null && BlockUtil.clientCanPlace(offsetPos, breakCrystal.getValue())) {
-                    if (getHelper(offsetPos) != null) {
-                        tryPlaceObsidian(getHelper(offsetPos));
-                    } else
-                    if (BlockUtil.getPlaceSide(offsetPos.down()) == null && BlockUtil.clientCanPlace(offsetPos.down(), breakCrystal.getValue()) && getHelper(offsetPos.down()) != null) {
-                        tryPlaceObsidian(getHelper(offsetPos.down()));
+            if (!(!this.chest.getValue() || this.onlyGround.getValue() && !this.target.method_24828() || this.ignoreCrawling.getValue() && this.target.method_20448())) {
+                class_2350[] class_2350Array = class_2350.values();
+                int n6 = class_2350Array.length;
+                for (n = 0; n < n6; ++n) {
+                    class_2350 ixxxxx = class_2350Array[n];
+                    if (ixxxxx == class_2350.field_11033 || ixxxxx == class_2350.field_11036) continue;
+                    offsetPos2 = pos.method_10093(ixxxxx).method_10086(chestOffset);
+                    this.tryPlaceObsidian((class_2338)offsetPos2);
+                    if (BlockUtil.getPlaceSide(offsetPos2) != null || !BlockUtil.clientCanPlace(offsetPos2, this.breakCrystal.getValue())) continue;
+                    if (this.getHelper((class_2338)offsetPos2) != null) {
+                        this.tryPlaceObsidian(this.getHelper((class_2338)offsetPos2));
+                        continue;
                     }
+                    if (BlockUtil.getPlaceSide(offsetPos2.method_10074()) != null || !BlockUtil.clientCanPlace(offsetPos2.method_10074(), this.breakCrystal.getValue()) || this.getHelper(offsetPos2.method_10074()) == null) continue;
+                    this.tryPlaceObsidian(this.getHelper(offsetPos2.method_10074()));
                 }
             }
-        }
-        if (extend.getValue()) {
-            for (int x : new int[]{1, 0, -1}) {
-                for (int z : new int[]{1, 0, -1}) {
-                    BlockPos offsetPos = pos.add(x, 0, z);
-                    if (checkEntity(new BlockPos(offsetPos))) doTrap(offsetPos);
+            if (this.extend.getValue()) {
+                for (int x : new int[]{1, 0, -1}) {
+                    for (int zx : new int[]{1, 0, -1}) {
+                        offsetPos = pos.method_10069(x, 0, zx);
+                        if (!this.checkEntity(new class_2338((class_2382)offsetPos))) continue;
+                        this.doTrap(player, offsetPos);
+                    }
                 }
             }
         }
@@ -268,131 +281,122 @@ public class AutoTrap
 
     @Override
     public String getInfo() {
-        if (target != null) {
-            return target.getName().getString();
+        return this.target != null ? this.target.method_5477().getString() : null;
+    }
+
+    public class_2338 getHelper(class_2338 pos) {
+        if (!this.helper.getValue()) {
+            return null;
+        }
+        for (class_2350 i : class_2350.values()) {
+            if (this.checkMine.getValue() && Alien.BREAK.isMining(pos.method_10093(i)) || !BlockUtil.isStrictDirection(pos.method_10093(i), i.method_10153()) || !BlockUtil.canPlace(pos.method_10093(i), this.placeRange.getValue(), this.breakCrystal.getValue())) continue;
+            return pos.method_10093(i);
         }
         return null;
     }
 
-    public BlockPos getHelper(BlockPos pos) {
-        if (!helper.getValue()) return null;
-        for (Direction i : Direction.values()) {
-            if (checkMine.getValue() && Alien.BREAK.isMining(pos.offset(i))) continue;
-            if (AntiCheat.INSTANCE.placement.getValue() == Placement.Strict && !BlockUtil.isStrictDirection(pos.offset(i), i.getOpposite())) continue;
-            if (BlockUtil.canPlace(pos.offset(i), placeRange.getValue(), breakCrystal.getValue())) return pos.offset(i);
+    public class_2338 getHelper(class_2338 pos, class_2350 ignore) {
+        if (!this.helper.getValue()) {
+            return null;
+        }
+        for (class_2350 i : class_2350.values()) {
+            if (i == ignore || this.checkMine.getValue() && Alien.BREAK.isMining(pos.method_10093(i)) || !BlockUtil.isStrictDirection(pos.method_10093(i), i.method_10153()) || !BlockUtil.canPlace(pos.method_10093(i), this.placeRange.getValue(), this.breakCrystal.getValue())) continue;
+            return pos.method_10093(i);
         }
         return null;
     }
 
-    public BlockPos getHelper(BlockPos pos, Direction ignore) {
-        if (!helper.getValue()) return null;
-        for (Direction i : Direction.values()) {
-            if (i == ignore) continue;
-            if (checkMine.getValue() && Alien.BREAK.isMining(pos.offset(i))) continue;
-            if (!BlockUtil.isStrictDirection(pos.offset(i), i.getOpposite())) continue;
-            if (BlockUtil.canPlace(pos.offset(i), placeRange.getValue(), breakCrystal.getValue())) return pos.offset(i);
+    private boolean checkEntity(class_2338 pos) {
+        if (AutoTrap.mc.field_1724.method_5829().method_994(new class_238(pos))) {
+            return false;
         }
-        return null;
-    }
-    private boolean checkEntity(BlockPos pos) {
-        if (mc.player.getBoundingBox().intersects(new Box(pos))) return false;
-        for (Entity entity : BlockUtil.getEndCrystals(new Box(pos))) {
-            if (entity.isAlive())
-                return true;
+        for (class_1297 class_12972 : Alien.THREAD.getPlayers()) {
+            if (!class_12972.method_5829().method_994(new class_238(pos)) || !class_12972.method_5805()) continue;
+            return true;
         }
         return false;
     }
 
-    private void tryPlaceBlock(BlockPos pos, boolean anchor, boolean sand, boolean web) {
-        if (placeList.contains(pos)) return;
-        if (Alien.BREAK.isMining(pos)) return;
-        if (!BlockUtil.canPlace(pos, 6, breakCrystal.getValue())) return;
-        if (!(progress < blocksPer.getValue())) return;
-        if (MathHelper.sqrt((float) EntityUtil.getEyesPos().squaredDistanceTo(pos.toCenterPos())) > placeRange.getValue())
-            return;
-        int old = mc.player.getInventory().selectedSlot;
-        int block = sand ? getConcrete() : (web ? (getWeb() != -1 ? getWeb() : getBlock()) : (anchor && getAnchor() != -1 ? getAnchor() : getBlock()));
-        if (block == -1) return;
-        placeList.add(pos);
-        CombatUtil.attackCrystal(pos, rotate.getValue(), usingPause.getValue());
-        doSwap(block);
-        BlockUtil.placeBlock(pos, rotate.getValue());
-        if (inventory.getValue()) {
-            doSwap(block);
-            EntityUtil.syncInventory();
-        } else {
-            doSwap(old);
+    private void tryPlaceBlock(class_2338 pos, boolean anchor, boolean sand, boolean web) {
+        if (!this.placeList.contains(pos) && !Alien.BREAK.isMining(pos) && BlockUtil.canPlace(pos, 6.0, this.breakCrystal.getValue()) && (double)this.progress < this.blocksPer.getValue() && !((double)class_3532.method_15355((float)((float)AutoTrap.mc.field_1724.method_33571().method_1025(pos.method_46558()))) > this.placeRange.getValue())) {
+            int block;
+            int old = AutoTrap.mc.field_1724.method_31548().field_7545;
+            int n = sand ? this.getConcrete() : (web ? (this.getWeb() != -1 ? this.getWeb() : this.getBlock()) : (block = anchor && this.getAnchor() != -1 ? this.getAnchor() : this.getBlock()));
+            if (block != -1) {
+                this.placeList.add(pos);
+                CombatUtil.attackCrystal(pos, this.rotate.getValue(), this.usingPause.getValue());
+                this.doSwap(block);
+                BlockUtil.placeBlock(pos, this.rotate.getValue());
+                if (this.inventory.getValue()) {
+                    this.doSwap(block);
+                    EntityUtil.syncInventory();
+                } else {
+                    this.doSwap(old);
+                }
+                this.timer.reset();
+                ++this.progress;
+            }
         }
-        timer.reset();
-        progress++;
     }
-    private void tryPlaceObsidian(BlockPos pos) {
-        if (pos == null) return;
-        if (placeList.contains(pos)) return;
-        if (Alien.BREAK.isMining(pos)) return;
-        if (!BlockUtil.canPlace(pos, 6, breakCrystal.getValue())) return;
-        if (!(progress < blocksPer.getValue())) return;
-        if (MathHelper.sqrt((float) EntityUtil.getEyesPos().squaredDistanceTo(pos.toCenterPos())) > placeRange.getValue())
-            return;
-        int old = mc.player.getInventory().selectedSlot;
-        int block = getBlock();
-        if (block == -1) return;
-        BlockUtil.placedPos.add(pos);
-        placeList.add(pos);
-        CombatUtil.attackCrystal(pos, rotate.getValue(), usingPause.getValue());
-        doSwap(block);
-        BlockUtil.placeBlock(pos, rotate.getValue());
-        if (inventory.getValue()) {
-            doSwap(block);
-            EntityUtil.syncInventory();
-        } else {
-            doSwap(old);
+
+    private void tryPlaceObsidian(class_2338 pos) {
+        if (pos != null && !this.placeList.contains(pos) && !Alien.BREAK.isMining(pos) && BlockUtil.canPlace(pos, 6.0, this.breakCrystal.getValue()) && (double)this.progress < this.blocksPer.getValue() && !((double)class_3532.method_15355((float)((float)AutoTrap.mc.field_1724.method_33571().method_1025(pos.method_46558()))) > this.placeRange.getValue())) {
+            int old = AutoTrap.mc.field_1724.method_31548().field_7545;
+            int block = this.getBlock();
+            if (block != -1) {
+                BlockUtil.placedPos.add(pos);
+                this.placeList.add(pos);
+                CombatUtil.attackCrystal(pos, this.rotate.getValue(), this.usingPause.getValue());
+                this.doSwap(block);
+                BlockUtil.placeBlock(pos, this.rotate.getValue());
+                if (this.inventory.getValue()) {
+                    this.doSwap(block);
+                    EntityUtil.syncInventory();
+                } else {
+                    this.doSwap(old);
+                }
+                this.timer.reset();
+                ++this.progress;
+            }
         }
-        timer.reset();
-        progress++;
     }
 
     private void doSwap(int slot) {
-        if (inventory.getValue()) {
-            InventoryUtil.inventorySwap(slot, mc.player.getInventory().selectedSlot);
+        if (this.inventory.getValue()) {
+            InventoryUtil.inventorySwap(slot, AutoTrap.mc.field_1724.method_31548().field_7545);
         } else {
             InventoryUtil.switchToSlot(slot);
         }
     }
 
     private int getBlock() {
-        if (inventory.getValue()) {
-            return InventoryUtil.findBlockInventorySlot(Blocks.OBSIDIAN);
-        } else {
-            return InventoryUtil.findBlock(Blocks.OBSIDIAN);
-        }
+        return this.inventory.getValue() ? InventoryUtil.findBlockInventorySlot(class_2246.field_10540) : InventoryUtil.findBlock(class_2246.field_10540);
     }
 
     private int getConcrete() {
-        if (inventory.getValue()) {
-            return InventoryUtil.findClassInventorySlot(ConcretePowderBlock.class);
-        } else {
-            return InventoryUtil.findClass(ConcretePowderBlock.class);
-        }
+        return this.inventory.getValue() ? InventoryUtil.findClassInventorySlot(class_2292.class) : InventoryUtil.findClass(class_2292.class);
     }
+
     private int getWeb() {
-        if (inventory.getValue()) {
-            return InventoryUtil.findBlockInventorySlot(Blocks.COBWEB);
-        } else {
-            return InventoryUtil.findBlock(Blocks.COBWEB);
-        }
+        return this.inventory.getValue() ? InventoryUtil.findBlockInventorySlot(class_2246.field_10343) : InventoryUtil.findBlock(class_2246.field_10343);
     }
+
     private int getAnchor() {
-        if (inventory.getValue()) {
-            return InventoryUtil.findBlockInventorySlot(Blocks.RESPAWN_ANCHOR);
-        } else {
-            return InventoryUtil.findBlock(Blocks.RESPAWN_ANCHOR);
-        }
+        return this.inventory.getValue() ? InventoryUtil.findBlockInventorySlot(class_2246.field_23152) : InventoryUtil.findBlock(class_2246.field_23152);
     }
-    private enum Mode {
+
+    public static enum TargetMode {
+        Single,
+        Multi;
+
+    }
+
+    private static enum Mode {
         Obsidian,
         Anchor,
         Web,
-        Concrete
+        Concrete;
+
     }
 }
+

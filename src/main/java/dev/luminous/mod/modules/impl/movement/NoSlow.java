@@ -1,186 +1,266 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1268
+ *  net.minecraft.class_1297
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_1713
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2350
+ *  net.minecraft.class_2596
+ *  net.minecraft.class_2813
+ *  net.minecraft.class_2815
+ *  net.minecraft.class_2828$class_2829
+ *  net.minecraft.class_2846
+ *  net.minecraft.class_2846$class_2847
+ *  net.minecraft.class_2848
+ *  net.minecraft.class_2848$class_2849
+ *  net.minecraft.class_2868
+ *  net.minecraft.class_2886
+ *  net.minecraft.class_304
+ *  net.minecraft.class_3675
+ *  net.minecraft.class_408
+ *  net.minecraft.class_9334
+ */
 package dev.luminous.mod.modules.impl.movement;
 
-import dev.luminous.api.events.eventbus.EventHandler;
+import dev.luminous.Alien;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.InteractItemEvent;
 import dev.luminous.api.events.impl.KeyboardInputEvent;
 import dev.luminous.api.events.impl.PacketEvent;
-import dev.luminous.api.events.impl.UpdateWalkingPlayerEvent;
-import dev.luminous.api.utils.entity.MovementUtil;
+import dev.luminous.api.events.impl.UpdateEvent;
+import dev.luminous.api.utils.player.MovementUtil;
 import dev.luminous.mod.modules.Module;
+import dev.luminous.mod.modules.impl.movement.AutoWalk;
+import dev.luminous.mod.modules.impl.movement.ElytraFly;
+import dev.luminous.mod.modules.impl.movement.Sprint;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.network.packet.c2s.play.*;
-import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.util.Hand;
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import net.minecraft.class_1268;
+import net.minecraft.class_1297;
+import net.minecraft.class_1657;
+import net.minecraft.class_1713;
+import net.minecraft.class_2338;
+import net.minecraft.class_2350;
+import net.minecraft.class_2596;
+import net.minecraft.class_2813;
+import net.minecraft.class_2815;
+import net.minecraft.class_2828;
+import net.minecraft.class_2846;
+import net.minecraft.class_2848;
+import net.minecraft.class_2868;
+import net.minecraft.class_2886;
+import net.minecraft.class_304;
+import net.minecraft.class_3675;
+import net.minecraft.class_408;
+import net.minecraft.class_9334;
 
-public class NoSlow extends Module {
+public class NoSlow
+extends Module {
     public static NoSlow INSTANCE;
-    private final EnumSetting<Mode> mode = add(new EnumSetting<>("Mode", Mode.Vanilla));
-    private final BooleanSetting soulSand = add(new BooleanSetting("SoulSand", true));
-    private final BooleanSetting active = add(new BooleanSetting("Gui", true));
-    private final EnumSetting<Bypass> clickBypass = add(new EnumSetting<>("Bypass", Bypass.None));
-    private final BooleanSetting sneak = add(new BooleanSetting("Sneak", false));
+    final Queue<class_2813> storedClicks = new LinkedList<class_2813>();
+    final AtomicBoolean pause = new AtomicBoolean();
+    private final EnumSetting<Mode> mode = this.add(new EnumSetting<Mode>("Mode", Mode.Vanilla));
+    private final BooleanSetting soulSand = this.add(new BooleanSetting("SoulSand", true));
+    private final BooleanSetting sneak = this.add(new BooleanSetting("Sneak", false));
+    private final BooleanSetting climb = this.add(new BooleanSetting("Climb", false));
+    private final BooleanSetting gui = this.add(new BooleanSetting("Gui", true));
+    private final BooleanSetting allowSneak = this.add(new BooleanSetting("AllowSneak", false, this.gui::getValue));
+    private final EnumSetting<Bypass> clickBypass = this.add(new EnumSetting<Bypass>("GuiMoveBypass", Bypass.None));
+    boolean using = false;
+    int delay = 0;
 
-    @Override
-    public String getInfo() {
-        return mode.getValue().name();
-    }
-
-    private enum Bypass {
-       None, StrictNCP, GrimSwap, MatrixNcp, Delay, StrictNCP2
-    }
-
-    public enum Mode {
-        Vanilla,
-        NCP,
-        Grim,
-        None
-    }
     public NoSlow() {
-        super("NoSlow", Category.Movement);
-        setChinese("无减速");
+        super("NoSlow", Module.Category.Movement);
+        this.setChinese("\u65e0\u51cf\u901f");
         INSTANCE = this;
     }
 
-    private final Queue<ClickSlotC2SPacket> storedClicks = new LinkedList<>();
-    private final AtomicBoolean pause = new AtomicBoolean();
-    @EventHandler
-    public void onUpdate(UpdateWalkingPlayerEvent event) {
-        if (event.isPost()) return;
-        if (mc.player.isUsingItem() && !mc.player.isRiding() && !mc.player.isFallFlying()) {
-            switch (mode.getValue()) {
-                case NCP -> {
-                    mc.getNetworkHandler().sendPacket(new UpdateSelectedSlotC2SPacket(mc.player.getInventory().selectedSlot));
-                }
-                case Grim -> {
-                    if (mc.player.getActiveHand() == Hand.OFF_HAND) {
-                        mc.getNetworkHandler().sendPacket(new UpdateSelectedSlotC2SPacket(mc.player.getInventory().selectedSlot % 8 + 1));
-                        mc.getNetworkHandler().sendPacket(new UpdateSelectedSlotC2SPacket(mc.player.getInventory().selectedSlot % 7 + 2));
-                        mc.getNetworkHandler().sendPacket(new UpdateSelectedSlotC2SPacket(mc.player.getInventory().selectedSlot));
-                    } else {
-                        sendSequencedPacket(id -> new PlayerInteractItemC2SPacket(Hand.OFF_HAND, id));
-                    }
-                }
-            }
-        }
-        if (active.getValue()) {
-            if (!(mc.currentScreen instanceof ChatScreen)) {
-                for (KeyBinding k : new KeyBinding[]{mc.options.backKey, mc.options.leftKey, mc.options.rightKey}) {
-                    k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(k.getBoundKeyTranslationKey()).getCode()));
-                }
-                mc.options.jumpKey.setPressed(ElytraFly.INSTANCE.isOn() && ElytraFly.INSTANCE.mode.is(ElytraFly.Mode.Bounce) && ElytraFly.INSTANCE.autoJump.getValue() || InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.jumpKey.getBoundKeyTranslationKey()).getCode()));
-                mc.options.forwardKey.setPressed(AutoWalk.INSTANCE.forward() || InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.forwardKey.getBoundKeyTranslationKey()).getCode()));
-                mc.options.sprintKey.setPressed(Sprint.INSTANCE.isOn() || InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.sprintKey.getBoundKeyTranslationKey()).getCode()));
-
-                if (sneak.getValue()) {
-                    mc.options.sneakKey.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.sneakKey.getBoundKeyTranslationKey()).getCode()));
-                }
-            }
-        }
-    }
-    @EventHandler
-    public void keyboard(KeyboardInputEvent event) {
-        if (active.getValue()) {
-            if (!(mc.currentScreen instanceof ChatScreen)) {
-                for (KeyBinding k : new KeyBinding[]{mc.options.backKey, mc.options.leftKey, mc.options.rightKey}) {
-                    k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(k.getBoundKeyTranslationKey()).getCode()));
-                }
-                mc.options.jumpKey.setPressed(ElytraFly.INSTANCE.isOn() && ElytraFly.INSTANCE.mode.is(ElytraFly.Mode.Bounce) && ElytraFly.INSTANCE.autoJump.getValue() || InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.jumpKey.getBoundKeyTranslationKey()).getCode()));
-                mc.options.forwardKey.setPressed(AutoWalk.INSTANCE.forward() || InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.forwardKey.getBoundKeyTranslationKey()).getCode()));
-                mc.options.sprintKey.setPressed(Sprint.INSTANCE.isOn() || InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.sprintKey.getBoundKeyTranslationKey()).getCode()));
-
-                if (sneak.getValue()) {
-                    mc.options.sneakKey.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.sneakKey.getBoundKeyTranslationKey()).getCode()));
-                }
-                mc.player.input.pressingForward = mc.options.forwardKey.isPressed();
-                mc.player.input.pressingBack = mc.options.backKey.isPressed();
-                mc.player.input.pressingLeft = mc.options.leftKey.isPressed();
-                mc.player.input.pressingRight = mc.options.rightKey.isPressed();
-                mc.player.input.movementForward = getMovementMultiplier(mc.player.input.pressingForward, mc.player.input.pressingBack);
-                mc.player.input.movementSideways = getMovementMultiplier(mc.player.input.pressingLeft, mc.player.input.pressingRight);
-                mc.player.input.jumping = mc.options.jumpKey.isPressed();
-                mc.player.input.sneaking = mc.options.sneakKey.isPressed();
-            }
-        }
-    }
     private static float getMovementMultiplier(boolean positive, boolean negative) {
         if (positive == negative) {
-            return 0.0F;
-        } else {
-            return positive ? 1.0F : -1.0F;
+            return 0.0f;
+        }
+        return positive ? 1.0f : -1.0f;
+    }
+
+    @Override
+    public String getInfo() {
+        return this.mode.getValue().name();
+    }
+
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        this.using = NoSlow.mc.field_1724.method_6115();
+        --this.delay;
+        if (this.using) {
+            this.delay = 2;
+        }
+        if (this.using && !NoSlow.mc.field_1724.method_3144() && !NoSlow.mc.field_1724.method_6128()) {
+            switch (this.mode.getValue().ordinal()) {
+                case 1: {
+                    mc.method_1562().method_52787((class_2596)new class_2868(NoSlow.mc.field_1724.method_31548().field_7545));
+                    break;
+                }
+                case 2: {
+                    if (NoSlow.mc.field_1724.method_6058() == class_1268.field_5810) {
+                        NoSlow.sendSequencedPacket(id -> new class_2886(class_1268.field_5808, id, Alien.ROTATION.getLastYaw(), Alien.ROTATION.getLastPitch()));
+                        break;
+                    }
+                    NoSlow.sendSequencedPacket(id -> new class_2886(class_1268.field_5810, id, Alien.ROTATION.getLastYaw(), Alien.ROTATION.getLastPitch()));
+                    break;
+                }
+                case 3: {
+                    NoSlow.mc.field_1761.method_2906(NoSlow.mc.field_1724.field_7512.field_7763, 1, 0, class_1713.field_7790, (class_1657)NoSlow.mc.field_1724);
+                    if (NoSlow.mc.field_1724.method_6058() == class_1268.field_5810) {
+                        NoSlow.sendSequencedPacket(id -> new class_2886(class_1268.field_5808, id, Alien.ROTATION.getLastYaw(), Alien.ROTATION.getLastPitch()));
+                        break;
+                    }
+                    NoSlow.sendSequencedPacket(id -> new class_2886(class_1268.field_5810, id, Alien.ROTATION.getLastYaw(), Alien.ROTATION.getLastPitch()));
+                }
+            }
+        }
+        if (this.gui.getValue() && !(NoSlow.mc.field_1755 instanceof class_408)) {
+            for (class_304 k : new class_304[]{NoSlow.mc.field_1690.field_1881, NoSlow.mc.field_1690.field_1913, NoSlow.mc.field_1690.field_1849}) {
+                k.method_23481(class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)k.method_1428()).method_1444()));
+            }
+            NoSlow.mc.field_1690.field_1903.method_23481(ElytraFly.INSTANCE.isOn() && ElytraFly.INSTANCE.mode.is(ElytraFly.Mode.Bounce) && ElytraFly.INSTANCE.autoJump.getValue() || class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)NoSlow.mc.field_1690.field_1903.method_1428()).method_1444()));
+            NoSlow.mc.field_1690.field_1894.method_23481(AutoWalk.INSTANCE.forward() || class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)NoSlow.mc.field_1690.field_1894.method_1428()).method_1444()));
+            NoSlow.mc.field_1690.field_1867.method_23481(Sprint.INSTANCE.isOn() && !Sprint.INSTANCE.inWater() || class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)NoSlow.mc.field_1690.field_1867.method_1428()).method_1444()));
+            if (this.allowSneak.getValue()) {
+                NoSlow.mc.field_1690.field_1832.method_23481(class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)NoSlow.mc.field_1690.field_1832.method_1428()).method_1444()));
+            }
         }
     }
 
-    @EventHandler
+    @EventListener(priority=100)
+    public void keyboard(KeyboardInputEvent event) {
+        if (this.sneak.getValue()) {
+            event.cancel();
+        }
+        if (this.gui.getValue() && !(NoSlow.mc.field_1755 instanceof class_408)) {
+            for (class_304 k : new class_304[]{NoSlow.mc.field_1690.field_1881, NoSlow.mc.field_1690.field_1913, NoSlow.mc.field_1690.field_1849}) {
+                k.method_23481(class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)k.method_1428()).method_1444()));
+            }
+            NoSlow.mc.field_1690.field_1903.method_23481(ElytraFly.INSTANCE.isOn() && ElytraFly.INSTANCE.mode.is(ElytraFly.Mode.Bounce) && ElytraFly.INSTANCE.autoJump.getValue() || class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)NoSlow.mc.field_1690.field_1903.method_1428()).method_1444()));
+            NoSlow.mc.field_1690.field_1894.method_23481(AutoWalk.INSTANCE.forward() || class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)NoSlow.mc.field_1690.field_1894.method_1428()).method_1444()));
+            NoSlow.mc.field_1690.field_1867.method_23481(Sprint.INSTANCE.isOn() && !Sprint.INSTANCE.inWater() || class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)NoSlow.mc.field_1690.field_1867.method_1428()).method_1444()));
+            if (this.allowSneak.getValue()) {
+                NoSlow.mc.field_1690.field_1832.method_23481(class_3675.method_15987((long)mc.method_22683().method_4490(), (int)class_3675.method_15981((String)NoSlow.mc.field_1690.field_1832.method_1428()).method_1444()));
+            }
+            NoSlow.mc.field_1724.field_3913.field_3910 = NoSlow.mc.field_1690.field_1894.method_1434();
+            NoSlow.mc.field_1724.field_3913.field_3909 = NoSlow.mc.field_1690.field_1881.method_1434();
+            NoSlow.mc.field_1724.field_3913.field_3908 = NoSlow.mc.field_1690.field_1913.method_1434();
+            NoSlow.mc.field_1724.field_3913.field_3906 = NoSlow.mc.field_1690.field_1849.method_1434();
+            NoSlow.mc.field_1724.field_3913.field_3905 = NoSlow.getMovementMultiplier(NoSlow.mc.field_1724.field_3913.field_3910, NoSlow.mc.field_1724.field_3913.field_3909);
+            NoSlow.mc.field_1724.field_3913.field_3907 = NoSlow.getMovementMultiplier(NoSlow.mc.field_1724.field_3913.field_3908, NoSlow.mc.field_1724.field_3913.field_3906);
+            NoSlow.mc.field_1724.field_3913.field_3904 = NoSlow.mc.field_1690.field_1903.method_1434();
+            NoSlow.mc.field_1724.field_3913.field_3903 = NoSlow.mc.field_1690.field_1832.method_1434();
+        }
+    }
+
+    @EventListener
+    public void onUse(InteractItemEvent event) {
+        if (event.isPre()) {
+            if (this.delay > 0) {
+                NoSlow.mc.field_1752 = 0;
+                event.cancel();
+            } else if (this.mode.is(Mode.GrimPacket) && NoSlow.mc.field_1724 != null && NoSlow.mc.field_1724.method_5998(event.hand).method_7909().method_57347().method_57832(class_9334.field_50075)) {
+                NoSlow.mc.field_1761.method_2906(NoSlow.mc.field_1724.field_7512.field_7763, 1, 0, class_1713.field_7790, (class_1657)NoSlow.mc.field_1724);
+            }
+        }
+    }
+
+    @EventListener
     public void onPacketSend(PacketEvent.Send e) {
-        if (nullCheck() || !MovementUtil.isMoving() || !mc.options.jumpKey.isPressed() || pause.get())
-            return;
-
-        if (e.getPacket() instanceof ClickSlotC2SPacket click) {
-            switch (clickBypass.getValue()) {
-                case GrimSwap -> {
-                    if (click.getActionType() != SlotActionType.PICKUP && click.getActionType() != SlotActionType.PICKUP_ALL)
-                        mc.getNetworkHandler().sendPacket(new CloseHandledScreenC2SPacket(0));
-                }
-
-                case StrictNCP -> {
-                    if (mc.player.isOnGround() && !mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().offset(0.0, 0.0656, 0.0)).iterator().hasNext()) {
-                        if (mc.player.isSprinting())
-                            mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
-                        mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 0.0656, mc.player.getZ(), false));
+        if (!NoSlow.nullCheck()) {
+            class_2886 packet;
+            class_2596<?> class_25962;
+            if (this.mode.is(Mode.Drop) && (class_25962 = e.getPacket()) instanceof class_2886 && (packet = (class_2886)class_25962).method_12551() == class_1268.field_5808 && NoSlow.mc.field_1724.method_6047().method_7909().method_57347().method_57832(class_9334.field_50075)) {
+                mc.method_1562().method_52787((class_2596)new class_2846(class_2846.class_2847.field_12975, class_2338.field_10980, class_2350.field_11033));
+            } else if (MovementUtil.isMoving() && !this.pause.get()) {
+                class_2596<?> class_25963 = e.getPacket();
+                if (class_25963 instanceof class_2813) {
+                    class_2813 click = (class_2813)class_25963;
+                    switch (this.clickBypass.getValue().ordinal()) {
+                        case 1: {
+                            if (!NoSlow.mc.field_1724.method_24828() || NoSlow.mc.field_1687.method_20812((class_1297)NoSlow.mc.field_1724, NoSlow.mc.field_1724.method_5829().method_989(0.0, 0.0656, 0.0)).iterator().hasNext()) break;
+                            if (NoSlow.mc.field_1724.method_5624()) {
+                                mc.method_1562().method_52787((class_2596)new class_2848((class_1297)NoSlow.mc.field_1724, class_2848.class_2849.field_12985));
+                            }
+                            mc.method_1562().method_52787((class_2596)new class_2828.class_2829(NoSlow.mc.field_1724.method_23317(), NoSlow.mc.field_1724.method_23318() + 0.0656, NoSlow.mc.field_1724.method_23321(), false));
+                            break;
+                        }
+                        case 2: {
+                            if (!NoSlow.mc.field_1724.method_24828() || NoSlow.mc.field_1687.method_20812((class_1297)NoSlow.mc.field_1724, NoSlow.mc.field_1724.method_5829().method_989(0.0, 2.71875E-7, 0.0)).iterator().hasNext()) break;
+                            if (NoSlow.mc.field_1724.method_5624()) {
+                                mc.method_1562().method_52787((class_2596)new class_2848((class_1297)NoSlow.mc.field_1724, class_2848.class_2849.field_12985));
+                            }
+                            mc.method_1562().method_52787((class_2596)new class_2828.class_2829(NoSlow.mc.field_1724.method_23317(), NoSlow.mc.field_1724.method_23318() + 2.71875E-7, NoSlow.mc.field_1724.method_23321(), false));
+                            break;
+                        }
+                        case 3: {
+                            if (click.method_12195() == class_1713.field_7790 || click.method_12195() == class_1713.field_7793) break;
+                            mc.method_1562().method_52787((class_2596)new class_2815(0));
+                            break;
+                        }
+                        case 4: {
+                            this.storedClicks.add(click);
+                            e.cancel();
+                        }
                     }
                 }
-
-                case StrictNCP2 -> {
-                    if (mc.player.isOnGround() && !mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().offset(0.0, 0.000000271875, 0.0)).iterator().hasNext()) {
-                        if (mc.player.isSprinting())
-                            mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
-                        mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 0.000000271875, mc.player.getZ(), false));
+                if (e.getPacket() instanceof class_2815 && this.clickBypass.is(Bypass.Delay)) {
+                    this.pause.set(true);
+                    while (!this.storedClicks.isEmpty()) {
+                        mc.method_1562().method_52787((class_2596)this.storedClicks.poll());
                     }
+                    this.pause.set(false);
                 }
-
-                case MatrixNcp -> {
-                    mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
-                    mc.options.forwardKey.setPressed(false);
-                    mc.player.input.movementForward = 0;
-                    mc.player.input.pressingForward = false;
-                }
-
-                case Delay -> {
-                    storedClicks.add(click);
-                    e.cancel();
-                }
-            }
-        }
-
-        if(e.getPacket() instanceof CloseHandledScreenC2SPacket) {
-            if(clickBypass.is(Bypass.Delay)) {
-                pause.set(true);
-                while (!storedClicks.isEmpty())
-                    mc.getNetworkHandler().sendPacket(storedClicks.poll());
-                pause.set(false);
             }
         }
     }
 
-    @EventHandler
-    public void onPacketSendPost(PacketEvent.SendPost e) {
-        if (e.getPacket() instanceof ClickSlotC2SPacket) {
-            if (mc.player.isSprinting() && clickBypass.is(Bypass.StrictNCP))
-                mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
+    @EventListener
+    public void onPacketSendPost(PacketEvent.Sent e) {
+        if (e.getPacket() instanceof class_2813 && NoSlow.mc.field_1724.method_5624() && this.clickBypass.is(Bypass.NCP)) {
+            mc.method_1562().method_52787((class_2596)new class_2848((class_1297)NoSlow.mc.field_1724, class_2848.class_2849.field_12981));
         }
     }
+
     public boolean noSlow() {
-        return isOn() && mode.getValue() != Mode.None;
+        return this.isOn() && this.mode.getValue() != Mode.None && (this.mode.getValue() != Mode.Drop && this.mode.getValue() != Mode.GrimPacket || this.using);
     }
 
     public boolean soulSand() {
-        return isOn() && soulSand.getValue();
+        return this.isOn() && this.soulSand.getValue();
+    }
+
+    public boolean climb() {
+        return this.isOn() && this.climb.getValue();
+    }
+
+    public static enum Mode {
+        Vanilla,
+        NCP,
+        Grim,
+        GrimPacket,
+        Drop,
+        None;
+
+    }
+
+    private static enum Bypass {
+        None,
+        NCP,
+        NCP2,
+        Grim,
+        Delay;
+
     }
 }
+

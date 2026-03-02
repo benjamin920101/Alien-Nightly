@@ -1,135 +1,162 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.blaze3d.systems.RenderSystem
+ *  net.minecraft.class_1922
+ *  net.minecraft.class_238
+ *  net.minecraft.class_239
+ *  net.minecraft.class_239$class_240
+ *  net.minecraft.class_265
+ *  net.minecraft.class_286
+ *  net.minecraft.class_287
+ *  net.minecraft.class_289
+ *  net.minecraft.class_290
+ *  net.minecraft.class_293$class_5596
+ *  net.minecraft.class_3965
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_757
+ *  net.minecraft.class_9801
+ *  org.joml.Matrix4f
+ */
 package dev.luminous.mod.modules.impl.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
-import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.shape.VoxelShape;
+import java.awt.Color;
+import net.minecraft.class_1922;
+import net.minecraft.class_238;
+import net.minecraft.class_239;
+import net.minecraft.class_265;
+import net.minecraft.class_286;
+import net.minecraft.class_287;
+import net.minecraft.class_289;
+import net.minecraft.class_290;
+import net.minecraft.class_293;
+import net.minecraft.class_3965;
+import net.minecraft.class_4587;
+import net.minecraft.class_757;
+import net.minecraft.class_9801;
 import org.joml.Matrix4f;
 
-import java.awt.*;
+public class HighLight
+extends Module {
+    public static HighLight INSTANCE;
+    private final BooleanSetting depth = this.add(new BooleanSetting("Depth", true));
+    private final ColorSetting fill = this.add(new ColorSetting("Fill", new Color(255, 0, 0, 50)).injectBoolean(true));
+    private final ColorSetting boxColor = this.add(new ColorSetting("Box", new Color(255, 0, 0, 100)).injectBoolean(true));
 
-public class HighLight extends Module {
-	public static HighLight INSTANCE;
-	public HighLight() {
-		super("HighLight", Category.Render);
-		INSTANCE = this;
-		setChinese("方块高亮");
-	}
-	private final BooleanSetting depth = add(new BooleanSetting("Depth", true));
-	private final ColorSetting fill = add(new ColorSetting("Fill", new Color(255, 0, 0, 50)).injectBoolean(true));
-	private final ColorSetting boxColor = add(new ColorSetting("Box", new Color(255, 0, 0, 100)).injectBoolean(true));
+    public HighLight() {
+        super("HighLight", Module.Category.Render);
+        INSTANCE = this;
+        this.setChinese("\u65b9\u5757\u9ad8\u4eae");
+    }
 
-	@Override
-	public void onRender3D(MatrixStack matrixStack) {
-		if (mc.crosshairTarget.getType() == HitResult.Type.BLOCK && mc.crosshairTarget instanceof BlockHitResult hitResult && (fill.booleanValue || boxColor.booleanValue
-		)) {
-			VoxelShape shape = mc.world.getBlockState(hitResult.getBlockPos()).getOutlineShape(mc.world, hitResult.getBlockPos());
-			if (shape == null) return;
-			if (shape.isEmpty()) return;
-			Box box = shape.getBoundingBox().offset(hitResult.getBlockPos()).expand(0.001);
-
-			box = box.offset(mc.gameRenderer.getCamera().getPos().negate());
-			RenderSystem.enableBlend();
-			if (!depth.getValue()) RenderSystem.disableDepthTest();
-
-			Matrix4f matrix = matrixStack.peek().getPositionMatrix();
-			Tessellator tessellator = RenderSystem.renderThreadTesselator();
-			BufferBuilder bufferBuilder = tessellator.getBuffer();
-
-			if (fill.booleanValue) {
-				Color color = fill.getValue();
-				RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
-				RenderSystem.setShader(GameRenderer::getPositionProgram);
-
-				bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.maxZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.minZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.minZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.maxZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.maxZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.minZ).next();
-
-				tessellator.draw();
-			}
-
-			if (depth.getValue()) RenderSystem.disableDepthTest();
-			if (boxColor.booleanValue) {
-				Color color = boxColor.getValue();
-				RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
-				RenderSystem.setShader(GameRenderer::getPositionProgram);
-				bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION);
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.minZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.maxZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.maxZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.minZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.minZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.minZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.minY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.maxZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.minY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.maxZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.minZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.minZ).next();
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.maxZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.maxX, (float) box.maxY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.maxZ).next();
-
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.maxZ).next();
-				bufferBuilder.vertex(matrix, (float) box.minX, (float) box.maxY, (float) box.minZ).next();
-
-				tessellator.draw();
-			}
-			RenderSystem.setShaderColor(1, 1, 1, 1);
-
-			RenderSystem.enableDepthTest();
-			RenderSystem.disableBlend();
-		}
-	}
+    @Override
+    public void onRender3D(class_4587 matrixStack) {
+        class_239 class_2392;
+        if (HighLight.mc.field_1765.method_17783() == class_239.class_240.field_1332 && (class_2392 = HighLight.mc.field_1765) instanceof class_3965) {
+            class_3965 hitResult = (class_3965)class_2392;
+            if (this.fill.booleanValue || this.boxColor.booleanValue) {
+                class_287 bufferBuilder;
+                float b;
+                float g;
+                float r;
+                float a;
+                Color color;
+                class_265 shape = HighLight.mc.field_1687.method_8320(hitResult.method_17777()).method_26218((class_1922)HighLight.mc.field_1687, hitResult.method_17777());
+                if (shape == null) {
+                    return;
+                }
+                if (shape.method_1110()) {
+                    return;
+                }
+                class_238 box = shape.method_1107().method_996(hitResult.method_17777()).method_1014(0.001);
+                box = box.method_997(HighLight.mc.field_1773.method_19418().method_19326().method_22882());
+                RenderSystem.enableBlend();
+                if (!this.depth.getValue()) {
+                    RenderSystem.disableDepthTest();
+                } else {
+                    RenderSystem.enableDepthTest();
+                }
+                Matrix4f matrix = matrixStack.method_23760().method_23761();
+                if (this.fill.booleanValue) {
+                    color = this.fill.getValue();
+                    a = (float)color.getAlpha() / 255.0f;
+                    r = (float)color.getRed() / 255.0f;
+                    g = (float)color.getGreen() / 255.0f;
+                    b = (float)color.getBlue() / 255.0f;
+                    RenderSystem.setShader(class_757::method_34540);
+                    bufferBuilder = class_289.method_1348().method_60827(class_293.class_5596.field_27382, class_290.field_1576);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    class_286.method_43433((class_9801)bufferBuilder.method_60800());
+                }
+                if (this.depth.getValue()) {
+                    RenderSystem.disableDepthTest();
+                }
+                if (this.boxColor.booleanValue) {
+                    color = this.boxColor.getValue();
+                    a = (float)color.getAlpha() / 255.0f;
+                    r = (float)color.getRed() / 255.0f;
+                    g = (float)color.getGreen() / 255.0f;
+                    b = (float)color.getBlue() / 255.0f;
+                    RenderSystem.setShader(class_757::method_34540);
+                    bufferBuilder = class_289.method_1348().method_60827(class_293.class_5596.field_29344, class_290.field_1576);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1322, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1320, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1324).method_22915(r, g, b, a);
+                    bufferBuilder.method_22918(matrix, (float)box.field_1323, (float)box.field_1325, (float)box.field_1321).method_22915(r, g, b, a);
+                    class_286.method_43433((class_9801)bufferBuilder.method_60800());
+                }
+                RenderSystem.enableDepthTest();
+                RenderSystem.disableBlend();
+            }
+        }
+    }
 }
+

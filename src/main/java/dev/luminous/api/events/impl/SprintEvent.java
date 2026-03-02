@@ -1,17 +1,30 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
 
-public class SprintEvent extends Event {
-    public SprintEvent(Stage stage) {
-        super(stage);
+public class SprintEvent
+extends Event {
+    private static final SprintEvent instance = new SprintEvent();
+    private boolean sprint;
+
+    private SprintEvent() {
     }
 
-    private boolean sprint = false;
-    public boolean isSprint() {
-        return sprint;
+    public static SprintEvent get() {
+        SprintEvent.instance.sprint = false;
+        instance.setCancelled(false);
+        return instance;
     }
+
+    public boolean isSprint() {
+        return this.sprint;
+    }
+
     public void setSprint(boolean sprint) {
         this.sprint = sprint;
     }
 }
+

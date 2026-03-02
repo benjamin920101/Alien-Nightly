@@ -1,22 +1,15 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.events.eventbus;
 
-/**
- * Cancellable events need to implement this interface.
- */
 public interface ICancellable {
-    /**
-     * Sets if this event is cancelled.
-     * @param cancelled Is cancelled
-     */
-    void setCancelled(boolean cancelled);
+    default public void cancel() {
+        this.setCancelled(true);
+    }
 
-    /**
-     * Cancels this event.
-     */
-    default void cancel() { setCancelled(true); }
+    public boolean isCancelled();
 
-    /**
-     * @return True if this event is cancelled.
-     */
-    boolean isCancelled();
+    public void setCancelled(boolean var1);
 }
+

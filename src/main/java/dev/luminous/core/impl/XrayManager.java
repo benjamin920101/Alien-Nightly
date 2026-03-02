@@ -1,83 +1,106 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2246
+ *  org.apache.commons.io.IOUtils
+ */
 package dev.luminous.core.impl;
 
-import dev.luminous.Alien;
 import dev.luminous.core.Manager;
 import dev.luminous.mod.modules.Module;
-import dev.luminous.mod.modules.impl.render.XRay;
-import net.minecraft.block.Blocks;
-import org.apache.commons.io.IOUtils;
-
-import java.io.*;
+import dev.luminous.mod.modules.impl.render.Xray;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.class_2246;
+import org.apache.commons.io.IOUtils;
 
-public class XrayManager extends Manager {
+public class XrayManager
+extends Manager {
+    private final ArrayList<String> list = new ArrayList();
+
     public XrayManager() {
-        read();
+        this.read();
     }
-    public final ArrayList<String> list = new ArrayList<>();
+
+    public ArrayList<String> getList() {
+        return this.list;
+    }
+
     public boolean inWhitelist(String name) {
-        return list.contains(name);
+        return this.list.contains(name) || this.list.contains(name.replace("block.minecraft.", "").replace("item.minecraft.", ""));
     }
+
+    public void clear() {
+        this.list.clear();
+    }
+
     public void remove(String name) {
-        if (list.remove(name)) {
-            if (!Module.nullCheck() && XRay.INSTANCE.isOn()) {
-                mc.worldRenderer.reload();
-            }
+        if (this.list.remove(name = name.replace("block.minecraft.", "").replace("item.minecraft.", "")) && !Module.nullCheck() && Xray.INSTANCE.isOn()) {
+            XrayManager.mc.field_1769.method_3279();
         }
     }
+
     public void add(String name) {
-        if (!list.contains(name)) {
-            list.add(name);
-            if (!Module.nullCheck() && XRay.INSTANCE.isOn()) {
-                mc.worldRenderer.reload();
+        if (!this.list.contains(name = name.replace("block.minecraft.", "").replace("item.minecraft.", ""))) {
+            this.list.add(name);
+            if (!Module.nullCheck() && Xray.INSTANCE.isOn()) {
+                XrayManager.mc.field_1769.method_3279();
             }
         }
     }
 
     public void read() {
         try {
-            File friendFile = getFile("xrays.txt");
+            File friendFile = XrayManager.getFile("xrays.txt");
             if (!friendFile.exists()) {
-                add(Blocks.DIAMOND_ORE.getTranslationKey());
-                add(Blocks.DEEPSLATE_DIAMOND_ORE.getTranslationKey());
-                add(Blocks.GOLD_ORE.getTranslationKey());
-                add(Blocks.NETHER_GOLD_ORE.getTranslationKey());
-                add(Blocks.IRON_ORE.getTranslationKey());
-                add(Blocks.DEEPSLATE_IRON_ORE.getTranslationKey());
-                add(Blocks.REDSTONE_ORE.getTranslationKey());
-                add(Blocks.EMERALD_ORE.getTranslationKey());
-                add(Blocks.DEEPSLATE_EMERALD_ORE.getTranslationKey());
-                add(Blocks.DEEPSLATE_REDSTONE_ORE.getTranslationKey());
-                add(Blocks.COAL_ORE.getTranslationKey());
-                add(Blocks.DEEPSLATE_COAL_ORE.getTranslationKey());
-                add(Blocks.ANCIENT_DEBRIS.getTranslationKey());
-                add(Blocks.NETHER_QUARTZ_ORE.getTranslationKey());
-                add(Blocks.LAPIS_ORE.getTranslationKey());
-                add(Blocks.DEEPSLATE_LAPIS_ORE.getTranslationKey());
+                this.add(class_2246.field_10442.method_9539());
+                this.add(class_2246.field_29029.method_9539());
+                this.add(class_2246.field_10571.method_9539());
+                this.add(class_2246.field_23077.method_9539());
+                this.add(class_2246.field_10212.method_9539());
+                this.add(class_2246.field_29027.method_9539());
+                this.add(class_2246.field_10080.method_9539());
+                this.add(class_2246.field_10013.method_9539());
+                this.add(class_2246.field_29220.method_9539());
+                this.add(class_2246.field_29030.method_9539());
+                this.add(class_2246.field_10418.method_9539());
+                this.add(class_2246.field_29219.method_9539());
+                this.add(class_2246.field_22109.method_9539());
+                this.add(class_2246.field_10213.method_9539());
+                this.add(class_2246.field_10090.method_9539());
+                this.add(class_2246.field_29028.method_9539());
                 return;
             }
-            List<String> list = IOUtils.readLines(new FileInputStream(friendFile), StandardCharsets.UTF_8);
-            
-            for (String s : list) {
-                add(s);
+            for (String s : IOUtils.readLines((InputStream)new FileInputStream(friendFile), (Charset)StandardCharsets.UTF_8)) {
+                this.add(s);
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        }
+        catch (Exception var5) {
+            var5.printStackTrace();
         }
     }
-    
+
     public void save() {
         try {
-            File friendFile = getFile("xrays.txt");
-            PrintWriter printwriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(friendFile), StandardCharsets.UTF_8));
-            for (String str : list) {
+            File friendFile = XrayManager.getFile("xrays.txt");
+            PrintWriter printwriter = new PrintWriter(new OutputStreamWriter((OutputStream)new FileOutputStream(friendFile), StandardCharsets.UTF_8));
+            for (String str : this.list) {
                 printwriter.println(str);
             }
             printwriter.close();
-        } catch (Exception exception) {
-            System.out.println("[" + Alien.NAME + "] Failed to save xrays");
+        }
+        catch (Exception var5) {
+            System.out.println("[Alien] Failed to save xrays");
         }
     }
 }
+

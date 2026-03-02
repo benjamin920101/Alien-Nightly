@@ -1,77 +1,82 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1268
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_7833
+ */
 package dev.luminous.mod.modules.impl.render;
 
-import dev.luminous.mod.modules.settings.impl.BooleanSetting;
-import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import dev.luminous.api.events.eventbus.EventHandler;
+import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.HeldItemRendererEvent;
 import dev.luminous.asm.accessors.IHeldItemRenderer;
 import dev.luminous.mod.modules.Module;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.RotationAxis;
+import dev.luminous.mod.modules.settings.impl.BooleanSetting;
+import dev.luminous.mod.modules.settings.impl.SliderSetting;
+import net.minecraft.class_1268;
+import net.minecraft.class_4587;
+import net.minecraft.class_7833;
 
-public class ViewModel extends Module {
+public class ViewModel
+extends Module {
     public static ViewModel INSTANCE;
+    public final BooleanSetting mainhandSwap = this.add(new BooleanSetting("MainhandSwap", true));
+    public final BooleanSetting offhandSwap = this.add(new BooleanSetting("OffhandSwap", true));
+    public final SliderSetting scaleMainX = this.add(new SliderSetting("ScaleMainX", 1.0, (double)0.1f, 5.0, 0.01));
+    public final SliderSetting scaleMainY = this.add(new SliderSetting("ScaleMainY", 1.0, (double)0.1f, 5.0, 0.01));
+    public final SliderSetting scaleMainZ = this.add(new SliderSetting("ScaleMainZ", 1.0, (double)0.1f, 5.0, 0.01));
+    public final SliderSetting positionMainX = this.add(new SliderSetting("PositionMainX", 0.0, -3.0, 3.0, 0.01));
+    public final SliderSetting positionMainY = this.add(new SliderSetting("PositionMainY", 0.0, -3.0, 3.0, 0.01));
+    public final SliderSetting positionMainZ = this.add(new SliderSetting("PositionMainZ", 0.0, -3.0, 3.0, 0.01));
+    public final SliderSetting rotationMainX = this.add(new SliderSetting("RotationMainX", 0.0, -180.0, 180.0, 0.01));
+    public final SliderSetting rotationMainY = this.add(new SliderSetting("RotationMainY", 0.0, -180.0, 180.0, 0.01));
+    public final SliderSetting rotationMainZ = this.add(new SliderSetting("RotationMainZ", 0.0, -180.0, 180.0, 0.01));
+    public final SliderSetting scaleOffX = this.add(new SliderSetting("ScaleOffX", 1.0, (double)0.1f, 5.0, 0.01));
+    public final SliderSetting scaleOffY = this.add(new SliderSetting("ScaleOffY", 1.0, (double)0.1f, 5.0, 0.01));
+    public final SliderSetting scaleOffZ = this.add(new SliderSetting("ScaleOffZ", 1.0, (double)0.1f, 5.0, 0.01));
+    public final SliderSetting positionOffX = this.add(new SliderSetting("PositionOffX", 0.0, -3.0, 3.0, 0.01));
+    public final SliderSetting positionOffY = this.add(new SliderSetting("PositionOffY", 0.0, -3.0, 3.0, 0.01));
+    public final SliderSetting positionOffZ = this.add(new SliderSetting("PositionOffZ", 0.0, -3.0, 3.0, 0.01));
+    public final SliderSetting rotationOffX = this.add(new SliderSetting("RotationOffX", 0.0, -180.0, 180.0, 0.01));
+    public final SliderSetting rotationOffY = this.add(new SliderSetting("RotationOffY", 0.0, -180.0, 180.0, 0.01));
+    public final SliderSetting rotationOffZ = this.add(new SliderSetting("RotationOffZ", 0.0, -180.0, 180.0, 0.01));
+    public final BooleanSetting slowAnimation = this.add(new BooleanSetting("SwingSpeed", true));
+    public final SliderSetting slowAnimationVal = this.add(new SliderSetting("Value", 6, 1, 50));
+
     public ViewModel() {
-        super("ViewModel", Category.Render);
-        setChinese("手持模型");
+        super("ViewModel", Module.Category.Render);
+        this.setChinese("\u624b\u6301\u6a21\u578b");
         INSTANCE = this;
     }
 
-    public final BooleanSetting swingAnimation = add(new BooleanSetting("SwingAnimation", false));
-    public final BooleanSetting eatAnimation = add(new BooleanSetting("EatAnimation", false));
-    public final BooleanSetting mainhandSwap = add(new BooleanSetting("MainhandSwap", true));
-    public final BooleanSetting offhandSwap = add(new BooleanSetting("OffhandSwap", true));
-    public final SliderSetting scaleMainX = add(new SliderSetting("ScaleMainX", 1f, 0.1f, 5f, 0.01));
-    public final SliderSetting scaleMainY = add(new SliderSetting("ScaleMainY", 1f, 0.1f, 5f, 0.01));
-    public final SliderSetting scaleMainZ = add(new SliderSetting("ScaleMainZ", 1f, 0.1f, 5f, 0.01));
-    public final SliderSetting positionMainX = add(new SliderSetting("PositionMainX", 0f, -3.0f, 3f, 0.01));
-    public final SliderSetting positionMainY = add(new SliderSetting("PositionMainY", 0f, -3.0f, 3f, 0.01));
-    public final SliderSetting positionMainZ = add(new SliderSetting("PositionMainZ", 0f, -3.0f, 3f, 0.01));
-    public final SliderSetting rotationMainX = add(new SliderSetting("RotationMainX", 0f, -180.0f, 180f, 0.01));
-    public final SliderSetting rotationMainY = add(new SliderSetting("RotationMainY", 0f, -180.0f, 180f, 0.01));
-    public final SliderSetting rotationMainZ = add(new SliderSetting("RotationMainZ", 0f, -180.0f, 180f, 0.01));
-    public final SliderSetting scaleOffX = add(new SliderSetting("ScaleOffX", 1f, 0.1f, 5f, 0.01));
-    public final SliderSetting scaleOffY = add(new SliderSetting("ScaleOffY", 1f, 0.1f, 5f, 0.01));
-    public final SliderSetting scaleOffZ = add(new SliderSetting("ScaleOffZ", 1f, 0.1f, 5f, 0.01));
-    public final SliderSetting positionOffX = add(new SliderSetting("PositionOffX", 0f, -3.0f, 3f, 0.01));
-    public final SliderSetting positionOffY = add(new SliderSetting("PositionOffY", 0f, -3.0f, 3f, 0.01));
-    public final SliderSetting positionOffZ = add(new SliderSetting("PositionOffZ", 0f, -3.0f, 3f, 0.01));
-    public final SliderSetting rotationOffX = add(new SliderSetting("RotationOffX", 0f, -180.0f, 180f, 0.01));
-    public final SliderSetting rotationOffY = add(new SliderSetting("RotationOffY", 0f, -180.0f, 180f, 0.01));
-    public final SliderSetting rotationOffZ = add(new SliderSetting("RotationOffZ", 0f, -180.0f, 180f, 0.01));
-    public final BooleanSetting slowAnimation = add(new BooleanSetting("SlowAnimation", true));
-    public final SliderSetting slowAnimationVal = add(new SliderSetting("SlowValue", 6, 1, 50));
-    public final SliderSetting eatX = add(new SliderSetting("EatX", 1f, -1f, 2f, 0.01));
-    public final SliderSetting eatY = add(new SliderSetting("EatY", 1f, -1f, 2f, 0.01));
-
     @Override
-    public void onRender3D(MatrixStack matrixStack) {
-        if (!mainhandSwap.getValue() && ((IHeldItemRenderer) mc.getEntityRenderDispatcher().getHeldItemRenderer()).getEquippedProgressMainHand() <= 1f) {
-            ((IHeldItemRenderer) mc.getEntityRenderDispatcher().getHeldItemRenderer()).setEquippedProgressMainHand(1f);
-            ((IHeldItemRenderer) mc.getEntityRenderDispatcher().getHeldItemRenderer()).setItemStackMainHand(mc.player.getMainHandStack());
+    public void onRender3D(class_4587 matrixStack) {
+        if (!this.mainhandSwap.getValue() && ((IHeldItemRenderer)mc.method_1561().method_43336()).getEquippedProgressMainHand() <= 1.0f) {
+            ((IHeldItemRenderer)mc.method_1561().method_43336()).setEquippedProgressMainHand(1.0f);
+            ((IHeldItemRenderer)mc.method_1561().method_43336()).setItemStackMainHand(ViewModel.mc.field_1724.method_6047());
         }
-
-        if (!offhandSwap.getValue() && ((IHeldItemRenderer) mc.getEntityRenderDispatcher().getHeldItemRenderer()).getEquippedProgressOffHand() <= 1f) {
-            ((IHeldItemRenderer) mc.getEntityRenderDispatcher().getHeldItemRenderer()).setEquippedProgressOffHand(1f);
-            ((IHeldItemRenderer) mc.getEntityRenderDispatcher().getHeldItemRenderer()).setItemStackOffHand(mc.player.getOffHandStack());
+        if (!this.offhandSwap.getValue() && ((IHeldItemRenderer)mc.method_1561().method_43336()).getEquippedProgressOffHand() <= 1.0f) {
+            ((IHeldItemRenderer)mc.method_1561().method_43336()).setEquippedProgressOffHand(1.0f);
+            ((IHeldItemRenderer)mc.method_1561().method_43336()).setItemStackOffHand(ViewModel.mc.field_1724.method_6079());
         }
     }
 
-    @EventHandler
+    @EventListener
     private void onHeldItemRender(HeldItemRendererEvent event) {
-        if (event.getHand() == Hand.MAIN_HAND) {
-            event.getStack().translate(positionMainX.getValueFloat(), positionMainY.getValueFloat(), positionMainZ.getValueFloat());
-            event.getStack().scale(scaleMainX.getValueFloat(), scaleMainY.getValueFloat(), scaleMainZ.getValueFloat());
-            event.getStack().multiply(RotationAxis.POSITIVE_X.rotationDegrees(rotationMainX.getValueFloat()));
-            event.getStack().multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotationMainY.getValueFloat()));
-            event.getStack().multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotationMainZ.getValueFloat()));
+        if (event.getHand() == class_1268.field_5808) {
+            event.getStack().method_46416(this.positionMainX.getValueFloat(), this.positionMainY.getValueFloat(), this.positionMainZ.getValueFloat());
+            event.getStack().method_22905(this.scaleMainX.getValueFloat(), this.scaleMainY.getValueFloat(), this.scaleMainZ.getValueFloat());
+            event.getStack().method_22907(class_7833.field_40714.rotationDegrees(this.rotationMainX.getValueFloat()));
+            event.getStack().method_22907(class_7833.field_40716.rotationDegrees(this.rotationMainY.getValueFloat()));
+            event.getStack().method_22907(class_7833.field_40718.rotationDegrees(this.rotationMainZ.getValueFloat()));
         } else {
-            event.getStack().translate(positionOffX.getValueFloat(), positionOffY.getValueFloat(), positionOffZ.getValueFloat());
-            event.getStack().scale(scaleOffX.getValueFloat(), scaleOffY.getValueFloat(), scaleOffZ.getValueFloat());
-            event.getStack().multiply(RotationAxis.POSITIVE_X.rotationDegrees(rotationOffX.getValueFloat()));
-            event.getStack().multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotationOffY.getValueFloat()));
-            event.getStack().multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotationOffZ.getValueFloat()));
+            event.getStack().method_46416(this.positionOffX.getValueFloat(), this.positionOffY.getValueFloat(), this.positionOffZ.getValueFloat());
+            event.getStack().method_22905(this.scaleOffX.getValueFloat(), this.scaleOffY.getValueFloat(), this.scaleOffZ.getValueFloat());
+            event.getStack().method_22907(class_7833.field_40714.rotationDegrees(this.rotationOffX.getValueFloat()));
+            event.getStack().method_22907(class_7833.field_40716.rotationDegrees(this.rotationOffY.getValueFloat()));
+            event.getStack().method_22907(class_7833.field_40718.rotationDegrees(this.rotationOffZ.getValueFloat()));
         }
     }
 }
+

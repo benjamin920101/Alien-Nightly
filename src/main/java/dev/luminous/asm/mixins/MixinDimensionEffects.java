@@ -1,27 +1,31 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_5294
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
+ */
 package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.impl.render.Ambience;
-import net.minecraft.client.render.DimensionEffects;
+import java.awt.Color;
+import net.minecraft.class_5294;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.awt.*;
-
-@Mixin(DimensionEffects.class)
+@Mixin(value={class_5294.class})
 public class MixinDimensionEffects {
-
-    @Inject(method = "getFogColorOverride", at = @At(value = "HEAD"), cancellable = true)
-    private void hookGetFogColorOverride(float skyAngle, float tickDelta,
-                                         CallbackInfoReturnable<float[]> cir) {
+    @Inject(method={"method_28109"}, at={@At(value="HEAD")}, cancellable=true)
+    private void hookGetFogColorOverride(float skyAngle, float tickDelta, CallbackInfoReturnable<float[]> cir) {
         if (Ambience.INSTANCE.isOn() && Ambience.INSTANCE.dimensionColor.booleanValue) {
             Color color = Ambience.INSTANCE.dimensionColor.getValue();
-            cir.setReturnValue(new float[]
-                    {
-                            (float) color.getRed() / 255.0f, (float) color.getGreen() / 255.0f,
-                            (float) color.getBlue() / 255.0f, 1.0f
-                    });
+            cir.setReturnValue((Object)new float[]{(float)color.getRed() / 255.0f, (float)color.getGreen() / 255.0f, (float)color.getBlue() / 255.0f, 1.0f});
         }
     }
 }
+

@@ -1,40 +1,49 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.llamalad7.mixinextras.injector.ModifyReturnValue
+ *  net.minecraft.class_1922
+ *  net.minecraft.class_1935
+ *  net.minecraft.class_2248
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2350
+ *  net.minecraft.class_2680
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
+ */
 package dev.luminous.asm.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.luminous.mod.modules.impl.movement.NoSlow;
-import dev.luminous.mod.modules.impl.render.XRay;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
+import dev.luminous.mod.modules.impl.render.Xray;
+import net.minecraft.class_1922;
+import net.minecraft.class_1935;
+import net.minecraft.class_2248;
+import net.minecraft.class_2338;
+import net.minecraft.class_2350;
+import net.minecraft.class_2680;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Block.class)
-public abstract class MixinBlock implements ItemConvertible {
-	@Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
-	private static void shouldDrawSideHook(BlockState state, BlockView world, BlockPos pos, Direction side, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
-		if (XRay.INSTANCE.isOn())
-			cir.setReturnValue(XRay.INSTANCE.isCheckableOre(state.getBlock()));
-	}
+@Mixin(value={class_2248.class})
+public abstract class MixinBlock
+implements class_1935 {
+    @Inject(at={@At(value="HEAD")}, method={"method_23349()F"}, cancellable=true)
+    private void onGetVelocityMultiplier(CallbackInfoReturnable<Float> cir) {
+        if (NoSlow.INSTANCE.soulSand() && cir.getReturnValueF() < 1.0f) {
+            cir.setReturnValue((Object)Float.valueOf(1.0f));
+        }
+    }
 
-	@Inject(method = "isTransparent", at = @At("HEAD"), cancellable = true)
-	public void isTransparentHook(BlockState state, BlockView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-		if (MinecraftClient.getInstance() == null) return;
-		if (XRay.INSTANCE.isOn())
-			cir.setReturnValue(!XRay.INSTANCE.isCheckableOre(state.getBlock()));
-	}
-
-	@Inject(at = { @At("HEAD") }, method = { "getVelocityMultiplier()F" }, cancellable = true)
-	private void onGetVelocityMultiplier(CallbackInfoReturnable<Float> cir) {
-		if (NoSlow.INSTANCE.soulSand()) {
-			if (cir.getReturnValueF() < 1.0f)
-				cir.setReturnValue(1F);
-		}
-	}
-
+    @ModifyReturnValue(method={"method_9607"}, at={@At(value="RETURN")})
+    private static boolean onShouldDrawSide(boolean original, class_2680 state, class_1922 world, class_2338 pos, class_2350 side, class_2338 blockPos) {
+        Xray xray = Xray.INSTANCE;
+        return xray.isOn() ? xray.modifyDrawSide(state, world, pos, side, original) : original;
+    }
 }
+

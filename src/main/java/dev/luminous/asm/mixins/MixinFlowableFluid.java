@@ -1,24 +1,28 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2350
+ *  net.minecraft.class_3609
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.Redirect
+ */
 package dev.luminous.asm.mixins;
 
-
 import dev.luminous.mod.modules.impl.movement.Velocity;
-import net.minecraft.fluid.FlowableFluid;
-import net.minecraft.util.math.Direction;
+import java.util.Iterator;
+import net.minecraft.class_2350;
+import net.minecraft.class_3609;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.Iterator;
-
-@Mixin(FlowableFluid.class)
+@Mixin(value={class_3609.class})
 public class MixinFlowableFluid {
-
-    @Redirect(method = "getVelocity", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 0))
-    private boolean getVelocity_hasNext(Iterator<Direction> var9) {
-        if (Velocity.INSTANCE.isOn() && Velocity.INSTANCE.waterPush.getValue()) {
-            return false;
-        }
-        return var9.hasNext();
+    @Redirect(method={"method_15782"}, at=@At(value="INVOKE", target="Ljava/util/Iterator;hasNext()Z", ordinal=0), require=0)
+    private boolean getVelocity_hasNext(Iterator<class_2350> var9) {
+        return Velocity.INSTANCE.isOn() && Velocity.INSTANCE.waterPush.getValue() ? false : var9.hasNext();
     }
-
 }
+

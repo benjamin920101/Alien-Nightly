@@ -1,97 +1,85 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2246
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_3616$class_3618
+ */
 package dev.luminous.mod.modules.impl.misc;
 
 import dev.luminous.Alien;
-import dev.luminous.api.utils.entity.EntityUtil;
-import dev.luminous.api.utils.entity.InventoryUtil;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.UpdateEvent;
 import dev.luminous.api.utils.math.Timer;
+import dev.luminous.api.utils.player.EntityUtil;
+import dev.luminous.api.utils.player.InventoryUtil;
 import dev.luminous.api.utils.world.BlockUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.LavaFluid;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.class_2246;
+import net.minecraft.class_2338;
+import net.minecraft.class_3616;
 
-public class LavaFiller extends Module {
-    private final BooleanSetting inventory =
-            add(new BooleanSetting("InventorySwap", true));
-    private final SliderSetting range =
-            add(new SliderSetting("Range", 5, 0, 8,.1));
-    public final SliderSetting placeDelay =
-            add(new SliderSetting("PlaceDelay", 50, 0, 500).setSuffix("ms"));
-    private final SliderSetting blocksPer =
-            add(new SliderSetting("BlocksPer", 1, 1, 8));
-    private final BooleanSetting detectMining =
-            add(new BooleanSetting("DetectMining", false));
-    private final BooleanSetting usingPause =
-            add(new BooleanSetting("UsingPause", true));
-    private final BooleanSetting rotate =
-            add(new BooleanSetting("Rotate", true));
-    private final BooleanSetting packetPlace =
-            add(new BooleanSetting("PacketPlace", true));
+public class LavaFiller
+extends Module {
+    public final SliderSetting placeDelay = this.add(new SliderSetting("PlaceDelay", 50, 0, 500).setSuffix("ms"));
+    private final BooleanSetting inventory = this.add(new BooleanSetting("InventorySwap", true));
+    private final SliderSetting range = this.add(new SliderSetting("Range", 5.0, 0.0, 8.0, 0.1));
+    private final SliderSetting blocksPer = this.add(new SliderSetting("BlocksPer", 1, 1, 8));
+    private final BooleanSetting detectMining = this.add(new BooleanSetting("DetectMining", false));
+    private final BooleanSetting usingPause = this.add(new BooleanSetting("UsingPause", true));
+    private final BooleanSetting rotate = this.add(new BooleanSetting("Rotate", true));
+    private final BooleanSetting packetPlace = this.add(new BooleanSetting("PacketPlace", true));
     private final Timer timer = new Timer();
-
     int progress = 0;
+
     public LavaFiller() {
-        super("LavaFiller", Category.Misc);
-        setChinese("自动填岩浆");
+        super("LavaFiller", Module.Category.Misc);
+        this.setChinese("\u81ea\u52a8\u586b\u5ca9\u6d46");
     }
 
-    @Override
-    public void onUpdate() {
-        if (!timer.passedMs((long) placeDelay.getValue())) return;
-        progress = 0;
-
-        if (getBlock() == -1) {
-            return;
-        }
-        if (usingPause.getValue() && mc.player.isUsingItem()) {
-            return;
-        }
-        for (BlockPos pos : BlockUtil.getSphere(range.getValueFloat())) {
-            if (mc.world.getBlockState(pos).getBlock() == Blocks.LAVA) {
-                if (mc.world.getBlockState(pos).getFluidState().getFluid() instanceof LavaFluid.Still) {
-                    tryPlaceBlock(pos);
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        if (this.timer.passed((long)this.placeDelay.getValue()) && (!this.inventory.getValue() || EntityUtil.inInventory())) {
+            this.progress = 0;
+            if (!(this.getBlock() == -1 || this.usingPause.getValue() && LavaFiller.mc.field_1724.method_6115())) {
+                for (class_2338 pos : BlockUtil.getSphere(this.range.getValueFloat())) {
+                    if (LavaFiller.mc.field_1687.method_8320(pos).method_26204() != class_2246.field_10164 || !(LavaFiller.mc.field_1687.method_8320(pos).method_26227().method_15772() instanceof class_3616.class_3618)) continue;
+                    this.tryPlaceBlock(pos);
                 }
             }
         }
     }
 
-
-    private void tryPlaceBlock(BlockPos pos) {
-        if (pos == null) return;
-        if (detectMining.getValue() && Alien.BREAK.isMining(pos)) return;
-        if (!(progress < blocksPer.getValue())) return;
-        int block = getBlock();
-        if (block == -1) return;
-
-        if (!BlockUtil.canPlace(pos, range.getValue(), false)) return;
-        int old = mc.player.getInventory().selectedSlot;
-        doSwap(block);
-        BlockUtil.placeBlock(pos, rotate.getValue(), packetPlace.getValue());
-        if (inventory.getValue()) {
-            doSwap(block);
-            EntityUtil.syncInventory();
-        } else {
-            doSwap(old);
+    private void tryPlaceBlock(class_2338 pos) {
+        int block;
+        if (pos != null && (!this.detectMining.getValue() || !Alien.BREAK.isMining(pos)) && (double)this.progress < this.blocksPer.getValue() && (block = this.getBlock()) != -1 && BlockUtil.canPlace(pos, this.range.getValue(), false)) {
+            int old = LavaFiller.mc.field_1724.method_31548().field_7545;
+            this.doSwap(block);
+            BlockUtil.placeBlock(pos, this.rotate.getValue(), this.packetPlace.getValue());
+            if (this.inventory.getValue()) {
+                this.doSwap(block);
+                EntityUtil.syncInventory();
+            } else {
+                this.doSwap(old);
+            }
+            ++this.progress;
+            this.timer.reset();
         }
-        progress++;
-        timer.reset();
     }
 
     private void doSwap(int slot) {
-        if (inventory.getValue()) {
-            InventoryUtil.inventorySwap(slot, mc.player.getInventory().selectedSlot);
+        if (this.inventory.getValue()) {
+            InventoryUtil.inventorySwap(slot, LavaFiller.mc.field_1724.method_31548().field_7545);
         } else {
             InventoryUtil.switchToSlot(slot);
         }
     }
 
     private int getBlock() {
-        if (inventory.getValue()) {
-            return InventoryUtil.findBlockInventorySlot(Blocks.OBSIDIAN);
-        } else {
-            return InventoryUtil.findBlock(Blocks.OBSIDIAN);
-        }
+        return this.inventory.getValue() ? InventoryUtil.findBlockInventorySlot(class_2246.field_10540) : InventoryUtil.findBlock(class_2246.field_10540);
     }
 }
+

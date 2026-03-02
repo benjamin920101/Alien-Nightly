@@ -1,77 +1,88 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_640
+ */
 package dev.luminous.mod.modules.impl.misc;
 
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.UpdateEvent;
 import dev.luminous.api.utils.math.Timer;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import dev.luminous.mod.modules.settings.impl.StringSetting;
-import net.minecraft.client.network.PlayerListEntry;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Random;
+import net.minecraft.class_640;
 
-import java.util.*;
-
-public class Spammer extends Module {
-    public enum Type {
-        Bot,
-        Custom,
-        AutoSex
-    }
-    private final StringSetting message = add(new StringSetting("Message", "最强外挂Alien社区版免费试用 群\uD835\uDFF1\uD835\uDFF4\uD835\uDFF5\uD835\uDFED\uD835\uDFF5\uD835\uDFED\uD835\uDFF1\uD835\uDFF2\uD835\uDFED"));
-    private final SliderSetting randoms =
-            add(new SliderSetting("Random", 3, 0, 20,1));
-    private final SliderSetting delay =
-            add(new SliderSetting("Delay", 5, 0, 60,0.1).setSuffix("s"));
-    public final BooleanSetting tellMode =
-            add(new BooleanSetting("RandomMsg", false));
-    public final BooleanSetting checkSelf =
-            add(new BooleanSetting("CheckSelf", false));
+public class Spammer
+extends Module {
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    public final BooleanSetting checkSelf = this.add(new BooleanSetting("CheckSelf", false));
+    final StringSetting message = this.add(new StringSetting("Message", "\u6700\u5f3a\u5916\u6302Alien\u793e\u533a\u7248\u514d\u8d39\u8bd5\u7528 \u7fa4\ud835\udff1\ud835\udff4\ud835\udff5\ud835\udfed\ud835\udff5\ud835\udfed\ud835\udff1\ud835\udff2\ud835\udfed"));
+    private final Random random = new Random();
+    private final SliderSetting randoms = this.add(new SliderSetting("Random", 3.0, 0.0, 20.0, 1.0));
+    private final SliderSetting delay = this.add(new SliderSetting("Delay", 5.0, 0.0, 60.0, 0.1).setSuffix("s"));
+    private final BooleanSetting tellMode = this.add(new BooleanSetting("RandomWhisper", false));
+    private final BooleanSetting autoDisable = this.add(new BooleanSetting("AutoDisable", true));
+    private final Timer timer = new Timer();
 
     public Spammer() {
-        super("Spammer", Category.Misc);
-        setChinese("自动刷屏");
+        super("Spammer", Module.Category.Misc);
+        this.setChinese("\u81ea\u52a8\u5237\u5c4f");
     }
 
     @Override
     public void onLogout() {
-        disable();
+        if (this.autoDisable.getValue()) {
+            this.disable();
+        }
     }
 
-    Random random = new Random();
-    Timer timer = new Timer();
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-    @Override
-    public void onUpdate() {
-        if (!timer.passedS(delay.getValue())) return;
-        timer.reset();
-        String randomString = generateRandomString(randoms.getValueInt());
-        if (!randomString.isEmpty()) {
-            randomString = " " + randomString;
-        }
-        if (tellMode.getValue()) {
-            Collection<PlayerListEntry> players = mc.getNetworkHandler().getPlayerList();
-            List<PlayerListEntry> list = new ArrayList<>(players);
-            int size = list.size();
-            if (size == 0) {
-                return;
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        if (this.timer.passedS(this.delay.getValue())) {
+            this.timer.reset();
+            Object randomString = this.generateRandomString(this.randoms.getValueInt());
+            if (!((String)randomString).isEmpty()) {
+                randomString = " " + (String)randomString;
             }
-            PlayerListEntry playerListEntry = list.get(random.nextInt(size));
-            while (checkSelf.getValue() && Objects.equals(playerListEntry.getProfile().getName(), mc.player.getGameProfile().getName())) {
-                playerListEntry = list.get(random.nextInt(size));
+            if (this.tellMode.getValue()) {
+                Collection players = mc.method_1562().method_2880();
+                ArrayList list = new ArrayList(players);
+                int size = list.size();
+                if (size == 0) {
+                    return;
+                }
+                class_640 playerListEntry = (class_640)list.get(this.random.nextInt(size));
+                int i = 0;
+                while (this.checkSelf.getValue() && Objects.equals(playerListEntry.method_2966().getName(), Spammer.mc.field_1724.method_7334().getName())) {
+                    if (i > 50) {
+                        return;
+                    }
+                    ++i;
+                    playerListEntry = (class_640)list.get(this.random.nextInt(size));
+                }
+                mc.method_1562().method_45730("tell " + playerListEntry.method_2966().getName() + " " + this.message.getValue() + (String)randomString);
+            } else if (this.message.getValue().startsWith("/")) {
+                mc.method_1562().method_45731(this.message.getValue().replaceFirst("/", "") + (String)randomString);
+            } else {
+                mc.method_1562().method_45729(this.message.getValue() + (String)randomString);
             }
-            mc.getNetworkHandler().sendChatCommand("tell " + playerListEntry.getProfile().getName() + " " + message.getValue() + randomString);
-        } else {
-            mc.getNetworkHandler().sendChatMessage(message.getValue() + randomString);
         }
     }
 
     private String generateRandomString(int LENGTH) {
         StringBuilder sb = new StringBuilder(LENGTH);
-
-        for (int i = 0; i < LENGTH; i++) {
-            int index = random.nextInt(CHARACTERS.length());
+        for (int i = 0; i < LENGTH; ++i) {
+            int index = this.random.nextInt(CHARACTERS.length());
             sb.append(CHARACTERS.charAt(index));
         }
-
         return sb.toString();
     }
 }
+

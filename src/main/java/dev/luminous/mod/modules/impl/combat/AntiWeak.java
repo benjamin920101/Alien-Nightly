@@ -1,84 +1,94 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1294
+ *  net.minecraft.class_1511
+ *  net.minecraft.class_1829
+ *  net.minecraft.class_2596
+ *  net.minecraft.class_2824
+ *  net.minecraft.class_2824$class_5907
+ */
 package dev.luminous.mod.modules.impl.combat;
 
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.PacketEvent;
+import dev.luminous.api.utils.math.Timer;
+import dev.luminous.api.utils.player.EntityUtil;
+import dev.luminous.api.utils.player.InventoryUtil;
+import dev.luminous.mod.modules.Module;
+import dev.luminous.mod.modules.impl.combat.Criticals;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import dev.luminous.api.events.eventbus.EventHandler;
-import dev.luminous.api.events.eventbus.EventPriority;
-import dev.luminous.api.events.impl.PacketEvent;
-import dev.luminous.api.utils.entity.EntityUtil;
-import dev.luminous.api.utils.entity.InventoryUtil;
-import dev.luminous.api.utils.math.Timer;
-import dev.luminous.mod.modules.Module;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.SwordItem;
-import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.class_1294;
+import net.minecraft.class_1511;
+import net.minecraft.class_1829;
+import net.minecraft.class_2596;
+import net.minecraft.class_2824;
 
-public class AntiWeak extends Module {
+public class AntiWeak
+extends Module {
+    private final EnumSetting<SwapMode> swapMode = this.add(new EnumSetting<SwapMode>("SwapMode", SwapMode.Inventory));
+    private final SliderSetting delay = this.add(new SliderSetting("Delay", 100, 0, 500).setSuffix("ms"));
+    private final BooleanSetting onlyCrystal = this.add(new BooleanSetting("OnlyCrystal", true));
+    private final Timer delayTimer = new Timer();
+    boolean ignore = false;
+    private class_2824 lastPacket = null;
+
     public AntiWeak() {
-        super("AntiWeak", Category.Combat);
-        setChinese("反虚弱");
-    }
-    private final SliderSetting delay = add(new SliderSetting("Delay", 100, 0, 500).setSuffix("ms"));
-    private final EnumSetting<SwapMode> swapMode =
-            add(new EnumSetting<>("SwapMode", SwapMode.Inventory));
-    private final BooleanSetting onlyCrystal =
-            add(new BooleanSetting("OnlyCrystal", true));
-    public enum SwapMode {
-        Normal, Silent, Inventory
+        super("AntiWeak", Module.Category.Combat);
+        this.setChinese("\u53cd\u865a\u5f31");
     }
 
     @Override
     public String getInfo() {
-        return swapMode.getValue().name();
+        return this.swapMode.getValue().name();
     }
 
-    private final Timer delayTimer = new Timer();
-    private PlayerInteractEntityC2SPacket lastPacket = null;
-    boolean ignore = false;
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventListener(priority=200)
     public void onPacketSend(PacketEvent.Send event) {
-        if (nullCheck()) return;
-        if (event.isCancelled()) return;
-        if (ignore) return;
-        if (mc.player.getStatusEffect(StatusEffects.WEAKNESS) == null) return;
-        if (mc.player.getMainHandStack().getItem() instanceof SwordItem)
-            return;
-        if (!delayTimer.passedMs(delay.getValue())) return;
-        if (event.getPacket() instanceof PlayerInteractEntityC2SPacket packet && Criticals.getInteractType(packet) == Criticals.InteractType.ATTACK) {
-
-            if (onlyCrystal.getValue() && !(Criticals.getEntity(packet) instanceof EndCrystalEntity))
+        class_2824 packet;
+        class_2596<?> class_25962;
+        if (!AntiWeak.nullCheck() && !event.isCancelled() && !this.ignore && AntiWeak.mc.field_1724.method_6112(class_1294.field_5911) != null && !(AntiWeak.mc.field_1724.method_6047().method_7909() instanceof class_1829) && this.delayTimer.passedMs(this.delay.getValue()) && (class_25962 = event.getPacket()) instanceof class_2824 && Criticals.getInteractType(packet = (class_2824)class_25962) == class_2824.class_5907.field_29172) {
+            if (this.onlyCrystal.getValue() && !(Criticals.getEntity(packet) instanceof class_1511)) {
                 return;
-            lastPacket = event.getPacket();
-            delayTimer.reset();
-            ignore = true;
-            doAnti();
-            ignore = false;
+            }
+            this.lastPacket = packet;
+            this.delayTimer.reset();
+            this.ignore = true;
+            this.doAnti();
+            this.ignore = false;
             event.cancel();
         }
     }
+
     private void doAnti() {
-        if (lastPacket == null) return;
         int strong;
-        if (swapMode.getValue() != SwapMode.Inventory) {
-            strong = InventoryUtil.findClass(SwordItem.class);
-        } else {
-            strong = InventoryUtil.findClassInventorySlot(SwordItem.class);
-        }
-        if (strong == -1) return;
-        int old = mc.player.getInventory().selectedSlot;
-        if (swapMode.getValue() != SwapMode.Inventory) {
-            InventoryUtil.switchToSlot(strong);
-        } else {
-            InventoryUtil.inventorySwap(strong, mc.player.getInventory().selectedSlot);
-        }
-        mc.getNetworkHandler().sendPacket(lastPacket);
-        if (swapMode.getValue() != SwapMode.Inventory) {
-            if (swapMode.getValue() != SwapMode.Normal) InventoryUtil.switchToSlot(old);
-        } else {
-            InventoryUtil.inventorySwap(strong, mc.player.getInventory().selectedSlot);
-            EntityUtil.syncInventory();
+        if (this.lastPacket != null && (strong = this.swapMode.getValue() != SwapMode.Inventory ? InventoryUtil.findClass(class_1829.class) : InventoryUtil.findClassInventorySlot(class_1829.class)) != -1) {
+            int old = AntiWeak.mc.field_1724.method_31548().field_7545;
+            if (this.swapMode.getValue() != SwapMode.Inventory) {
+                InventoryUtil.switchToSlot(strong);
+            } else {
+                InventoryUtil.inventorySwap(strong, AntiWeak.mc.field_1724.method_31548().field_7545);
+            }
+            mc.method_1562().method_52787((class_2596)this.lastPacket);
+            if (this.swapMode.getValue() != SwapMode.Inventory) {
+                if (this.swapMode.getValue() != SwapMode.Normal) {
+                    InventoryUtil.switchToSlot(old);
+                }
+            } else {
+                InventoryUtil.inventorySwap(strong, AntiWeak.mc.field_1724.method_31548().field_7545);
+                EntityUtil.syncInventory();
+            }
         }
     }
+
+    public static enum SwapMode {
+        Normal,
+        Silent,
+        Inventory;
+
+    }
 }
+

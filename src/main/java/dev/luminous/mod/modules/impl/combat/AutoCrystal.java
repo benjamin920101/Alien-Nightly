@@ -1,749 +1,843 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1268
+ *  net.minecraft.class_1297
+ *  net.minecraft.class_1297$class_5529
+ *  net.minecraft.class_1309
+ *  net.minecraft.class_1511
+ *  net.minecraft.class_1542
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_1799
+ *  net.minecraft.class_1802
+ *  net.minecraft.class_2246
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2350
+ *  net.minecraft.class_238
+ *  net.minecraft.class_239$class_240
+ *  net.minecraft.class_243
+ *  net.minecraft.class_2596
+ *  net.minecraft.class_2824
+ *  net.minecraft.class_2868
+ *  net.minecraft.class_3959
+ *  net.minecraft.class_3959$class_242
+ *  net.minecraft.class_3959$class_3960
+ *  net.minecraft.class_3965
+ *  net.minecraft.class_4587
+ */
 package dev.luminous.mod.modules.impl.combat;
 
-import com.mojang.authlib.GameProfile;
-import dev.luminous.api.events.eventbus.EventHandler;
-import dev.luminous.api.events.impl.LookAtEvent;
+import dev.luminous.Alien;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.ClientTickEvent;
+import dev.luminous.api.events.impl.EntitySpawnedEvent;
 import dev.luminous.api.events.impl.PacketEvent;
 import dev.luminous.api.events.impl.Render3DEvent;
-import dev.luminous.api.events.impl.UpdateWalkingPlayerEvent;
+import dev.luminous.api.events.impl.RotationEvent;
 import dev.luminous.api.utils.combat.CombatUtil;
-import dev.luminous.api.utils.entity.EntityUtil;
-import dev.luminous.api.utils.entity.InventoryUtil;
-import dev.luminous.api.utils.math.*;
+import dev.luminous.api.utils.entity.PlayerEntityPredict;
+import dev.luminous.api.utils.math.AnimateUtil;
+import dev.luminous.api.utils.math.Animation;
+import dev.luminous.api.utils.math.DamageUtils;
+import dev.luminous.api.utils.math.Easing;
+import dev.luminous.api.utils.math.ExplosionUtil;
+import dev.luminous.api.utils.math.MathUtil;
+import dev.luminous.api.utils.math.Timer;
+import dev.luminous.api.utils.player.EntityUtil;
+import dev.luminous.api.utils.player.InventoryUtil;
 import dev.luminous.api.utils.render.ColorUtil;
 import dev.luminous.api.utils.render.JelloUtil;
 import dev.luminous.api.utils.render.Render3DUtil;
 import dev.luminous.api.utils.world.BlockPosX;
 import dev.luminous.api.utils.world.BlockUtil;
 import dev.luminous.asm.accessors.IEntity;
-import dev.luminous.Alien;
 import dev.luminous.mod.modules.Module;
-import dev.luminous.mod.modules.impl.client.AntiCheat;
 import dev.luminous.mod.modules.impl.client.ClientSetting;
+import dev.luminous.mod.modules.impl.combat.AutoAnchor;
+import dev.luminous.mod.modules.impl.combat.AutoWeb;
 import dev.luminous.mod.modules.impl.exploit.Blink;
-import dev.luminous.mod.modules.impl.player.PacketMine;
-import dev.luminous.mod.modules.impl.render.ExplosionSpawn;
-import dev.luminous.mod.modules.settings.SwingSide;
+import dev.luminous.mod.modules.impl.movement.ElytraFly;
+import dev.luminous.mod.modules.impl.movement.Velocity;
+import dev.luminous.mod.modules.impl.player.SpeedMine;
+import dev.luminous.mod.modules.settings.enums.SwingSide;
+import dev.luminous.mod.modules.settings.enums.Timing;
+import dev.luminous.mod.modules.settings.impl.BindSetting;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
-import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
-import net.minecraft.util.Hand;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-
-import java.awt.*;
+import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.UUID;
+import net.minecraft.class_1268;
+import net.minecraft.class_1297;
+import net.minecraft.class_1309;
+import net.minecraft.class_1511;
+import net.minecraft.class_1542;
+import net.minecraft.class_1657;
+import net.minecraft.class_1799;
+import net.minecraft.class_1802;
+import net.minecraft.class_2246;
+import net.minecraft.class_2338;
+import net.minecraft.class_2350;
+import net.minecraft.class_238;
+import net.minecraft.class_239;
+import net.minecraft.class_243;
+import net.minecraft.class_2596;
+import net.minecraft.class_2824;
+import net.minecraft.class_2868;
+import net.minecraft.class_3959;
+import net.minecraft.class_3965;
+import net.minecraft.class_4587;
 
-import static dev.luminous.api.utils.world.BlockUtil.getBlock;
-import static dev.luminous.api.utils.world.BlockUtil.hasCrystal;
-
-
-
-public class AutoCrystal extends Module {
+public class AutoCrystal
+extends Module {
     public static AutoCrystal INSTANCE;
-    public static BlockPos crystalPos;
+    public class_2338 crystalPos;
     public final Timer lastBreakTimer = new Timer();
-    private final Timer placeTimer = new Timer(), noPosTimer = new Timer(), switchTimer = new Timer(), calcDelay = new Timer();
-
-    private final EnumSetting<Page> page = add(new EnumSetting<>("Page", Page.General));
-    //General
-    private final BooleanSetting preferAnchor = add(new BooleanSetting("PreferAnchor", true, () -> page.getValue() == Page.General));
-    private final BooleanSetting breakOnlyHasCrystal = add(new BooleanSetting("OnlyHold", true, () -> page.getValue() == Page.General));
-    private final EnumSetting<SwingSide> swingMode = add(new EnumSetting<>("Swing", SwingSide.All, () -> page.getValue() == Page.General));
-    private final BooleanSetting eatingPause = add(new BooleanSetting("EatingPause", true, () -> page.getValue() == Page.General));
-    private final SliderSetting switchCooldown = add(new SliderSetting("SwitchPause", 100, 0, 1000, () -> page.getValue() == Page.General).setSuffix("ms"));
-    private final SliderSetting targetRange = add(new SliderSetting("TargetRange", 12.0, 0.0, 20.0, () -> page.getValue() == Page.General).setSuffix("m"));
-    private final SliderSetting updateDelay = add(new SliderSetting("UpdateDelay", 50, 0, 1000, () -> page.getValue() == Page.General).setSuffix("ms"));
-    private final SliderSetting wallRange = add(new SliderSetting("WallRange", 6.0, 0.0, 6.0, () -> page.getValue() == Page.General).setSuffix("m"));
-    //Rotate
-    private final BooleanSetting rotate = add(new BooleanSetting("Rotate", true, () -> page.getValue() == Page.Rotation).setParent());
-    private final BooleanSetting onBreak = add(new BooleanSetting("OnBreak", false, () -> rotate.isOpen() && page.getValue() == Page.Rotation));
-    private final SliderSetting yOffset = add(new SliderSetting("YOffset", 0.05, 0, 1, 0.01, () -> rotate.isOpen() && onBreak.getValue() && page.getValue() == Page.Rotation));
-    private final BooleanSetting yawStep = add(new BooleanSetting("YawStep", false, () -> rotate.isOpen() && page.getValue() == Page.Rotation));
-    private final SliderSetting steps = add(new SliderSetting("Steps", 0.05, 0, 1, 0.01, () -> rotate.isOpen() && yawStep.getValue() && page.getValue() == Page.Rotation));
-    private final BooleanSetting checkFov = add(new BooleanSetting("OnlyLooking", true, () -> rotate.isOpen() && yawStep.getValue() && page.getValue() == Page.Rotation));
-    private final SliderSetting fov = add(new SliderSetting("Fov", 30, 0, 50, () -> rotate.isOpen() && yawStep.getValue() && checkFov.getValue() && page.getValue() == Page.Rotation));
-    private final SliderSetting priority = add(new SliderSetting("Priority", 10,0 ,100, () -> rotate.isOpen() && yawStep.getValue() && page.getValue() == Page.Rotation));
-    //Place
-    private final SliderSetting autoMinDamage = add(new SliderSetting("PistonMin", 5.0, 0.0, 36.0, () -> page.getValue() == Page.Interact).setSuffix("dmg"));
-    private final SliderSetting minDamage = add(new SliderSetting("Min", 5.0, 0.0, 36.0, () -> page.getValue() == Page.Interact).setSuffix("dmg"));
-    private final SliderSetting maxSelf = add(new SliderSetting("Self", 12.0, 0.0, 36.0, () -> page.getValue() == Page.Interact).setSuffix("dmg"));
-    private final SliderSetting range = add(new SliderSetting("Range", 5.0, 0.0, 6, () -> page.getValue() == Page.Interact).setSuffix("m"));
-    private final SliderSetting noSuicide = add(new SliderSetting("NoSuicide", 3.0, 0.0, 10.0, () -> page.getValue() == Page.Interact).setSuffix("hp"));
-    private final BooleanSetting smart = add(new BooleanSetting("Smart", true, () -> page.getValue() == Page.Interact));
-    private final BooleanSetting place = add(new BooleanSetting("Place", true, () -> page.getValue() == Page.Interact).setParent());
-    private final SliderSetting placeDelay = add(new SliderSetting("PlaceDelay", 300, 0, 1000, () -> page.getValue() == Page.Interact && place.isOpen()).setSuffix("ms"));
-    private final EnumSetting<SwapMode> autoSwap = add(new EnumSetting<>("AutoSwap", SwapMode.Off, () -> page.getValue() == Page.Interact && place.isOpen()));
-    private final BooleanSetting afterBreak = add(new BooleanSetting("AfterBreak", true, () -> page.getValue() == Page.Interact && place.isOpen()));
-    private final BooleanSetting breakSetting = add(new BooleanSetting("Break", true, () -> page.getValue() == Page.Interact).setParent());
-    private final SliderSetting breakDelay = add(new SliderSetting("BreakDelay", 300, 0, 1000, () -> page.getValue() == Page.Interact && breakSetting.isOpen()).setSuffix("ms"));
-    private final SliderSetting minAge = add(new SliderSetting("MinAge", 0, 0, 20, () -> page.getValue() == Page.Interact && breakSetting.isOpen()).setSuffix("tick"));
-    private final BooleanSetting breakRemove = add(new BooleanSetting("Remove", false, () -> page.getValue() == Page.Interact && breakSetting.isOpen()));
-    private final BooleanSetting onlyTick = add(new BooleanSetting("OnlyTick", true, () -> page.getValue() == Page.Interact));
-    //Render
-    private final ColorSetting text = add(new ColorSetting("Text", new Color(-1), () -> page.getValue() == Page.Render).injectBoolean(true));
-    private final BooleanSetting render = add(new BooleanSetting("Render", true, () -> page.getValue() == Page.Render));
-    private final BooleanSetting sync = add(new BooleanSetting("Sync", true, () -> page.getValue() == Page.Render && render.getValue()));
-    private final BooleanSetting shrink = add(new BooleanSetting("Shrink", true, () -> page.getValue() == Page.Render && render.getValue()));
-    private final ColorSetting box = add(new ColorSetting("Box", new Color(255, 255, 255, 255), () -> page.getValue() == Page.Render && render.getValue()).injectBoolean(true));
-    private final SliderSetting lineWidth = add(new SliderSetting("LineWidth", 1.5d, 0.01d, 3d, 0.01, () -> page.getValue() == Page.Render && render.getValue()));
-    private final ColorSetting fill = add(new ColorSetting("Fill", new Color(255, 255, 255, 100), () -> page.getValue() == Page.Render && render.getValue()).injectBoolean(true));
-    private final SliderSetting sliderSpeed = add(new SliderSetting("SliderSpeed", 0.2, 0.01, 1, 0.01, () -> page.getValue() == Page.Render && render.getValue()));
-    private final SliderSetting startFadeTime = add(new SliderSetting("StartFade", 0.3d, 0d, 2d, 0.01, () -> page.getValue() == Page.Render && render.getValue()).setSuffix("s"));
-    private final SliderSetting fadeSpeed = add(new SliderSetting("FadeSpeed", 0.2d, 0.01d, 1d, 0.01, () -> page.getValue() == Page.Render && render.getValue()));
-
-    private final EnumSetting<TargetESP> mode = add(new EnumSetting<>("TargetESP", TargetESP.Jello, () -> page.getValue() == Page.Render));
-    private final ColorSetting color = add(new ColorSetting("TargetColor", new Color(255, 255, 255, 50), () -> page.getValue() == Page.Render));
-    private final ColorSetting hitColor = add(new ColorSetting("HitColor", new Color(255, 255, 255, 150), () -> page.getValue() == Page.Render));
-    public final SliderSetting animationTime = add(new SliderSetting("AnimationTime", 200, 0, 2000, 1, () -> page.getValue() == Page.Render && mode.is(TargetESP.Box)));
-    public final EnumSetting<Easing> ease = add(new EnumSetting<>("Ease", Easing.CubicInOut, () -> page.getValue() == Page.Render && mode.is(TargetESP.Box)));
-    //Calc
-    private final BooleanSetting thread = add(new BooleanSetting("Thread", true, () -> page.getValue() == Page.Calc));
-    private final BooleanSetting doCrystal = add(new BooleanSetting("ThreadInteract", false, () -> page.getValue() == Page.Calc));
-    private final BooleanSetting lite = add(new BooleanSetting("LessCPU", false, () -> page.getValue() == Page.Calc));
-    private final SliderSetting predictTicks = add(new SliderSetting("Predict", 4, 0, 10, () -> page.getValue() == Page.Calc).setSuffix("ticks"));
-    private final BooleanSetting terrainIgnore = add(new BooleanSetting("TerrainIgnore", true, () -> page.getValue() == Page.Calc));
-    //Misc
-    private final BooleanSetting ignoreMine = add(new BooleanSetting("IgnoreMine", true, () -> page.getValue() == Page.Misc).setParent());
-    private final SliderSetting constantProgress = add(new SliderSetting("Progress", 90.0, 0.0, 100.0, () -> page.getValue() == Page.Misc && ignoreMine.isOpen()).setSuffix("%"));
-    private final BooleanSetting antiSurround = add(new BooleanSetting("AntiSurround", false, () -> page.getValue() == Page.Misc).setParent());
-    private final SliderSetting antiSurroundMax = add(new SliderSetting("WhenLower", 5.0, 0.0, 36.0, () -> page.getValue() == Page.Misc && antiSurround.isOpen()).setSuffix("dmg"));
-    private final BooleanSetting slowPlace = add(new BooleanSetting("Timeout", true, () -> page.getValue() == Page.Misc).setParent());
-    private final SliderSetting slowDelay = add(new SliderSetting("TimeoutDelay", 600, 0, 2000, () -> page.getValue() == Page.Misc && slowPlace.isOpen()).setSuffix("ms"));
-    private final SliderSetting slowMinDamage = add(new SliderSetting("TimeoutMin", 1.5, 0.0, 36.0, () -> page.getValue() == Page.Misc && slowPlace.isOpen()).setSuffix("dmg"));
-    private final BooleanSetting forcePlace = add(new BooleanSetting("ForcePlace", true, () -> page.getValue() == Page.Misc).setParent());
-    private final SliderSetting forceMaxHealth = add(new SliderSetting("LowerThan", 7, 0, 36, () -> page.getValue() == Page.Misc && forcePlace.isOpen()).setSuffix("health"));
-    private final SliderSetting forceMin = add(new SliderSetting("ForceMin", 1.5, 0.0, 36.0, () -> page.getValue() == Page.Misc && forcePlace.isOpen()).setSuffix("dmg"));
-    private final BooleanSetting armorBreaker = add(new BooleanSetting("ArmorBreaker", true, () -> page.getValue() == Page.Misc).setParent());
-    private final SliderSetting maxDurable = add(new SliderSetting("MaxDurable", 8, 0, 100, () -> page.getValue() == Page.Misc && armorBreaker.isOpen()).setSuffix("%"));
-    private final SliderSetting armorBreakerDamage = add(new SliderSetting("BreakerMin", 3.0, 0.0, 36.0, () -> page.getValue() == Page.Misc && armorBreaker.isOpen()).setSuffix("dmg"));
-    private final SliderSetting hurtTime = add(new SliderSetting("HurtTime", 10, 0, 10, 1, () -> page.getValue() == Page.Misc));
-    private final SliderSetting waitHurt = add(new SliderSetting("WaitHurt", 10, 0, 10, 1, () -> page.getValue() == Page.Misc));
-    private final SliderSetting syncTimeout = add(new SliderSetting("WaitTimeOut", 500, 0, 2000, 10, () -> page.getValue() == Page.Misc));
-    private final BooleanSetting forceWeb = add(new BooleanSetting("ForceWeb", true, () -> page.getValue() == Page.Misc).setParent());
-    public final BooleanSetting airPlace = add(new BooleanSetting("AirPlace", false, () -> page.getValue() == Page.Misc && forceWeb.isOpen()));
-    public final BooleanSetting replace = add(new BooleanSetting("Replace", false, () -> page.getValue() == Page.Misc && forceWeb.isOpen()));
-    public PlayerEntity displayTarget;
-    private final Animation animation = new Animation();
-    public float breakDamage, tempDamage, lastDamage;
-    public Vec3d directionVec = null;
-    double currentFade = 0;
-    private BlockPos tempPos, breakPos, syncPos;
-    private Vec3d placeVec3d, curVec3d;
-
-    public enum TargetESP {
-        Box,
-        Jello,
-        None
-    }
+    private final EnumSetting<Page> page = this.add(new EnumSetting<Page>("Page", Page.General));
+    final Animation animation = new Animation();
+    final DecimalFormat df = new DecimalFormat("0.0");
+    private final Timer baseTimer = new Timer();
+    private final Timer placeTimer = new Timer();
+    private final Timer noPosTimer = new Timer();
+    private final Timer switchTimer = new Timer();
+    private final Timer calcDelay = new Timer();
+    private final BindSetting pause = this.add(new BindSetting("Pause", -1, () -> this.page.is(Page.Check)));
+    private final BooleanSetting preferAnchor = this.add(new BooleanSetting("PreferAnchor", true, () -> this.page.getValue() == Page.Check));
+    private final BooleanSetting breakOnlyHasCrystal = this.add(new BooleanSetting("OnlyHold", true, () -> this.page.getValue() == Page.Check));
+    private final BooleanSetting eatingPause = this.add(new BooleanSetting("EatingPause", true, () -> this.page.getValue() == Page.Check));
+    private final SliderSetting switchCooldown = this.add(new SliderSetting("SwitchPause", 100, 0, 1000, () -> this.page.getValue() == Page.Check).setSuffix("ms"));
+    private final SliderSetting targetRange = this.add(new SliderSetting("TargetRange", 12.0, 0.0, 20.0, () -> this.page.getValue() == Page.Check).setSuffix("m"));
+    private final SliderSetting updateDelay = this.add(new SliderSetting("UpdateDelay", 50, 0, 1000, () -> this.page.getValue() == Page.Check).setSuffix("ms"));
+    private final BooleanSetting rotate = this.add(new BooleanSetting("Rotate", true, () -> this.page.getValue() == Page.Rotation).setParent());
+    private final BooleanSetting onPlace = this.add(new BooleanSetting("OnPlace", false, () -> this.rotate.isOpen() && this.page.getValue() == Page.Rotation));
+    private final BooleanSetting onBreak = this.add(new BooleanSetting("OnBreak", false, () -> this.rotate.isOpen() && this.page.getValue() == Page.Rotation));
+    private final BooleanSetting yawStep = this.add(new BooleanSetting("YawStep", false, () -> this.rotate.isOpen() && this.page.getValue() == Page.Rotation).setParent());
+    private final BooleanSetting whenElytra = this.add(new BooleanSetting("FallFlying", true, () -> this.rotate.isOpen() && this.page.getValue() == Page.Rotation && this.yawStep.isOpen()));
+    private final SliderSetting steps = this.add(new SliderSetting("Steps", 0.05, 0.0, 1.0, 0.01, () -> this.rotate.isOpen() && this.yawStep.isOpen() && this.page.getValue() == Page.Rotation));
+    private final BooleanSetting checkFov = this.add(new BooleanSetting("OnlyLooking", true, () -> this.rotate.isOpen() && this.yawStep.isOpen() && this.page.getValue() == Page.Rotation));
+    private final SliderSetting fov = this.add(new SliderSetting("Fov", 20.0, 0.0, 360.0, 0.1, () -> this.rotate.isOpen() && this.yawStep.isOpen() && this.checkFov.getValue() && this.page.getValue() == Page.Rotation));
+    private final SliderSetting priority = this.add(new SliderSetting("Priority", 10, 0, 100, () -> this.rotate.isOpen() && this.yawStep.isOpen() && this.page.getValue() == Page.Rotation));
+    private final SliderSetting minDamage = this.add(new SliderSetting("Min", 5.0, 0.0, 36.0, () -> this.page.getValue() == Page.General).setSuffix("dmg"));
+    private final SliderSetting maxSelf = this.add(new SliderSetting("Max", 12.0, 0.0, 36.0, () -> this.page.getValue() == Page.General).setSuffix("dmg"));
+    private final SliderSetting reserve = this.add(new SliderSetting("Reserve", 2.0, 0.0, 10.0, () -> this.page.getValue() == Page.General).setSuffix("hp"));
+    private final BooleanSetting balance = this.add(new BooleanSetting("Balance", true, () -> this.page.getValue() == Page.General).setParent());
+    private final SliderSetting balanceOffset = this.add(new SliderSetting("BalanceOffset", 0.0, -20.0, 20.0, 0.1, () -> this.page.getValue() == Page.General && this.balance.isOpen()).setSuffix("hp"));
+    private final BooleanSetting place = this.add(new BooleanSetting("Place", true, () -> this.page.getValue() == Page.General).setParent());
+    public final SliderSetting placeRange = this.add(new SliderSetting("PlaceRange", 5.0, 0.0, 6.0, 0.01, () -> this.page.getValue() == Page.General && this.place.isOpen()).setSuffix("m"));
+    private final SliderSetting placeDelay = this.add(new SliderSetting("PlaceDelay", 300, 0, 1000, () -> this.page.getValue() == Page.General && this.place.isOpen()).setSuffix("ms"));
+    private final EnumSetting<SwapMode> autoSwap = this.add(new EnumSetting<SwapMode>("AutoSwap", SwapMode.None, () -> this.page.getValue() == Page.General && this.place.isOpen()));
+    private final BooleanSetting afterBreak = this.add(new BooleanSetting("AfterBreak", true, () -> this.page.getValue() == Page.General && this.place.isOpen()));
+    private final BooleanSetting forcePlace = this.add(new BooleanSetting("ForcePlace", false, () -> this.page.getValue() == Page.General && this.place.isOpen()));
+    private final BooleanSetting breakSetting = this.add(new BooleanSetting("Break", true, () -> this.page.getValue() == Page.General).setParent());
+    public final SliderSetting breakRange = this.add(new SliderSetting("BreakRange", 4.0, 0.0, 6.0, 0.01, () -> this.page.getValue() == Page.General && this.breakSetting.isOpen()).setSuffix("m"));
+    private final SliderSetting breakDelay = this.add(new SliderSetting("BreakDelay", 300, 0, 1000, () -> this.page.getValue() == Page.General && this.breakSetting.isOpen()).setSuffix("ms"));
+    private final SliderSetting minAge = this.add(new SliderSetting("MinAge", 0, 0, 20, () -> this.page.getValue() == Page.General && this.breakSetting.isOpen()).setSuffix("tick"));
+    private final BooleanSetting breakRemove = this.add(new BooleanSetting("Remove", false, () -> this.page.getValue() == Page.General && this.breakSetting.isOpen()));
+    private final BooleanSetting onAdd = this.add(new BooleanSetting("OnAdd", false, () -> this.page.getValue() == Page.General && this.breakSetting.isOpen()));
+    private final BooleanSetting resetCD = this.add(new BooleanSetting("ResetAttack", true, () -> this.page.getValue() == Page.General && this.breakSetting.isOpen()));
+    private final EnumSetting<Timing> timing = this.add(new EnumSetting<Timing>("Timing", Timing.All, () -> this.page.getValue() == Page.General));
+    private final BooleanSetting interactOnRender = this.add(new BooleanSetting("InteractOnRender", false, () -> this.page.getValue() == Page.General));
+    private final SliderSetting wallRange = this.add(new SliderSetting("WallRange", 6.0, 0.0, 6.0, () -> this.page.getValue() == Page.General).setSuffix("m"));
+    private final EnumSetting<SwingSide> swingMode = this.add(new EnumSetting<SwingSide>("Swing", SwingSide.All, () -> this.page.getValue() == Page.General));
+    private final ColorSetting text = this.add(new ColorSetting("Text", new Color(-1), () -> this.page.getValue() == Page.Render).injectBoolean(true));
+    private final EnumSetting<TargetESP> mode = this.add(new EnumSetting<TargetESP>("TargetESP", TargetESP.Fill, () -> this.page.getValue() == Page.Render));
+    private final SliderSetting animationTime = this.add(new SliderSetting("AnimationTime", 200.0, 0.0, 2000.0, 1.0, () -> this.page.getValue() == Page.Render));
+    private final EnumSetting<Easing> ease = this.add(new EnumSetting<Easing>("Ease", Easing.CubicInOut, () -> this.page.getValue() == Page.Render));
+    private final ColorSetting color = this.add(new ColorSetting("TargetColor", new Color(255, 255, 255, 50), () -> this.page.getValue() == Page.Render));
+    private final ColorSetting outlineColor = this.add(new ColorSetting("TargetOutlineColor", new Color(255, 255, 255, 50), () -> this.page.getValue() == Page.Render));
+    private final ColorSetting hitColor = this.add(new ColorSetting("HitColor", new Color(255, 255, 255, 150), () -> this.page.getValue() == Page.Render));
+    private final ColorSetting hitOutlineColor = this.add(new ColorSetting("HitOutlineColor", new Color(255, 255, 255, 150), () -> this.page.getValue() == Page.Render));
+    private final BooleanSetting render = this.add(new BooleanSetting("Render", true, () -> this.page.getValue() == Page.Render));
+    private final BooleanSetting sync = this.add(new BooleanSetting("Sync", true, () -> this.page.getValue() == Page.Render && this.render.getValue()));
+    private final BooleanSetting shrink = this.add(new BooleanSetting("Shrink", true, () -> this.page.getValue() == Page.Render && this.render.getValue()));
+    private final ColorSetting box = this.add(new ColorSetting("Box", new Color(255, 255, 255, 255), () -> this.page.getValue() == Page.Render && this.render.getValue()).injectBoolean(true));
+    private final SliderSetting lineWidth = this.add(new SliderSetting("LineWidth", 1.5, 0.01, 3.0, 0.01, () -> this.page.getValue() == Page.Render && this.render.getValue()));
+    private final ColorSetting fill = this.add(new ColorSetting("Fill", new Color(255, 255, 255, 100), () -> this.page.getValue() == Page.Render && this.render.getValue()).injectBoolean(true));
+    private final SliderSetting sliderSpeed = this.add(new SliderSetting("SliderSpeed", 0.2, 0.01, 1.0, 0.01, () -> this.page.getValue() == Page.Render && this.render.getValue()));
+    private final SliderSetting startFadeTime = this.add(new SliderSetting("StartFade", 0.3, 0.0, 2.0, 0.01, () -> this.page.getValue() == Page.Render && this.render.getValue()).setSuffix("s"));
+    private final SliderSetting fadeSpeed = this.add(new SliderSetting("FadeSpeed", 0.2, 0.01, 1.0, 0.01, () -> this.page.getValue() == Page.Render && this.render.getValue()));
+    private final SliderSetting attackVecStep = this.add(new SliderSetting("AttackVecStep", 0.1, 0.01, 1.0, 0.01, () -> this.page.getValue() == Page.Calc));
+    private final BooleanSetting thread = this.add(new BooleanSetting("Thread", false, () -> this.page.getValue() == Page.Calc));
+    private final BooleanSetting doCrystal = this.add(new BooleanSetting("InteractInCalc", false, () -> this.page.getValue() == Page.Calc));
+    private final SliderSetting selfPredict = this.add(new SliderSetting("SelfPredict", 0, 0, 20, () -> this.page.getValue() == Page.Calc).setSuffix("ticks"));
+    private final SliderSetting predictTicks = this.add(new SliderSetting("Predict", 4, 0, 20, () -> this.page.getValue() == Page.Calc).setSuffix("ticks"));
+    private final SliderSetting simulation = this.add(new SliderSetting("Simulation", 5.0, 0.0, 20.0, 1.0, () -> this.page.getValue() == Page.Calc));
+    private final SliderSetting maxMotionY = this.add(new SliderSetting("MaxMotionY", 0.34, 0.0, 2.0, 0.01, () -> this.page.getValue() == Page.Calc));
+    private final BooleanSetting step = this.add(new BooleanSetting("Step", false, () -> this.page.getValue() == Page.Calc));
+    private final BooleanSetting doubleStep = this.add(new BooleanSetting("DoubleStep", false, () -> this.page.getValue() == Page.Calc));
+    private final BooleanSetting jump = this.add(new BooleanSetting("Jump", false, () -> this.page.getValue() == Page.Calc));
+    private final BooleanSetting inBlockPause = this.add(new BooleanSetting("InBlockPause", true, () -> this.page.getValue() == Page.Calc));
+    private final BooleanSetting terrainIgnore = this.add(new BooleanSetting("TerrainIgnore", true, () -> this.page.getValue() == Page.Calc));
+    private final BooleanSetting basePlace = this.add(new BooleanSetting("BasePlace", true, () -> this.page.getValue() == Page.Base));
+    private final SliderSetting baseMin = this.add(new SliderSetting("BaseMin", 6.0, 0.0, 36.0, 0.1, () -> this.page.getValue() == Page.Base).setSuffix("hp"));
+    private final SliderSetting baseMax = this.add(new SliderSetting("BaseMax", 12.0, 0.0, 36.0, 0.1, () -> this.page.getValue() == Page.Base).setSuffix("hp"));
+    private final SliderSetting overrideMax = this.add(new SliderSetting("MaxOverride", 8.0, 0.0, 36.0, 0.1, () -> this.page.getValue() == Page.Base).setSuffix("hp"));
+    private final BooleanSetting baseBalance = this.add(new BooleanSetting("BaseBalance", true, () -> this.page.getValue() == Page.Base));
+    private final BooleanSetting onlyBelow = this.add(new BooleanSetting("OnlyBelow", true, () -> this.page.getValue() == Page.Base));
+    private final BooleanSetting inventory = this.add(new BooleanSetting("InventorySwap", true, () -> this.page.getValue() == Page.Base));
+    private final BooleanSetting detectMining = this.add(new BooleanSetting("DetectMining", true, () -> this.page.getValue() == Page.Base));
+    private final SliderSetting delay = this.add(new SliderSetting("Delay", 3000, 0, 10000, () -> this.page.getValue() == Page.Base).setSuffix("ms"));
+    private final BooleanSetting ignoreMine = this.add(new BooleanSetting("IgnoreMine", true, () -> this.page.getValue() == Page.Misc).setParent());
+    private final SliderSetting constantProgress = this.add(new SliderSetting("Progress", 90.0, 0.0, 100.0, () -> this.page.getValue() == Page.Misc && this.ignoreMine.isOpen()).setSuffix("%"));
+    private final BooleanSetting antiSurround = this.add(new BooleanSetting("AntiSurround", false, () -> this.page.getValue() == Page.Misc).setParent());
+    private final SliderSetting miningProgress = this.add(new SliderSetting("MiningProgress", 90.0, 0.0, 100.0, () -> this.page.getValue() == Page.Misc && this.antiSurround.isOpen()).setSuffix("%"));
+    private final SliderSetting antiSurroundMax = this.add(new SliderSetting("WhenLower", 5.0, 0.0, 36.0, () -> this.page.getValue() == Page.Misc && this.antiSurround.isOpen()).setSuffix("dmg"));
+    private final BooleanSetting slowPlace = this.add(new BooleanSetting("Timeout", true, () -> this.page.getValue() == Page.Misc).setParent());
+    private final SliderSetting slowDelay = this.add(new SliderSetting("TimeoutDelay", 600, 0, 2000, () -> this.page.getValue() == Page.Misc && this.slowPlace.isOpen()).setSuffix("ms"));
+    private final SliderSetting slowMinDamage = this.add(new SliderSetting("TimeoutMin", 1.5, 0.0, 36.0, () -> this.page.getValue() == Page.Misc && this.slowPlace.isOpen()).setSuffix("dmg"));
+    private final BooleanSetting lethalOverride = this.add(new BooleanSetting("LethalOverride", true, () -> this.page.getValue() == Page.Misc).setParent());
+    private final SliderSetting forceMaxHealth = this.add(new SliderSetting("LowerThan", 7.0, 0.0, 36.0, 0.1, () -> this.page.getValue() == Page.Misc && this.lethalOverride.isOpen()).setSuffix("health"));
+    private final SliderSetting forceMin = this.add(new SliderSetting("ForceMin", 1.5, 0.0, 36.0, () -> this.page.getValue() == Page.Misc && this.lethalOverride.isOpen()).setSuffix("dmg"));
+    private final BooleanSetting armorBreaker = this.add(new BooleanSetting("ArmorBreaker", true, () -> this.page.getValue() == Page.Misc).setParent());
+    private final SliderSetting maxDurable = this.add(new SliderSetting("MaxDurable", 8, 0, 100, () -> this.page.getValue() == Page.Misc && this.armorBreaker.isOpen()).setSuffix("%"));
+    private final SliderSetting armorBreakerDamage = this.add(new SliderSetting("BreakerMin", 3.0, 0.0, 36.0, () -> this.page.getValue() == Page.Misc && this.armorBreaker.isOpen()).setSuffix("dmg"));
+    private final BooleanSetting forceWeb = this.add(new BooleanSetting("WebReset", true, () -> this.page.getValue() == Page.Misc).setParent());
+    public final BooleanSetting airPlace = this.add(new BooleanSetting("AirPlace", false, () -> this.page.getValue() == Page.Misc && this.forceWeb.isOpen()));
+    public final BooleanSetting replace = this.add(new BooleanSetting("Replace", false, () -> this.page.getValue() == Page.Misc && this.forceWeb.isOpen()));
+    private final SliderSetting hurtTime = this.add(new SliderSetting("HurtTime", 10.0, 0.0, 10.0, 1.0, () -> this.page.getValue() == Page.Misc));
+    private final SliderSetting waitHurt = this.add(new SliderSetting("WaitHurt", 10.0, 0.0, 10.0, 1.0, () -> this.page.getValue() == Page.Misc));
+    private final SliderSetting syncTimeout = this.add(new SliderSetting("WaitTimeOut", 500.0, 0.0, 2000.0, 10.0, () -> this.page.getValue() == Page.Misc));
+    private final Timer syncTimer = new Timer();
+    public class_1657 displayTarget;
+    public float breakDamage;
+    public float tempDamage;
+    public float lastDamage;
+    public class_243 directionVec = null;
+    double currentFade = 0.0;
+    private class_1511 tempBreakCrystal;
+    private class_1511 breakCrystal;
+    private class_2338 tempPos;
+    private class_2338 syncPos;
+    private class_243 placeVec3d;
+    private class_243 curVec3d;
+    int lastSlot;
+    class_2338 tempBasePos;
+    class_2338 basePos;
 
     public AutoCrystal() {
-        super("AutoCrystal", Category.Combat);
-        setChinese("自动水晶");
+        super("AutoCrystal", Module.Category.Combat);
+        this.setChinese("\u81ea\u52a8\u6c34\u6676");
         INSTANCE = this;
         Alien.EVENT_BUS.subscribe(new CrystalRender());
     }
 
-    public static boolean canSee(Vec3d from, Vec3d to) {
-        HitResult result = mc.world.raycast(new RaycastContext(from, to, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player));
-        return result == null || result.getType() == HitResult.Type.MISS;
-    }
-
-    DecimalFormat df = new DecimalFormat("0.0");
     @Override
     public String getInfo() {
-        if (displayTarget != null && lastDamage > 0) {
-            //return displayTarget.getName().getString() + ", " + new DecimalFormat("0.0").format(lastDamage);
-            return df.format(lastDamage);
-        }
-        return null;
+        return this.displayTarget != null && this.lastDamage > 0.0f ? this.df.format(this.lastDamage) : null;
     }
 
     @Override
     public void onDisable() {
-        crystalPos = null;
-        tempPos = null;
+        this.crystalPos = null;
+        this.tempPos = null;
     }
 
     @Override
-    public void onEnable() {
-        crystalPos = null;
-        tempPos = null;
-        breakPos = null;
-        displayTarget = null;
-        syncTimer.reset();
-        lastBreakTimer.reset();
+    public boolean onEnable() {
+        this.crystalPos = null;
+        this.tempPos = null;
+        this.tempBreakCrystal = null;
+        this.displayTarget = null;
+        this.syncTimer.reset();
+        this.lastBreakTimer.reset();
+        return false;
     }
 
-    @Override
     public void onThread() {
-        if (thread.getValue()) {
-            updateCrystalPos();
+        if (!this.isOff() && this.thread.getValue()) {
+            this.updateCrystalPos();
+        }
+    }
+
+    @EventListener
+    public void onTick(ClientTickEvent event) {
+        if (!(AutoCrystal.nullCheck() || this.timing.is(Timing.Pre) && event.isPost() || this.timing.is(Timing.Post) && event.isPre())) {
+            if (!this.thread.getValue()) {
+                this.updateCrystalPos();
+            }
+            if (!this.shouldReturn()) {
+                this.doInteract();
+                class_2338 basePos = this.basePos;
+                if (this.basePlace.getValue() && basePos != null && BlockUtil.canPlace(basePos)) {
+                    this.doPlace(basePos);
+                }
+            }
         }
     }
 
     @Override
-    public void onUpdate() {
-        if (!thread.getValue()) {
-            updateCrystalPos();
+    public void onRender3D(class_4587 matrixStack) {
+        if (this.interactOnRender.getValue() && !this.shouldReturn()) {
+            this.doInteract();
+            class_2338 basePos = this.basePos;
+            if (this.basePlace.getValue() && basePos != null && BlockUtil.canPlace(basePos)) {
+                this.doPlace(basePos);
+            }
         }
-        doInteract();
-    }
-
-    @EventHandler
-    public void onUpdateWalking(UpdateWalkingPlayerEvent event) {
-        if (!thread.getValue()) updateCrystalPos();
-        if (!onlyTick.getValue()) doInteract();
-    }
-
-    @Override
-    public void onRender3D(MatrixStack matrixStack) {
-        if (!thread.getValue()) updateCrystalPos();
-        if (!onlyTick.getValue()) doInteract();
-        if (displayTarget != null && !noPosTimer.passedMs(500)) {
-            doRender(matrixStack, mc.getTickDelta(), displayTarget, mode.getValue());
+        if (this.displayTarget != null && !this.noPosTimer.passed(500L)) {
+            this.doRender(matrixStack, mc.method_60646().method_60637(true), (class_1297)this.displayTarget, this.mode.getValue());
         }
     }
 
-    public void doRender(MatrixStack matrixStack, float partialTicks, Entity entity, TargetESP mode) {
-        switch (mode) {
-            case Box -> Render3DUtil.draw3DBox(matrixStack, ((IEntity) entity).getDimensions().getBoxAt(new Vec3d(MathUtil.interpolate(entity.lastRenderX, entity.getX(), partialTicks), MathUtil.interpolate(entity.lastRenderY, entity.getY(), partialTicks), MathUtil.interpolate(entity.lastRenderZ, entity.getZ(), partialTicks))).expand(0, 0.1, 0), ColorUtil.fadeColor(color.getValue(), hitColor.getValue(), animation.get(0, animationTime.getValueInt(), ease.getValue())), false, true);
-            case Jello -> JelloUtil.drawJello(matrixStack, entity, color.getValue());
+    public void doRender(class_4587 stack, float partialTicks, class_1297 entity, TargetESP mode) {
+        switch (mode.ordinal()) {
+            case 0: {
+                Render3DUtil.draw3DBox(stack, ((IEntity)entity).getDimensions().method_30757(new class_243(MathUtil.interpolate(entity.field_6038, entity.method_23317(), (double)partialTicks), MathUtil.interpolate(entity.field_5971, entity.method_23318(), (double)partialTicks), MathUtil.interpolate(entity.field_5989, entity.method_23321(), (double)partialTicks))).method_1009(0.0, 0.1, 0.0), ColorUtil.fadeColor(this.color.getValue(), this.hitColor.getValue(), this.animation.get(0.0, this.animationTime.getValueInt(), this.ease.getValue())), ColorUtil.fadeColor(this.outlineColor.getValue(), this.hitOutlineColor.getValue(), this.animation.get(0.0, this.animationTime.getValueInt(), this.ease.getValue())), true, true);
+                break;
+            }
+            case 1: {
+                Render3DUtil.draw3DBox(stack, ((IEntity)entity).getDimensions().method_30757(new class_243(MathUtil.interpolate(entity.field_6038, entity.method_23317(), (double)partialTicks), MathUtil.interpolate(entity.field_5971, entity.method_23318(), (double)partialTicks), MathUtil.interpolate(entity.field_5989, entity.method_23321(), (double)partialTicks))).method_1009(0.0, 0.1, 0.0), ColorUtil.fadeColor(this.color.getValue(), this.hitColor.getValue(), this.animation.get(0.0, this.animationTime.getValueInt(), this.ease.getValue())), ColorUtil.fadeColor(this.outlineColor.getValue(), this.hitOutlineColor.getValue(), this.animation.get(0.0, this.animationTime.getValueInt(), this.ease.getValue())), false, true);
+                break;
+            }
+            case 2: {
+                JelloUtil.drawJello(stack, entity, this.color.getValue());
+                break;
+            }
+            case 3: {
+                Render3DUtil.drawTargetEsp(stack, (class_1297)this.displayTarget, this.color.getValue());
+            }
         }
     }
 
     private void doInteract() {
-        if (shouldReturn()) {
-            return;
-        }
-        if (breakPos != null) {
-            doBreak(breakPos);
-            breakPos = null;
-        }
+        class_2338 crystalPos = this.crystalPos;
         if (crystalPos != null) {
-            doCrystal(crystalPos);
+            this.doCrystal(crystalPos);
+        }
+        if (this.breakCrystal != null) {
+            this.doBreak(this.breakCrystal);
+            this.breakCrystal = null;
         }
     }
 
-    @EventHandler()
-    public void onRotate(LookAtEvent event) {
-        if (rotate.getValue() && yawStep.getValue() && directionVec != null && !noPosTimer.passed(1000)) {
-            event.setTarget(directionVec, steps.getValueFloat(), priority.getValueFloat());
+    @EventListener
+    public void onRotate(RotationEvent event) {
+        if (this.rotate.getValue() && this.shouldYawStep() && this.directionVec != null && this.displayTarget != null && !this.noPosTimer.passed(1000L) && !this.shouldReturn()) {
+            event.setTarget(this.directionVec, this.steps.getValueFloat(), this.priority.getValueFloat());
         }
     }
 
-    @EventHandler(priority = -199)
+    @EventListener(priority=-199)
     public void onPacketSend(PacketEvent.Send event) {
-        if (event.isCancelled()) return;
-        if (event.getPacket() instanceof UpdateSelectedSlotC2SPacket) {
-            switchTimer.reset();
+        class_2868 packet;
+        class_2596<?> class_25962;
+        if (!event.isCancelled() && (class_25962 = event.getPacket()) instanceof class_2868 && this.lastSlot != (packet = (class_2868)class_25962).method_12442()) {
+            this.lastSlot = packet.method_12442();
+            this.switchTimer.reset();
         }
+    }
+
+    public class_243 getAttackVec(class_243 feetPos) {
+        return MathUtil.getPointToBoxFromBottom(AutoCrystal.mc.field_1724.method_33571(), feetPos, this.breakRange.getValue(), 2.0, this.attackVecStep.getValue());
     }
 
     private void updateCrystalPos() {
-        getCrystalPos();
-        lastDamage = tempDamage;
-        crystalPos = tempPos;
+        if (this.calcDelay.passedMs(this.updateDelay.getValue())) {
+            this.calcDelay.reset();
+            this.calcCrystalPos();
+            CombatUtil.modifyPos = null;
+            CombatUtil.modifyBlockState = null;
+            this.basePos = this.tempBasePos;
+            this.lastDamage = this.tempDamage;
+            this.breakCrystal = this.tempBreakCrystal;
+            this.crystalPos = this.tempPos;
+        }
     }
 
     private boolean shouldReturn() {
-        if (eatingPause.getValue() && mc.player.isUsingItem() || Blink.INSTANCE.isOn() && Blink.INSTANCE.pauseModule.getValue()) {
-            lastBreakTimer.reset();
-            return true;
+        if (!(this.eatingPause.getValue() && AutoCrystal.mc.field_1724.method_6115() || Blink.INSTANCE.isOn() && Blink.INSTANCE.pauseModule.getValue())) {
+            if (this.preferAnchor.getValue() && AutoAnchor.INSTANCE.currentPos != null) {
+                this.lastBreakTimer.reset();
+                return true;
+            }
+            if (this.pause.isPressed()) {
+                this.lastBreakTimer.reset();
+                return true;
+            }
+            return false;
         }
-        if (preferAnchor.getValue() && AutoAnchor.INSTANCE.currentPos != null) {
-            lastBreakTimer.reset();
-            return true;
-        }
-        return false;
+        this.lastBreakTimer.reset();
+        return true;
     }
 
-    private void getCrystalPos() {
-        if (nullCheck()) {
-            lastBreakTimer.reset();
-            tempPos = null;
-            return;
-        }
-        if (!calcDelay.passedMs((long) updateDelay.getValue())) return;
-        if (breakOnlyHasCrystal.getValue() && !mc.player.getMainHandStack().getItem().equals(Items.END_CRYSTAL) && !mc.player.getOffHandStack().getItem().equals(Items.END_CRYSTAL) && !findCrystal()) {
-            lastBreakTimer.reset();
-            tempPos = null;
-            return;
-        }
-        boolean shouldReturn = shouldReturn();
-        calcDelay.reset();
-        breakPos = null;
-        breakDamage = 0;
-        tempPos = null;
-        tempDamage = 0f;
-        ArrayList<PlayerAndPredict> list = new ArrayList<>();
-        for (PlayerEntity target : CombatUtil.getEnemies(targetRange.getValueFloat())) {
-            if (target.hurtTime <= hurtTime.getValueInt()) {
-                list.add(new PlayerAndPredict(target));
-            }
-        }
-        PlayerAndPredict self = new PlayerAndPredict(mc.player);
-        if (list.isEmpty()) {
-            lastBreakTimer.reset();
-        } else {
-            for (BlockPos pos : BlockUtil.getSphere((float) range.getValue() + 1)) {
-                if (behindWall(pos)) continue;
-                if (mc.player.getEyePos().distanceTo(pos.toCenterPos().add(0, -0.5, 0)) > range.getValue()) {
-                    continue;
+    private void calcCrystalPos() {
+        if (!AutoCrystal.nullCheck()) {
+            if (this.breakOnlyHasCrystal.getValue() && !AutoCrystal.mc.field_1724.method_6047().method_7909().equals(class_1802.field_8301) && !AutoCrystal.mc.field_1724.method_6079().method_7909().equals(class_1802.field_8301) && !this.hasCrystal()) {
+                this.tempPos = null;
+                this.tempBreakCrystal = null;
+                this.lastBreakTimer.reset();
+            } else {
+                boolean shouldReturn = this.shouldReturn();
+                boolean needBasePlace = this.basePlace.getValue() && this.baseTimer.passedMs(this.delay.getValue()) && this.getBlock() != -1;
+                this.tempBreakCrystal = null;
+                this.breakDamage = 0.0f;
+                this.tempPos = null;
+                this.tempDamage = 0.0f;
+                this.tempBasePos = null;
+                float baseDamage = 0.0f;
+                ArrayList<PlayerEntityPredict> list = new ArrayList<PlayerEntityPredict>();
+                for (class_1657 target : CombatUtil.getEnemies(this.targetRange.getValueFloat())) {
+                    if (target.field_6235 > this.hurtTime.getValueInt()) continue;
+                    list.add(new PlayerEntityPredict(target, this.maxMotionY.getValue(), this.predictTicks.getValueInt(), this.simulation.getValueInt(), this.step.getValue(), this.doubleStep.getValue(), this.jump.getValue(), this.inBlockPause.getValue()));
                 }
-                if (!canTouch(pos.down())) continue;
-                if (!canPlaceCrystal(pos, true, false)) continue;
-                for (PlayerAndPredict pap : list) {
-                    if (lite.getValue() && liteCheck(pos.toCenterPos().add(0, -0.5, 0), pap.predict.getPos())) {
-                        continue;
-                    }
-                    float damage = calculateDamage(pos, pap.player, pap.predict);
-                    if (tempPos == null || damage > tempDamage) {
-                        float selfDamage = calculateDamage(pos, self.player, self.predict);
-                        if (selfDamage > maxSelf.getValue()) continue;
-                        if (noSuicide.getValue() > 0 && selfDamage > mc.player.getHealth() + mc.player.getAbsorptionAmount() - noSuicide.getValue())
-                            continue;
-                        if (damage < EntityUtil.getHealth(pap.player)) {
-                            if (damage < getDamage(pap.player)) continue;
-                            if (smart.getValue()) {
-                                if (getDamage(pap.player) == forceMin.getValue()) {
-                                    if (damage < selfDamage - 2.5) {
-                                        continue;
-                                    }
-                                } else {
-                                    if (damage < selfDamage) {
-                                        continue;
-                                    }
-                                }
-                            }
+                PlayerEntityPredict self = new PlayerEntityPredict((class_1657)AutoCrystal.mc.field_1724, this.maxMotionY.getValue(), this.selfPredict.getValueInt(), this.simulation.getValueInt(), this.step.getValue(), this.doubleStep.getValue(), this.jump.getValue(), this.inBlockPause.getValue());
+                if (list.isEmpty()) {
+                    this.lastBreakTimer.reset();
+                } else {
+                    float damage;
+                    float selfDamage;
+                    class_243 attackVec;
+                    for (class_1297 entity : Alien.THREAD.getEntities()) {
+                        if (!(entity instanceof class_1511)) continue;
+                        class_1511 crystal = (class_1511)entity;
+                        if (entity.field_6012 < this.minAge.getValueInt() || (attackVec = this.getAttackVec(crystal.method_19538())) == null || !AutoCrystal.mc.field_1724.method_6057((class_1297)crystal) && AutoCrystal.mc.field_1724.method_33571().method_1022(attackVec) > this.wallRange.getValue()) continue;
+                        selfDamage = this.calculateDamage(crystal.method_19538(), self.player, self.predict);
+                        for (PlayerEntityPredict pap : list) {
+                            damage = this.calculateDamage(crystal.method_19538(), pap.player, pap.predict);
+                            if (!(damage > this.breakDamage) || (double)selfDamage > this.maxSelf.getValue() || this.reserve.getValue() > 0.0 && (double)selfDamage > (double)(AutoCrystal.mc.field_1724.method_6032() + AutoCrystal.mc.field_1724.method_6067()) - this.reserve.getValue() || damage < EntityUtil.getHealth((class_1297)pap.player) && ((double)damage < this.getDamage(pap.player) || this.balance.getValue() && !(this.getDamage(pap.player) == this.forceMin.getValue() ? !((double)damage < (double)selfDamage - 2.5) : !((double)damage < (double)selfDamage + this.balanceOffset.getValue())))) continue;
+                            this.breakDamage = damage;
+                            this.tempBreakCrystal = crystal;
+                            this.displayTarget = pap.player;
                         }
-                        displayTarget = pap.player;
-                        tempPos = pos;
-                        tempDamage = damage;
                     }
-                }
-            }
-            for (Entity entity : mc.world.getEntities()) {
-                if (entity instanceof EndCrystalEntity crystal) {
-                    if (!mc.player.canSee(crystal) && mc.player.getEyePos().distanceTo(crystal.getPos()) > wallRange.getValue())
-                        continue;
-                    if (mc.player.getEyePos().distanceTo(crystal.getPos()) > range.getValue()) {
-                        continue;
+                    if (this.doCrystal.getValue() && this.tempBreakCrystal != null && !shouldReturn) {
+                        this.doBreak(this.tempBreakCrystal);
+                        this.tempBreakCrystal = null;
                     }
-                    for (PlayerAndPredict pap : list) {
-                        float damage = calculateDamage(crystal.getPos(), pap.player, pap.predict);
-                        if (breakPos == null || damage > breakDamage) {
-                            float selfDamage = calculateDamage(crystal.getPos(), self.player, self.predict);
-                            if (selfDamage > maxSelf.getValue()) continue;
-                            if (noSuicide.getValue() > 0 && selfDamage > mc.player.getHealth() + mc.player.getAbsorptionAmount() - noSuicide.getValue())
+                    for (class_2338 pos : BlockUtil.getSphere((float)this.breakRange.getValue() + 1.5f)) {
+                        boolean base = false;
+                        CombatUtil.modifyPos = null;
+                        CombatUtil.modifyBlockState = null;
+                        if (needBasePlace && BlockUtil.canPlace(pos.method_10074())) {
+                            CombatUtil.modifyPos = pos.method_10074();
+                            CombatUtil.modifyBlockState = class_2246.field_10540.method_9564();
+                            base = true;
+                        }
+                        if (base && Alien.BREAK.isMining(pos.method_10074()) && this.detectMining.getValue() || (attackVec = this.getAttackVec(pos.method_61082())) == null || this.behindWall(pos, attackVec) || !this.canTouch(pos.method_10074()) || !this.canPlaceCrystal(pos, true, false)) continue;
+                        selfDamage = base ? this.calculateBaseDamage(pos, self.player, self.predict) : this.calculateDamage(pos, self.player, self.predict);
+                        for (PlayerEntityPredict papx : list) {
+                            if (base && this.onlyBelow.getValue() && (double)pos.method_10264() - 0.5 > papx.player.method_23318()) continue;
+                            float f = damage = base ? this.calculateBaseDamage(pos, papx.player, papx.predict) : this.calculateDamage(pos, papx.player, papx.predict);
+                            if (base) {
+                                if (!((double)this.tempDamage <= this.overrideMax.getValue()) || !(damage > this.tempDamage) || !(damage > baseDamage) || (double)selfDamage > this.baseMax.getValue() || this.reserve.getValue() > 0.0 && (double)selfDamage > (double)(AutoCrystal.mc.field_1724.method_6032() + AutoCrystal.mc.field_1724.method_6067()) - this.reserve.getValue() || damage < EntityUtil.getHealth((class_1297)papx.player) && ((double)damage < this.baseMin.getValue() || this.baseBalance.getValue() && damage < selfDamage)) continue;
+                                this.displayTarget = papx.player;
+                                baseDamage = damage;
+                                this.tempBasePos = pos.method_10074();
+                                this.tempPos = null;
                                 continue;
-                            if (damage < EntityUtil.getHealth(pap.player)) {
-                                if (damage < getDamage(pap.player)) continue;
-                                if (smart.getValue()) {
-                                    if (getDamage(pap.player) == forceMin.getValue()) {
-                                        if (damage < selfDamage - 2.5) {
-                                            continue;
-                                        }
-                                    } else {
-                                        if (damage < selfDamage) {
-                                            continue;
-                                        }
-                                    }
-                                }
                             }
-                            breakPos = new BlockPosX(crystal.getPos());
-                            if (damage > tempDamage) {
-                                displayTarget = pap.player;
-                                //tempDamage = damage;
-                            }
+                            if (!(damage > this.tempDamage) || !(damage >= baseDamage) && !((double)this.tempDamage > this.overrideMax.getValue()) || (double)selfDamage > this.maxSelf.getValue() || this.reserve.getValue() > 0.0 && (double)selfDamage > (double)(AutoCrystal.mc.field_1724.method_6032() + AutoCrystal.mc.field_1724.method_6067()) - this.reserve.getValue() || damage < EntityUtil.getHealth((class_1297)papx.player) && ((double)damage < this.getDamage(papx.player) || this.balance.getValue() && !(this.getDamage(papx.player) == this.forceMin.getValue() ? !((double)damage < (double)selfDamage - 2.5) : !((double)damage < (double)selfDamage + this.balanceOffset.getValue())))) continue;
+                            this.displayTarget = papx.player;
+                            this.tempPos = pos;
+                            this.tempBasePos = null;
+                            this.tempDamage = damage;
                         }
                     }
-                }
-            }
-            if (doCrystal.getValue() && breakPos != null && !shouldReturn) {
-                doBreak(breakPos);
-                breakPos = null;
-            }
-            if (antiSurround.getValue() && PacketMine.getBreakPos() != null && PacketMine.progress >= 0.9 && !BlockUtil.hasEntity(PacketMine.getBreakPos(), false)) {
-                if (tempDamage <= antiSurroundMax.getValueFloat()) {
-                    for (PlayerAndPredict pap : list) {
-                        for (Direction i : Direction.values()) {
-                            if (i == Direction.DOWN || i == Direction.UP) continue;
-                            BlockPos offsetPos = new BlockPosX(pap.player.getPos().add(0, 0.5, 0)).offset(i);
-                            if (offsetPos.equals(PacketMine.getBreakPos())) {
-                                if (canPlaceCrystal(offsetPos.offset(i), false, false)) {
-                                    float selfDamage = calculateDamage(offsetPos.offset(i), self.player, self.predict);
-                                    if (selfDamage < maxSelf.getValue() && !(noSuicide.getValue() > 0 && selfDamage > mc.player.getHealth() + mc.player.getAbsorptionAmount() - noSuicide.getValue())) {
-                                        tempPos = offsetPos.offset(i);
-                                        if (doCrystal.getValue() && tempPos != null && !shouldReturn) {
-                                            doCrystal(tempPos);
-                                        }
-                                        return;
+                    CombatUtil.modifyPos = null;
+                    CombatUtil.modifyBlockState = null;
+                    if (this.antiSurround.getValue() && SpeedMine.getBreakPos() != null && SpeedMine.progress >= (double)this.miningProgress.getValueFloat() && !BlockUtil.hasEntity(SpeedMine.getBreakPos(), false) && this.tempDamage <= this.antiSurroundMax.getValueFloat()) {
+                        for (PlayerEntityPredict papxx : list) {
+                            BlockPosX pos = new BlockPosX(papxx.player.method_19538().method_1031(0.0, 0.5, 0.0));
+                            if (BlockUtil.canCollide((class_1297)papxx.player, new class_238((class_2338)pos))) continue;
+                            for (class_2350 i : class_2350.values()) {
+                                class_2338 offsetPos;
+                                if (i == class_2350.field_11033 || i == class_2350.field_11036 || !(offsetPos = pos.method_10093(i)).equals((Object)SpeedMine.getBreakPos())) continue;
+                                for (class_2350 direction : class_2350.values()) {
+                                    float selfDamage2;
+                                    if (direction == class_2350.field_11033 || direction == class_2350.field_11036 || !this.canPlaceCrystal(offsetPos.method_10093(direction), false, false) || !((double)(selfDamage2 = this.calculateDamage(offsetPos.method_10093(direction), self.player, self.predict)) < this.maxSelf.getValue()) || this.reserve.getValue() > 0.0 && (double)selfDamage2 > (double)(AutoCrystal.mc.field_1724.method_6032() + AutoCrystal.mc.field_1724.method_6067()) - this.reserve.getValue()) continue;
+                                    this.tempPos = offsetPos.method_10093(direction);
+                                    if (this.doCrystal.getValue() && this.tempPos != null && !shouldReturn) {
+                                        this.doCrystal(this.tempPos);
                                     }
-                                }
-                                for (Direction ii : Direction.values()) {
-                                    if (ii == Direction.DOWN || ii == i) continue;
-                                    if (canPlaceCrystal(offsetPos.offset(ii), false, false)) {
-                                        float selfDamage = calculateDamage(offsetPos.offset(ii), self.player, self.predict);
-                                        if (selfDamage < maxSelf.getValue() && !(noSuicide.getValue() > 0 && selfDamage > mc.player.getHealth() + mc.player.getAbsorptionAmount() - noSuicide.getValue())) {
-                                            tempPos = offsetPos.offset(ii);
-                                            if (doCrystal.getValue() && tempPos != null && !shouldReturn) {
-                                                doCrystal(tempPos);
-                                            }
-                                            return;
-                                        }
-                                    }
+                                    return;
                                 }
                             }
                         }
                     }
                 }
-            }
-        }
-        if (doCrystal.getValue() && tempPos != null && !shouldReturn) {
-            doCrystal(tempPos);
-        }
-    }
-
-    public boolean canPlaceCrystal(BlockPos pos, boolean ignoreCrystal, boolean ignoreItem) {
-        BlockPos obsPos = pos.down();
-        BlockPos boost = obsPos.up();
-        BlockPos boost2 = boost.up();
-
-        return (getBlock(obsPos) == Blocks.BEDROCK || getBlock(obsPos) == Blocks.OBSIDIAN)
-                && BlockUtil.getClickSideStrict(obsPos) != null
-                && noEntityBlockCrystal(boost, ignoreCrystal, ignoreItem)
-                && noEntityBlockCrystal(boost2, ignoreCrystal, ignoreItem)
-                && (mc.world.isAir(boost) || hasCrystal(boost) && getBlock(boost) == Blocks.FIRE)
-                && (!ClientSetting.INSTANCE.lowVersion.getValue() || mc.world.isAir(boost2));
-    }
-
-    private boolean liteCheck(Vec3d from, Vec3d to) {
-        return !canSee(from, to) && !canSee(from, to.add(0, 1.8, 0));
-    }
-
-    private boolean noEntityBlockCrystal(BlockPos pos, boolean ignoreCrystal, boolean ignoreItem) {
-        for (Entity entity : BlockUtil.getEntities(new Box(pos))) {
-            if (!entity.isAlive() || ignoreItem && entity instanceof ItemEntity || entity instanceof ArmorStandEntity && AntiCheat.INSTANCE.obsMode.getValue())
-                continue;
-            if (entity instanceof EndCrystalEntity) {
-                if (!ignoreCrystal) return false;
-                if (mc.player.canSee(entity) || mc.player.getEyePos().distanceTo(entity.getPos()) <= wallRange.getValue()) {
-                    continue;
+                if (this.doCrystal.getValue() && this.tempPos != null && !shouldReturn) {
+                    this.doCrystal(this.tempPos);
                 }
             }
+        }
+    }
+
+    @EventListener
+    private void onEntity(EntitySpawnedEvent event) {
+        class_1511 crystal;
+        class_1297 class_12972;
+        if (this.onAdd.getValue() && (class_12972 = event.getEntity()) instanceof class_1511 && (crystal = (class_1511)class_12972).method_24515().equals((Object)this.syncPos)) {
+            this.doBreak(crystal);
+        }
+    }
+
+    public boolean canPlaceCrystal(class_2338 pos, boolean ignoreCrystal, boolean ignoreItem) {
+        class_2338 obsPos = pos.method_10074();
+        class_2338 boost = obsPos.method_10084();
+        class_2338 boost2 = boost.method_10084();
+        return !(BlockUtil.getBlock(obsPos) != class_2246.field_9987 && BlockUtil.getBlock(obsPos) != class_2246.field_10540 || BlockUtil.getClickSideStrict(obsPos) == null || !this.noEntityBlockCrystal(boost, ignoreCrystal, ignoreItem) || !this.noEntityBlockCrystal(boost2, ignoreCrystal, ignoreItem) || !AutoCrystal.mc.field_1687.method_22347(boost) && (!BlockUtil.hasCrystal(boost) || BlockUtil.getBlock(boost) != class_2246.field_10036) || ClientSetting.INSTANCE.lowVersion.getValue() && !AutoCrystal.mc.field_1687.method_22347(boost2));
+    }
+
+    private boolean noEntityBlockCrystal(class_2338 pos, boolean ignoreCrystal, boolean ignoreItem) {
+        for (class_1297 entity : BlockUtil.getEntities(new class_238(pos))) {
+            if (!entity.method_5805() || entity instanceof class_1542 && ignoreItem || entity instanceof class_1511 && ignoreCrystal && this.getAttackVec(entity.method_19538()) != null && (AutoCrystal.mc.field_1724.method_6057(entity) || AutoCrystal.mc.field_1724.method_33571().method_1022(entity.method_19538()) <= this.wallRange.getValue())) continue;
             return false;
         }
         return true;
     }
 
-    public boolean behindWall(BlockPos pos) {
-        Vec3d testVec;
-        /*if (CombatSetting.INSTANCE.lowVersion.getValue()) {
-            testVec = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-        } else {
-            testVec = new Vec3d(pos.getX() + 0.5, pos.getY() + 2 * 0.85, pos.getZ() + 0.5);
-        }*/
-        testVec = new Vec3d(pos.getX() + 0.5, pos.getY() + 2 * 0.85, pos.getZ() + 0.5);
-        HitResult result = mc.world.raycast(new RaycastContext(EntityUtil.getEyesPos(), testVec, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player));
-        if (result == null || result.getType() == HitResult.Type.MISS) return false;
-        return mc.player.getEyePos().distanceTo(pos.toCenterPos().add(0, -0.5, 0)) > wallRange.getValue();
+    public boolean behindWall(class_2338 pos, class_243 attackVec) {
+        class_243 crystalEyePos = new class_243((double)pos.method_10263() + 0.5, (double)pos.method_10264() + 1.7, (double)pos.method_10260() + 0.5);
+        class_3965 result = AutoCrystal.mc.field_1687.method_17742(new class_3959(AutoCrystal.mc.field_1724.method_33571(), crystalEyePos, class_3959.class_3960.field_17558, class_3959.class_242.field_1348, (class_1297)AutoCrystal.mc.field_1724));
+        return result != null && result.method_17783() != class_239.class_240.field_1333 ? AutoCrystal.mc.field_1724.method_33571().method_1022(attackVec) > this.wallRange.getValue() : false;
     }
 
-    private boolean canTouch(BlockPos pos) {
-        Direction side = BlockUtil.getClickSideStrict(pos);
-        return side != null && pos.toCenterPos().add(new Vec3d(side.getVector().getX() * 0.5, side.getVector().getY() * 0.5, side.getVector().getZ() * 0.5)).distanceTo(mc.player.getEyePos()) <= range.getValue();
+    /*
+     * Enabled force condition propagation
+     * Lifted jumps to return sites
+     */
+    private boolean canTouch(class_2338 pos) {
+        class_2350 side = BlockUtil.getClickSideStrict(pos);
+        if (side == null) return false;
+        class_243 class_2432 = new class_243((double)side.method_10163().method_10263() * 0.5, (double)side.method_10163().method_10264() * 0.5, (double)side.method_10163().method_10260() * 0.5);
+        if (!(pos.method_46558().method_1019(class_2432).method_1022(AutoCrystal.mc.field_1724.method_33571()) <= this.placeRange.getValue())) return false;
+        return true;
     }
 
-    private void doCrystal(BlockPos pos) {
-        if (canPlaceCrystal(pos, false, false)) {
-            doPlace(pos);
-        } else {
-            doBreak(pos);
+    private void doCrystal(class_2338 pos) {
+        if (this.canPlaceCrystal(pos, false, false)) {
+            this.doPlace(pos, this.rotate.getValue() && this.onPlace.getValue());
         }
+        this.doBreak(pos);
     }
 
-    public float calculateDamage(BlockPos pos, PlayerEntity player, PlayerEntity predict) {
-        return calculateDamage(new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), player, predict);
-    }
-
-    public float calculateDamage(Vec3d pos, PlayerEntity player, PlayerEntity predict) {
-        if (ignoreMine.getValue() && PacketMine.getBreakPos() != null) {
-            if (mc.player.getEyePos().distanceTo(PacketMine.getBreakPos().toCenterPos()) <= PacketMine.INSTANCE.range.getValue()) {
-                if (PacketMine.progress >= constantProgress.getValue() / 100) {
-                    CombatUtil.modifyPos = PacketMine.getBreakPos();
-                    CombatUtil.modifyBlockState = Blocks.AIR.getDefaultState();
-                }
+    private void doPlace(class_2338 pos) {
+        int block;
+        if (!(!this.baseTimer.passed((long)this.delay.getValue()) || this.detectMining.getValue() && Alien.BREAK.isMining(pos) || (block = this.getBlock()) == -1)) {
+            int old = AutoCrystal.mc.field_1724.method_31548().field_7545;
+            this.baseSwap(block);
+            BlockUtil.placeBlock(pos, this.rotate.getValue());
+            if (this.inventory.getValue()) {
+                this.baseSwap(block);
+                EntityUtil.syncInventory();
+            } else {
+                this.baseSwap(old);
             }
+            this.baseTimer.reset();
         }
-        if (terrainIgnore.getValue()) {
+    }
+
+    public float calculateDamage(class_2338 pos, class_1657 player, class_1657 predict) {
+        return this.calculateDamage(new class_243((double)pos.method_10263() + 0.5, (double)pos.method_10264(), (double)pos.method_10260() + 0.5), player, predict);
+    }
+
+    public float calculateDamage(class_243 pos, class_1657 player, class_1657 predict) {
+        if (this.ignoreMine.getValue() && SpeedMine.getBreakPos() != null && AutoCrystal.mc.field_1724.method_33571().method_1022(SpeedMine.getBreakPos().method_46558()) <= SpeedMine.INSTANCE.range.getValue() && SpeedMine.progress >= this.constantProgress.getValue() / 100.0) {
+            CombatUtil.modifyPos = SpeedMine.getBreakPos();
+            CombatUtil.modifyBlockState = class_2246.field_10124.method_9564();
+        }
+        if (this.terrainIgnore.getValue()) {
             CombatUtil.terrainIgnore = true;
         }
-        float damage = ExplosionUtil.calculateDamage(pos.getX(), pos.getY(), pos.getZ(), player, predict, 6);
+        float damage = ExplosionUtil.calculateDamage(pos, (class_1309)player, (class_1309)predict, 6.0f);
         CombatUtil.modifyPos = null;
         CombatUtil.terrainIgnore = false;
         return damage;
     }
 
-    private double getDamage(PlayerEntity target) {
-        if (!PacketMine.INSTANCE.obsidian.isPressed() && slowPlace.getValue() && lastBreakTimer.passedMs((long) slowDelay.getValue()) && !PistonCrystal.INSTANCE.isOn()) {
-            return slowMinDamage.getValue();
+    public float calculateBaseDamage(class_2338 pos, class_1657 player, class_1657 predict) {
+        if (this.terrainIgnore.getValue()) {
+            CombatUtil.terrainIgnore = true;
         }
-        if (forcePlace.getValue() && EntityUtil.getHealth(target) <= forceMaxHealth.getValue() && !PacketMine.INSTANCE.obsidian.isPressed() && !PistonCrystal.INSTANCE.isOn()) {
-            return forceMin.getValue();
-        }
-        if (armorBreaker.getValue()) {
-            DefaultedList<ItemStack> armors = target.getInventory().armor;
-            for (ItemStack armor : armors) {
-                if (armor.isEmpty()) continue;
-                if (EntityUtil.getDamagePercent(armor) > maxDurable.getValue()) continue;
-                return armorBreakerDamage.getValue();
-            }
-        }
-        if (PistonCrystal.INSTANCE.isOn()) {
-            return autoMinDamage.getValueFloat();
-        }
-        return minDamage.getValue();
+        float damage = DamageUtils.overridingExplosionDamage((class_1309)player, (class_1309)predict, new class_243((double)pos.method_10263() + 0.5, (double)pos.method_10264(), (double)pos.method_10260() + 0.5), 12.0f, pos.method_10074(), class_2246.field_10540.method_9564());
+        CombatUtil.terrainIgnore = false;
+        return damage;
     }
 
-    public boolean findCrystal() {
-        if (autoSwap.getValue() == SwapMode.Off) return false;
-        return getCrystal() != -1;
+    private double getDamage(class_1657 target) {
+        if (!SpeedMine.INSTANCE.obsidian.isPressed() && this.slowPlace.getValue() && this.lastBreakTimer.passed((long)this.slowDelay.getValue())) {
+            return this.slowMinDamage.getValue();
+        }
+        if (this.lethalOverride.getValue() && (double)EntityUtil.getHealth((class_1297)target) <= this.forceMaxHealth.getValue() && !SpeedMine.INSTANCE.obsidian.isPressed()) {
+            return this.forceMin.getValue();
+        }
+        if (this.armorBreaker.getValue()) {
+            for (class_1799 armor : target.method_31548().field_7548) {
+                if (armor.method_7960() || (double)EntityUtil.getDamagePercent(armor) > this.maxDurable.getValue()) continue;
+                return this.armorBreakerDamage.getValue();
+            }
+        }
+        return this.minDamage.getValue();
     }
 
-    private final Timer syncTimer = new Timer();
+    private boolean shouldYawStep() {
+        return (this.whenElytra.getValue() || !AutoCrystal.mc.field_1724.method_6128() && (!ElytraFly.INSTANCE.isOn() || !ElytraFly.INSTANCE.isFallFlying())) && this.yawStep.getValue() && !Velocity.INSTANCE.noRotation();
+    }
 
-    private void doBreak(BlockPos pos) {
-        noPosTimer.reset();
-        if (!breakSetting.getValue()) return;
-        if (displayTarget != null && displayTarget.hurtTime > waitHurt.getValueInt() && !syncTimer.passed(syncTimeout.getValue())) {
-            return;
-        }
-        lastBreakTimer.reset();
-        if (!switchTimer.passedMs((long) switchCooldown.getValue())) {
-            return;
-        }
-        syncTimer.reset();
-        for (EndCrystalEntity entity : BlockUtil.getEndCrystals(new Box(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
-            if (entity.age < minAge.getValueInt()) continue;
-            if (rotate.getValue() && onBreak.getValue()) {
-                if (!faceVector(entity.getPos().add(0, yOffset.getValue(), 0))) return;
-            }
-            if (!CombatUtil.breakTimer.passedMs((long) breakDelay.getValue())) return;
-            animation.to = 1;
-            animation.from = 1;
-            CombatUtil.breakTimer.reset();
-            syncPos = pos;
-            mc.getNetworkHandler().sendPacket(PlayerInteractEntityC2SPacket.attack(entity, mc.player.isSneaking()));
-            mc.player.resetLastAttackedTicks();
-            EntityUtil.swingHand(Hand.MAIN_HAND, swingMode.getValue());
-            if (breakRemove.getValue()) {
-                mc.world.removeEntity(entity.getId(), Entity.RemovalReason.KILLED);
-            }
-            if (crystalPos != null && displayTarget != null && lastDamage >= getDamage(displayTarget) && afterBreak.getValue()) {
-                if (!yawStep.getValue() || !checkFov.getValue() || Alien.ROTATION.inFov(entity.getPos(), fov.getValueFloat())) {
-                    doPlace(crystalPos);
+    public boolean hasCrystal() {
+        return this.autoSwap.getValue() != SwapMode.None && this.getCrystal() != -1;
+    }
+
+    private void doBreak(class_1511 entity) {
+        this.noPosTimer.reset();
+        if (this.breakSetting.getValue() && entity.method_5805() && (this.displayTarget == null || this.displayTarget.field_6235 <= this.waitHurt.getValueInt() || this.syncTimer.passedMs(this.syncTimeout.getValue()))) {
+            this.lastBreakTimer.reset();
+            if (this.switchTimer.passed((long)this.switchCooldown.getValue())) {
+                this.syncTimer.reset();
+                if (entity.field_6012 >= this.minAge.getValueInt()) {
+                    if (!this.shouldYawStep() && !CombatUtil.breakTimer.passed((long)this.breakDelay.getValue())) {
+                        if (this.forcePlace.getValue() && this.crystalPos != null) {
+                            this.doPlace(this.crystalPos, false);
+                        }
+                    } else {
+                        class_243 attackVec;
+                        if (this.rotate.getValue() && this.onBreak.getValue() && !this.faceVector((attackVec = this.getAttackVec(entity.method_19538())) == null ? entity.method_19538() : attackVec)) {
+                            if (this.forcePlace.getValue() && this.crystalPos != null) {
+                                this.doPlace(this.crystalPos, false);
+                            }
+                            return;
+                        }
+                        if (this.shouldYawStep() && !CombatUtil.breakTimer.passed((long)this.breakDelay.getValue())) {
+                            if (this.forcePlace.getValue() && this.crystalPos != null) {
+                                this.doPlace(this.crystalPos, false);
+                            }
+                        } else {
+                            class_2338 crystalPos;
+                            this.animation.to = 1.0;
+                            this.animation.from = 1.0;
+                            CombatUtil.breakTimer.reset();
+                            this.syncPos = entity.method_24515();
+                            mc.method_1562().method_52787((class_2596)class_2824.method_34206((class_1297)entity, (boolean)AutoCrystal.mc.field_1724.method_5715()));
+                            if (this.resetCD.getValue()) {
+                                AutoCrystal.mc.field_1724.method_7350();
+                            }
+                            EntityUtil.swingHand(class_1268.field_5808, this.swingMode.getValue());
+                            if (this.breakRemove.getValue()) {
+                                AutoCrystal.mc.field_1687.method_2945(entity.method_5628(), class_1297.class_5529.field_26998);
+                            }
+                            if ((crystalPos = this.crystalPos) != null && this.displayTarget != null && (double)this.lastDamage >= this.getDamage(this.displayTarget) && this.afterBreak.getValue() && (!this.rotate.getValue() || !this.shouldYawStep() || !this.checkFov.getValue() || Alien.ROTATION.inFov(entity.method_19538(), this.fov.getValueFloat()))) {
+                                this.doPlace(crystalPos, false);
+                            }
+                            if (this.forceWeb.getValue() && AutoWeb.INSTANCE.isOn()) {
+                                AutoWeb.force = true;
+                            }
+                            if (this.rotate.getValue() && !this.shouldYawStep()) {
+                                Alien.ROTATION.snapBack();
+                            }
+                        }
+                    }
                 }
             }
-            if (forceWeb.getValue() && AutoWeb.INSTANCE.isOn()) {
-                AutoWeb.force = true;
-            }
-            if (rotate.getValue() && !yawStep.getValue() && AntiCheat.INSTANCE.snapBack.getValue()) {
-                Alien.ROTATION.snapBack();
-            }
-           return;
         }
     }
 
-    private void doPlace(BlockPos pos) {
-        noPosTimer.reset();
-        if (!place.getValue()) return;
-        if (!mc.player.getMainHandStack().getItem().equals(Items.END_CRYSTAL) && !mc.player.getOffHandStack().getItem().equals(Items.END_CRYSTAL) && !findCrystal()) {
-            return;
+    private void doBreak(class_2338 pos) {
+        this.noPosTimer.reset();
+        if (this.breakSetting.getValue() && (this.displayTarget == null || this.displayTarget.field_6235 <= this.waitHurt.getValueInt() || this.syncTimer.passedMs(this.syncTimeout.getValue()))) {
+            this.lastBreakTimer.reset();
+            if (this.switchTimer.passed((long)this.switchCooldown.getValue())) {
+                this.syncTimer.reset();
+                for (class_1511 entity : BlockUtil.getEndCrystals(new class_238((double)pos.method_10263(), (double)pos.method_10264(), (double)pos.method_10260(), (double)(pos.method_10263() + 1), (double)(pos.method_10264() + 2), (double)(pos.method_10260() + 1)))) {
+                    class_2338 crystalPos;
+                    class_243 attackVec;
+                    if (entity.field_6012 < this.minAge.getValueInt() || !entity.method_5805()) continue;
+                    if (!this.shouldYawStep() && !CombatUtil.breakTimer.passed((long)this.breakDelay.getValue())) {
+                        if (this.forcePlace.getValue() && this.crystalPos != null) {
+                            this.doPlace(this.crystalPos, false);
+                        }
+                        return;
+                    }
+                    if (this.rotate.getValue() && this.onBreak.getValue() && !this.faceVector((attackVec = this.getAttackVec(entity.method_19538())) == null ? entity.method_19538() : attackVec)) {
+                        if (this.forcePlace.getValue() && this.crystalPos != null) {
+                            this.doPlace(this.crystalPos, false);
+                        }
+                        return;
+                    }
+                    if (this.shouldYawStep() && !CombatUtil.breakTimer.passed((long)this.breakDelay.getValue())) {
+                        if (this.forcePlace.getValue() && this.crystalPos != null) {
+                            this.doPlace(this.crystalPos, false);
+                        }
+                        return;
+                    }
+                    this.animation.to = 1.0;
+                    this.animation.from = 1.0;
+                    CombatUtil.breakTimer.reset();
+                    this.syncPos = pos;
+                    mc.method_1562().method_52787((class_2596)class_2824.method_34206((class_1297)entity, (boolean)AutoCrystal.mc.field_1724.method_5715()));
+                    if (this.resetCD.getValue()) {
+                        AutoCrystal.mc.field_1724.method_7350();
+                    }
+                    EntityUtil.swingHand(class_1268.field_5808, this.swingMode.getValue());
+                    if (this.breakRemove.getValue()) {
+                        AutoCrystal.mc.field_1687.method_2945(entity.method_5628(), class_1297.class_5529.field_26998);
+                    }
+                    if ((crystalPos = this.crystalPos) != null && this.displayTarget != null && (double)this.lastDamage >= this.getDamage(this.displayTarget) && this.afterBreak.getValue() && (!this.rotate.getValue() || !this.shouldYawStep() || !this.checkFov.getValue() || Alien.ROTATION.inFov(entity.method_19538(), this.fov.getValueFloat()))) {
+                        this.doPlace(crystalPos, false);
+                    }
+                    if (this.forceWeb.getValue() && AutoWeb.INSTANCE.isOn()) {
+                        AutoWeb.force = true;
+                    }
+                    if (this.rotate.getValue() && !this.shouldYawStep()) {
+                        Alien.ROTATION.snapBack();
+                    }
+                    return;
+                }
+                if (this.forcePlace.getValue() && this.crystalPos != null) {
+                    this.doPlace(this.crystalPos, false);
+                }
+            }
         }
-        if (!canTouch(pos.down())) {
-            return;
-        }
-        BlockPos obsPos = pos.down();
-        Direction facing = BlockUtil.getClickSide(obsPos);
-        Vec3d vec = obsPos.toCenterPos().add(facing.getVector().getX() * 0.5, facing.getVector().getY() * 0.5, facing.getVector().getZ() * 0.5);
-        if (facing != Direction.UP && facing != Direction.DOWN) {
-            vec = vec.add(0, 0.45, 0);
-        }
-        if (rotate.getValue()) {
-            if (!faceVector(vec)) return;
-        }
-        if (!placeTimer.passedMs((long) placeDelay.getValue())) return;
-        if (mc.player.getMainHandStack().getItem().equals(Items.END_CRYSTAL) || mc.player.getOffHandStack().getItem().equals(Items.END_CRYSTAL)) {
-            placeTimer.reset();
-            syncPos = pos;
-            placeCrystal(pos);
-        } else {
-            placeTimer.reset();
-            syncPos = pos;
-            int old = mc.player.getInventory().selectedSlot;
-            int crystal = getCrystal();
-            if (crystal == -1) return;
-            doSwap(crystal);
-            placeCrystal(pos);
-            if (autoSwap.getValue() == SwapMode.Silent) {
-                doSwap(old);
-            } else if (autoSwap.getValue() == SwapMode.Inventory) {
-                doSwap(crystal);
-                EntityUtil.syncInventory();
+    }
+
+    private void doPlace(class_2338 pos, boolean rotate) {
+        this.noPosTimer.reset();
+        if (this.place.getValue() && (AutoCrystal.mc.field_1724.method_6047().method_7909().equals(class_1802.field_8301) || AutoCrystal.mc.field_1724.method_6079().method_7909().equals(class_1802.field_8301) || this.hasCrystal()) && this.canTouch(pos.method_10074())) {
+            class_2338 obsPos = pos.method_10074();
+            class_2350 facing = BlockUtil.getClickSide(obsPos);
+            class_243 vec = obsPos.method_46558().method_1031((double)facing.method_10163().method_10263() * 0.5, (double)facing.method_10163().method_10264() * 0.5, (double)facing.method_10163().method_10260() * 0.5);
+            if (facing != class_2350.field_11036 && facing != class_2350.field_11033) {
+                vec = vec.method_1031(0.0, 0.45, 0.0);
+            }
+            if ((this.shouldYawStep() || this.placeTimer.passed((long)this.placeDelay.getValue())) && (!rotate || this.faceVector(vec)) && this.placeTimer.passed((long)this.placeDelay.getValue())) {
+                if (!AutoCrystal.mc.field_1724.method_6047().method_7909().equals(class_1802.field_8301) && !AutoCrystal.mc.field_1724.method_6079().method_7909().equals(class_1802.field_8301)) {
+                    this.placeTimer.reset();
+                    this.syncPos = pos;
+                    int old = AutoCrystal.mc.field_1724.method_31548().field_7545;
+                    int crystal = this.getCrystal();
+                    if (crystal == -1) {
+                        return;
+                    }
+                    this.doSwap(crystal);
+                    this.placeCrystal(pos);
+                    if (this.autoSwap.getValue() == SwapMode.Silent) {
+                        this.doSwap(old);
+                    } else if (this.autoSwap.getValue() == SwapMode.Inventory) {
+                        this.doSwap(crystal);
+                        EntityUtil.syncInventory();
+                    }
+                } else {
+                    this.placeTimer.reset();
+                    this.syncPos = pos;
+                    this.placeCrystal(pos);
+                }
+                if (rotate && !this.shouldYawStep()) {
+                    Alien.ROTATION.snapBack();
+                }
             }
         }
     }
 
     private void doSwap(int slot) {
-        if (autoSwap.getValue() == SwapMode.Silent || autoSwap.getValue() == SwapMode.Normal) {
+        if (this.autoSwap.getValue() == SwapMode.Silent || this.autoSwap.getValue() == SwapMode.Normal) {
             InventoryUtil.switchToSlot(slot);
-        } else if (autoSwap.getValue() == SwapMode.Inventory) {
-            InventoryUtil.inventorySwap(slot, mc.player.getInventory().selectedSlot);
+        } else if (this.autoSwap.getValue() == SwapMode.Inventory) {
+            InventoryUtil.inventorySwap(slot, AutoCrystal.mc.field_1724.method_31548().field_7545);
         }
+    }
+
+    private void baseSwap(int slot) {
+        if (!this.inventory.getValue()) {
+            InventoryUtil.switchToSlot(slot);
+        } else {
+            InventoryUtil.inventorySwap(slot, AutoCrystal.mc.field_1724.method_31548().field_7545);
+        }
+    }
+
+    private int getBlock() {
+        return this.inventory.getValue() ? InventoryUtil.findBlockInventorySlot(class_2246.field_10540) : InventoryUtil.findBlock(class_2246.field_10540);
     }
 
     private int getCrystal() {
-        if (autoSwap.getValue() == SwapMode.Silent || autoSwap.getValue() == SwapMode.Normal) {
-            return InventoryUtil.findItem(Items.END_CRYSTAL);
-        } else if (autoSwap.getValue() == SwapMode.Inventory) {
-            return InventoryUtil.findItemInventorySlot(Items.END_CRYSTAL);
+        if (this.autoSwap.getValue() == SwapMode.Silent || this.autoSwap.getValue() == SwapMode.Normal) {
+            return InventoryUtil.findItem(class_1802.field_8301);
         }
-        return -1;
+        return this.autoSwap.getValue() == SwapMode.Inventory ? InventoryUtil.findItemInventorySlot(class_1802.field_8301) : -1;
     }
 
-    private void placeCrystal(BlockPos pos) {
-        ExplosionSpawn.INSTANCE.add(pos);
-        //PlaceRender.PlaceMap.put(pos, new PlaceRender.placePosition(pos));
-        boolean offhand = mc.player.getOffHandStack().getItem() == Items.END_CRYSTAL;
-        BlockPos obsPos = pos.down();
-        Direction facing = BlockUtil.getClickSide(obsPos);
-        BlockUtil.clickBlock(obsPos, facing, false, offhand ? Hand.OFF_HAND : Hand.MAIN_HAND, swingMode.getValue());
+    private void placeCrystal(class_2338 pos) {
+        boolean offhand = AutoCrystal.mc.field_1724.method_6079().method_7909() == class_1802.field_8301;
+        class_2338 obsPos = pos.method_10074();
+        class_2350 facing = BlockUtil.getClickSide(obsPos);
+        BlockUtil.clickBlock(obsPos, facing, false, offhand ? class_1268.field_5810 : class_1268.field_5808, this.swingMode.getValue());
     }
 
-    private boolean faceVector(Vec3d directionVec) {
-        if (!yawStep.getValue()) {
+    private boolean faceVector(class_243 directionVec) {
+        if (directionVec == null) {
+            return false;
+        }
+        if (!this.shouldYawStep()) {
             Alien.ROTATION.lookAt(directionVec);
             return true;
-        } else {
-            this.directionVec = directionVec;
-            if (Alien.ROTATION.inFov(directionVec, fov.getValueFloat())) {
-                return true;
-            }
         }
-        return !checkFov.getValue();
+        this.directionVec = directionVec;
+        return Alien.ROTATION.inFov(directionVec, this.fov.getValueFloat()) ? true : !this.checkFov.getValue();
     }
 
-    private enum Page {
-        General, Interact, Misc, Rotation, Calc, Render
+    private static enum Page {
+        General,
+        Base,
+        Misc,
+        Rotation,
+        Check,
+        Calc,
+        Render;
+
     }
 
-    private enum SwapMode {
-        Off, Normal, Silent, Inventory
+    private static enum SwapMode {
+        None,
+        Normal,
+        Silent,
+        Inventory;
+
     }
 
-    private class PlayerAndPredict {
-        final PlayerEntity player;
-        final PlayerEntity predict;
+    public static enum TargetESP {
+        Box,
+        Fill,
+        Jello,
+        ThunderHack,
+        None;
 
-        private PlayerAndPredict(PlayerEntity player) {
-            this.player = player;
-            if (predictTicks.getValueFloat() > 0) {
-                predict = new PlayerEntity(mc.world, player.getBlockPos(), player.getYaw(), new GameProfile(UUID.fromString("66123666-1234-5432-6666-667563866600"), "PredictEntity339")) {
-                    @Override
-                    public boolean isSpectator() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isCreative() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isOnGround() {
-                        return player.isOnGround();
-                    }
-                };
-                predict.setPosition(player.getPos().add(CombatUtil.getMotionVec(player, predictTicks.getValueInt(), true)));
-                predict.setHealth(player.getHealth());
-                predict.prevX = player.prevX;
-                predict.prevZ = player.prevZ;
-                predict.prevY = player.prevY;
-                predict.setOnGround(player.isOnGround());
-                predict.getInventory().clone(player.getInventory());
-                predict.setPose(player.getPose());
-                for (StatusEffectInstance se : new ArrayList<>(player.getStatusEffects())) {
-                    predict.addStatusEffect(se);
-                }
-            } else {
-                predict = player;
-            }
-        }
     }
 
     private class CrystalRender {
-        @EventHandler
+        private CrystalRender() {
+        }
+
+        @EventListener
         public void onRender3D(Render3DEvent event) {
-            BlockPos cpos = sync.getValue() && crystalPos != null ? syncPos : crystalPos;
+            class_2338 cpos;
+            class_2338 class_23382 = cpos = AutoCrystal.this.sync.getValue() && AutoCrystal.this.crystalPos != null ? AutoCrystal.this.syncPos : AutoCrystal.this.crystalPos;
             if (cpos != null) {
-                placeVec3d = cpos.down().toCenterPos();
+                AutoCrystal.this.placeVec3d = cpos.method_10074().method_46558();
             }
-            if (placeVec3d == null) {
-                return;
-            }
-            if (fadeSpeed.getValue() >= 1) {
-                currentFade = noPosTimer.passedMs((long) (startFadeTime.getValue() * 1000)) ? 0 : 0.5;
-            } else {
-                currentFade = AnimateUtil.animate(currentFade, noPosTimer.passedMs((long) (startFadeTime.getValue() * 1000)) ? 0 : 0.5, fadeSpeed.getValue() / 10);
-            }
-            if (currentFade == 0) {
-                curVec3d = null;
-                return;
-            }
-            if (curVec3d == null || sliderSpeed.getValue() >= 1) {
-                curVec3d = placeVec3d;
-            } else {
-                curVec3d = new Vec3d(AnimateUtil.animate(curVec3d.x, placeVec3d.x, sliderSpeed.getValue() / 10), AnimateUtil.animate(curVec3d.y, placeVec3d.y, sliderSpeed.getValue() / 10), AnimateUtil.animate(curVec3d.z, placeVec3d.z, sliderSpeed.getValue() / 10));
-            }
-            if (render.getValue()) {
-                Box cbox = new Box(curVec3d, curVec3d);
-                if (shrink.getValue()) {
-                    cbox = cbox.expand(currentFade);
+            if (AutoCrystal.this.placeVec3d != null) {
+                AutoCrystal.this.currentFade = AutoCrystal.this.fadeSpeed.getValue() >= 1.0 ? (AutoCrystal.this.noPosTimer.passed((long)(AutoCrystal.this.startFadeTime.getValue() * 1000.0)) ? 0.0 : 0.5) : AnimateUtil.animate(AutoCrystal.this.currentFade, AutoCrystal.this.noPosTimer.passed((long)(AutoCrystal.this.startFadeTime.getValue() * 1000.0)) ? 0.0 : 0.5, AutoCrystal.this.fadeSpeed.getValue() / 10.0);
+                if (AutoCrystal.this.currentFade == 0.0) {
+                    AutoCrystal.this.curVec3d = null;
                 } else {
-                    cbox = cbox.expand(0.5);
+                    AutoCrystal.this.curVec3d = AutoCrystal.this.curVec3d != null && !(AutoCrystal.this.sliderSpeed.getValue() >= 1.0) ? new class_243(AnimateUtil.animate(AutoCrystal.this.curVec3d.field_1352, AutoCrystal.this.placeVec3d.field_1352, AutoCrystal.this.sliderSpeed.getValue() / 10.0), AnimateUtil.animate(AutoCrystal.this.curVec3d.field_1351, AutoCrystal.this.placeVec3d.field_1351, AutoCrystal.this.sliderSpeed.getValue() / 10.0), AnimateUtil.animate(AutoCrystal.this.curVec3d.field_1350, AutoCrystal.this.placeVec3d.field_1350, AutoCrystal.this.sliderSpeed.getValue() / 10.0)) : AutoCrystal.this.placeVec3d;
+                    if (AutoCrystal.this.render.getValue()) {
+                        class_238 cbox = new class_238(AutoCrystal.this.curVec3d, AutoCrystal.this.curVec3d);
+                        cbox = AutoCrystal.this.shrink.getValue() ? cbox.method_1014(AutoCrystal.this.currentFade) : cbox.method_1014(0.5);
+                        class_4587 matrixStack = event.matrixStack;
+                        if (AutoCrystal.this.fill.booleanValue) {
+                            Render3DUtil.drawFill(matrixStack, cbox, ColorUtil.injectAlpha(AutoCrystal.this.fill.getValue(), (int)((double)AutoCrystal.this.fill.getValue().getAlpha() * AutoCrystal.this.currentFade * 2.0)));
+                        }
+                        if (AutoCrystal.this.box.booleanValue) {
+                            Render3DUtil.drawBox(matrixStack, cbox, ColorUtil.injectAlpha(AutoCrystal.this.box.getValue(), (int)((double)AutoCrystal.this.box.getValue().getAlpha() * AutoCrystal.this.currentFade * 2.0)), AutoCrystal.this.lineWidth.getValueFloat());
+                        }
+                    }
+                    if (AutoCrystal.this.text.booleanValue && AutoCrystal.this.lastDamage > 0.0f && !AutoCrystal.this.noPosTimer.passed((long)(AutoCrystal.this.startFadeTime.getValue() * 1000.0))) {
+                        Render3DUtil.drawText3D(AutoCrystal.this.df.format(AutoCrystal.this.lastDamage), AutoCrystal.this.curVec3d, AutoCrystal.this.text.getValue());
+                    }
                 }
-                MatrixStack matrixStack = event.getMatrixStack();
-                if (fill.booleanValue) {
-                    Render3DUtil.drawFill(matrixStack, cbox, ColorUtil.injectAlpha(fill.getValue(), (int) (fill.getValue().getAlpha() * currentFade * 2D)));
-                }
-                if (box.booleanValue) {
-                    Render3DUtil.drawBox(matrixStack, cbox, ColorUtil.injectAlpha(box.getValue(), (int) (box.getValue().getAlpha() * currentFade * 2D)), lineWidth.getValueFloat());
-                }
-            }
-            if (text.booleanValue && lastDamage > 0) {
-                if (!noPosTimer.passedMs((long) (startFadeTime.getValue() * 1000))) Render3DUtil.drawText3D(df.format(lastDamage), curVec3d, text.getValue());
             }
         }
     }
 }
+

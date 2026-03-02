@@ -1,156 +1,83 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.blaze3d.systems.RenderSystem
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_4587
+ */
 package dev.luminous.mod.modules.impl.render;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.luminous.mod.modules.settings.impl.ColorSetting;
-import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import dev.luminous.api.events.eventbus.EventHandler;
+import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.TotemEvent;
-import dev.luminous.api.utils.math.MathUtil;
-import dev.luminous.api.utils.math.AnimateUtil;
+import dev.luminous.api.utils.entity.CopyPlayerEntity;
+import dev.luminous.api.utils.math.Animation;
+import dev.luminous.api.utils.math.Easing;
+import dev.luminous.api.utils.render.ModelPlayer;
 import dev.luminous.mod.modules.Module;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RotationAxis;
-import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
+import dev.luminous.mod.modules.settings.impl.BooleanSetting;
+import dev.luminous.mod.modules.settings.impl.ColorSetting;
+import dev.luminous.mod.modules.settings.impl.EnumSetting;
+import dev.luminous.mod.modules.settings.impl.SliderSetting;
+import java.awt.Color;
 import java.util.concurrent.CopyOnWriteArrayList;
+import net.minecraft.class_1657;
+import net.minecraft.class_4587;
 
-public final class PopChams extends Module {
-    private final ColorSetting color = add(new ColorSetting("Color", new Color(255, 255, 255)));
-    private final SliderSetting alphaSpeed = add(new SliderSetting("AlphaSpeed", 0.2, 0, 1, 0.01));
-
-    private final CopyOnWriteArrayList<Person> popList = new CopyOnWriteArrayList<>();
+public class PopChams
+extends Module {
     public static PopChams INSTANCE;
+    public final EnumSetting<Easing> ease = this.add(new EnumSetting<Easing>("Ease", Easing.CubicInOut));
+    private final ColorSetting fill = this.add(new ColorSetting("Fill", new Color(255, 255, 255, 100)).injectBoolean(true));
+    private final ColorSetting line = this.add(new ColorSetting("Line", new Color(255, 255, 255, 100)).injectBoolean(true));
+    final CopyOnWriteArrayList<Person> popList = new CopyOnWriteArrayList();
+    private final BooleanSetting alpha = this.add(new BooleanSetting("Alpha", true));
+    private final BooleanSetting forceSneak = this.add(new BooleanSetting("ForceSneak", false));
+    private final BooleanSetting noSelf = this.add(new BooleanSetting("NoSelf", true));
+    private final BooleanSetting noLimb = this.add(new BooleanSetting("NoLimb", true));
+    private final SliderSetting fadeTime = this.add(new SliderSetting("FadeTime", 300, 0, 1000));
+    private final SliderSetting yOffset = this.add(new SliderSetting("YOffset", 0.0, -10.0, 10.0, 0.01));
+    private final SliderSetting scale = this.add(new SliderSetting("Scale", 1.0, 0.0, 2.0, 0.01));
+    private final SliderSetting yaw = this.add(new SliderSetting("Yaw", 0.0, 0.0, 720.0, 0.01));
 
     public PopChams() {
-        super("PopChams", Category.Render);
-        setChinese("爆图腾上色");
+        super("PopChams", Module.Category.Render);
+        this.setChinese("\u7206\u56fe\u817e\u4e0a\u8272");
         INSTANCE = this;
     }
 
     @Override
-    public void onUpdate() {
-        popList.forEach(person -> person.update(popList));
+    public void onRender3D(class_4587 matrixStack) {
+        RenderSystem.depthMask((boolean)false);
+        this.popList.removeIf(person -> person.render(matrixStack));
+        RenderSystem.depthMask((boolean)true);
     }
 
-    @Override
-    public void onRender3D(MatrixStack matrixStack) {
-        RenderSystem.depthMask(false);
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(770, 771, 0, 1);
-
-        popList.forEach(person -> {
-            person.modelPlayer.leftPants.visible = false;
-            person.modelPlayer.rightPants.visible = false;
-            person.modelPlayer.leftSleeve.visible = false;
-            person.modelPlayer.rightSleeve.visible = false;
-            person.modelPlayer.jacket.visible = false;
-            person.modelPlayer.hat.visible = false;
-            renderEntity(matrixStack, person.player, person.modelPlayer, person.getAlpha());
-        });
-
-        RenderSystem.disableBlend();
-        RenderSystem.depthMask(true);
-    }
-
-
-    @EventHandler
-    private void onTotemPop(TotemEvent e) {
-        if (e.getPlayer().equals(mc.player) || mc.world == null) return;
-
-        PlayerEntity entity = new PlayerEntity(mc.world, BlockPos.ORIGIN, e.getPlayer().bodyYaw, new GameProfile(e.getPlayer().getUuid(), e.getPlayer().getName().getString())) {
-            @Override
-            public boolean isSpectator() {
-                return false;
-            }
-
-            @Override
-            public boolean isCreative() {
-                return false;
-            }
-        };
-
-        entity.copyPositionAndRotation(e.getPlayer());
-        entity.bodyYaw = e.getPlayer().bodyYaw;
-        entity.headYaw = e.getPlayer().headYaw;
-        entity.handSwingProgress = e.getPlayer().handSwingProgress;
-        entity.handSwingTicks = e.getPlayer().handSwingTicks;
-        entity.setSneaking(e.getPlayer().isSneaking());
-        entity.limbAnimator.setSpeed(e.getPlayer().limbAnimator.getSpeed());
-        entity.limbAnimator.pos = e.getPlayer().limbAnimator.getPos();
-        popList.add(new Person(entity));
-    }
-
-    private void renderEntity(MatrixStack matrices, LivingEntity entity, BipedEntityModel<PlayerEntity> modelBase, int alpha) {
-        double x = entity.getX() - mc.getEntityRenderDispatcher().camera.getPos().getX();
-        double y = entity.getY() - mc.getEntityRenderDispatcher().camera.getPos().getY();
-        double z = entity.getZ() - mc.getEntityRenderDispatcher().camera.getPos().getZ();
-
-        matrices.push();
-        matrices.translate((float) x, (float) y, (float) z);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotation(MathUtil.rad(180 - entity.bodyYaw)));
-        prepareScale(matrices);
-
-        modelBase.animateModel((PlayerEntity) entity, entity.limbAnimator.getPos(), entity.limbAnimator.getSpeed(), mc.getTickDelta());
-        modelBase.setAngles((PlayerEntity) entity, entity.limbAnimator.getPos(), entity.limbAnimator.getSpeed(), entity.age, entity.headYaw - entity.bodyYaw, entity.getPitch());
-
-        RenderSystem.enableBlend();
-        RenderSystem.disableDepthTest();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        modelBase.render(matrices, buffer, 10, 0, color.getValue().getRed() / 255f, color.getValue().getGreen() / 255f, color.getValue().getBlue() / 255f, alpha / 255f);
-        tessellator.draw();
-        RenderSystem.disableBlend();
-        RenderSystem.enableDepthTest();
-        matrices.pop();
-    }
-
-    private static void prepareScale(MatrixStack matrixStack) {
-        matrixStack.scale(-1.0F, -1.0F, 1.0F);
-        matrixStack.scale(1.6f, 1.8f, 1.6f);
-        matrixStack.translate(0.0F, -1.501F, 0.0F);
+    @EventListener
+    private void onTotemPop(TotemEvent event) {
+        if (!this.noSelf.getValue() || !event.getPlayer().equals((Object)PopChams.mc.field_1724)) {
+            this.popList.add(new Person(new CopyPlayerEntity(event.getPlayer())));
+        }
     }
 
     private class Person {
-        private final PlayerEntity player;
-        private final PlayerEntityModel<PlayerEntity> modelPlayer;
-        private int alpha;
+        public final ModelPlayer modelPlayer;
+        final Animation animation;
 
-        public Person(PlayerEntity player) {
-            this.player = player;
-            modelPlayer = new PlayerEntityModel<>(new EntityRendererFactory.Context(mc.getEntityRenderDispatcher(), mc.getItemRenderer(), mc.getBlockRenderManager(), mc.getEntityRenderDispatcher().getHeldItemRenderer(), mc.getResourceManager(), mc.getEntityModelLoader(), mc.textRenderer).getPart(EntityModelLayers.PLAYER), false);
-            modelPlayer.getHead().scale(new Vector3f(-0.3f, -0.3f, -0.3f));
-            alpha = color.getValue().getAlpha();
+        public Person(class_1657 player) {
+            this.modelPlayer = new ModelPlayer(player);
+            this.animation = new Animation();
         }
 
-        public void update(CopyOnWriteArrayList<Person> arrayList) {
-            if (alpha <= 0) {
-                arrayList.remove(this);
-                player.kill();
-                player.remove(Entity.RemovalReason.KILLED);
-                player.onRemoved();
-                return;
+        public boolean render(class_4587 matrixStack) {
+            double animation = this.animation.get(1.0, PopChams.this.fadeTime.getValueInt(), PopChams.this.ease.getValue());
+            if (animation >= 1.0) {
+                return true;
             }
-            alpha = (int) (AnimateUtil.animate(alpha, 0, alphaSpeed.getValue()) - 0.2);
-        }
-
-        public int getAlpha() {
-            return (int) MathUtil.clamp(alpha, 0, 255);
+            this.modelPlayer.render(matrixStack, PopChams.this.fill, PopChams.this.line, PopChams.this.alpha.getValue() ? 1.0 - animation : 1.0, PopChams.this.yOffset.getValue() * animation, 1.0 + (PopChams.this.scale.getValue() - 1.0) * animation, PopChams.this.yaw.getValue() * animation, PopChams.this.noLimb.getValue(), PopChams.this.forceSneak.getValue());
+            return false;
         }
     }
 }
+

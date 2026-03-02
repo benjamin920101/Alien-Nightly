@@ -1,28 +1,23 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_703
+ */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.particle.ParticleEffect;
+import net.minecraft.class_703;
 
-public class ParticleEvent extends Event {
-    public ParticleEvent() {
-        super(Stage.Pre);
-    }
-    public static class AddParticle extends ParticleEvent {
+public class ParticleEvent
+extends Event {
+    private static final ParticleEvent instance = new ParticleEvent();
+    public class_703 particle;
 
-        public final Particle particle;
-        public AddParticle(Particle particle){
-            this.particle = particle;
-        }
-
-    }
-
-    public static class AddEmmiter extends ParticleEvent {
-        public final ParticleEffect emmiter;
-
-        public AddEmmiter(ParticleEffect emmiter){
-            this.emmiter = emmiter;
-        }
-
+    public static ParticleEvent get(class_703 particle) {
+        ParticleEvent.instance.particle = particle;
+        instance.setCancelled(false);
+        return instance;
     }
 }
+

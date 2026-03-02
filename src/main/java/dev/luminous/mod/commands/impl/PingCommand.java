@@ -1,42 +1,48 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2596
+ *  net.minecraft.class_7439
+ */
 package dev.luminous.mod.commands.impl;
 
 import dev.luminous.Alien;
-import dev.luminous.api.events.eventbus.EventHandler;
+import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.PacketEvent;
-import dev.luminous.core.impl.CommandManager;
 import dev.luminous.mod.commands.Command;
-import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
-
 import java.util.List;
+import net.minecraft.class_2596;
+import net.minecraft.class_7439;
 
-public class PingCommand extends Command {
+public class PingCommand
+extends Command {
+    private long sendTime;
 
-	public PingCommand() {
-		super("ping", "");
-	}
+    public PingCommand() {
+        super("ping", "");
+    }
 
-	private long sendTime;
+    @Override
+    public void runCommand(String[] parameters) {
+        this.sendTime = System.currentTimeMillis();
+        mc.method_1562().method_45730("chat ");
+        Alien.EVENT_BUS.subscribe(this);
+    }
 
-	@Override
-	public void runCommand(String[] parameters) {
-		sendTime = System.currentTimeMillis();
-		mc.getNetworkHandler().sendChatCommand("chat ");
-		Alien.EVENT_BUS.subscribe(this);
-	}
+    @Override
+    public String[] getAutocorrect(int count, List<String> seperated) {
+        return null;
+    }
 
-
-	@Override
-	public String[] getAutocorrect(int count, List<String> seperated) {
-		return null;
-	}
-
-	@EventHandler
-	public void onPacketReceive(PacketEvent.Receive e) {
-		if (e.getPacket() instanceof GameMessageS2CPacket packet) {
-			if (packet.content().getString().contains("chat.use") || packet.content().getString().contains("命令") || packet.content().getString().contains("Bad command")|| packet.content().getString().contains("No such command") || packet.content().getString().contains("<--[HERE]") || packet.content().getString().contains("Unknown") || packet.content().getString().contains("帮助") || packet.content().getString().contains("执行错误")) {
-				CommandManager.sendChatMessage("ping: " + (System.currentTimeMillis() - sendTime) + "ms");
-				Alien.EVENT_BUS.unsubscribe(this);
-			}
-		}
-	}
+    @EventListener
+    public void onPacketReceive(PacketEvent.Receive e) {
+        class_7439 packet;
+        class_2596<?> class_25962 = e.getPacket();
+        if (class_25962 instanceof class_7439 && ((packet = (class_7439)class_25962).comp_763().getString().contains("chat.use") || packet.comp_763().getString().contains("\u547d\u4ee4") || packet.comp_763().getString().contains("Bad command") || packet.comp_763().getString().contains("No such command") || packet.comp_763().getString().contains("<--[HERE]") || packet.comp_763().getString().contains("Unknown") || packet.comp_763().getString().contains("\u5e2e\u52a9") || packet.comp_763().getString().contains("\u6267\u884c\u9519\u8bef"))) {
+            this.sendChatMessage("ping: " + (System.currentTimeMillis() - this.sendTime) + "ms");
+            Alien.EVENT_BUS.unsubscribe(this);
+        }
+    }
 }
+

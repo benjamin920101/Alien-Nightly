@@ -1,18 +1,26 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.mod.modules.impl.movement;
 
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.UpdateEvent;
+import dev.luminous.asm.accessors.ILivingEntity;
 import dev.luminous.mod.modules.Module;
 
-public final class NoJumpDelay
-        extends Module {
+public class NoJumpDelay
+extends Module {
     public static NoJumpDelay INSTANCE;
+
     public NoJumpDelay() {
-        super("NoJumpDelay", Category.Movement);
-        setChinese("无跳跃冷却");
+        super("NoJumpDelay", Module.Category.Movement);
+        this.setChinese("\u65e0\u8df3\u8dc3\u51b7\u5374");
         INSTANCE = this;
     }
 
-    @Override
-    public void onUpdate() {
-        mc.player.jumpingCooldown = 0;
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        ((ILivingEntity)NoJumpDelay.mc.field_1724).setLastJumpCooldown(0);
     }
 }
+

@@ -1,31 +1,40 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2664
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.Mutable
+ *  org.spongepowered.asm.mixin.gen.Accessor
+ */
 package dev.luminous.asm.accessors;
 
-import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
+import net.minecraft.class_2664;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(ExplosionS2CPacket.class)
+@Mixin(value={class_2664.class})
 public interface IExplosionS2CPacket {
+    @Mutable
+    @Accessor(value="field_12176")
+    public void setVelocityX(float var1);
 
     @Mutable
-    @Accessor("playerVelocityX")
-    void setVelocityX(float velocityX);
+    @Accessor(value="field_12183")
+    public void setVelocityY(float var1);
 
     @Mutable
-    @Accessor("playerVelocityY")
-    void setVelocityY(float velocityY);
+    @Accessor(value="field_12182")
+    public void setVelocityZ(float var1);
 
-    @Mutable
-    @Accessor("playerVelocityZ")
-    void setVelocityZ(float velocityZ);
+    @Accessor(value="field_12176")
+    public float getX();
 
-    @Accessor("playerVelocityX")
-    float getX();
+    @Accessor(value="field_12183")
+    public float getY();
 
-    @Accessor("playerVelocityY")
-    float getY();
-
-    @Accessor("playerVelocityZ")
-    float getZ();
+    @Accessor(value="field_12182")
+    public float getZ();
 }
+

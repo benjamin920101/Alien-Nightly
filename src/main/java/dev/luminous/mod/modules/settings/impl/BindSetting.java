@@ -1,101 +1,87 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.glfw.GLFW
+ */
 package dev.luminous.mod.modules.settings.impl;
 
-import dev.luminous.Alien;
-import dev.luminous.core.impl.ModuleManager;
 import dev.luminous.mod.modules.settings.Setting;
-import org.lwjgl.glfw.GLFW;
-
 import java.lang.reflect.Field;
 import java.util.function.BooleanSupplier;
+import org.lwjgl.glfw.GLFW;
 
-public class BindSetting extends Setting {
-    private boolean isListening = false;
-    private int key;
-    private final int defaultKey;
+public class BindSetting
+extends Setting {
+    private final int defaultValue;
+    public boolean holding = false;
+    private int value;
     private boolean pressed = false;
     private boolean holdEnable = false;
-    public boolean hold = false;
-    public BindSetting(String name, int key) {
-        super(name, ModuleManager.lastLoadMod.getName() + "_" + name);
-        defaultKey = key;
-        this.key = key;
+
+    public BindSetting(String name, int value) {
+        super(name);
+        this.defaultValue = value;
+        this.value = value;
     }
 
-    public BindSetting(String name, int key, BooleanSupplier visibilityIn) {
-        super(name, ModuleManager.lastLoadMod.getName() + "_" + name, visibilityIn);
-        defaultKey = key;
-        this.key = key;
+    public BindSetting(String name, int value, BooleanSupplier visibilityIn) {
+        super(name, visibilityIn);
+        this.defaultValue = value;
+        this.value = value;
     }
 
-    @Override
-    public void loadSetting() {
-        setKey(Alien.CONFIG.getInt(getLine(), defaultKey));
-        setHoldEnable(Alien.CONFIG.getBoolean(getLine() + "_hold"));
+    public int getValue() {
+        return this.value;
     }
 
-    public int getKey() {
-        return this.key;
+    public void setValue(int value) {
+        this.value = value;
     }
 
-    public void setKey(int key) {
-        this.key = key;
-    }
-
-    public String getBind() {
-        if (key == -1) return "None";
-        if (key < -1) {
-            if (key == -2) {
-                return "MouseLeft";
-            }
-            if (key == -3) {
-                return "MouseRight";
-            }
-            if (key == -4) {
-                return "MouseMiddle";
-            }
-            return "Mouse" + (Math.abs(key) - 4);
+    public String getKeyString() {
+        Object kn;
+        if (this.value == -1) {
+            return "None";
         }
-        String kn = this.key > 0 ? GLFW.glfwGetKeyName(this.key, GLFW.glfwGetKeyScancode(this.key)) : "None";
+        if (this.value < -1) {
+            return "Mouse" + (Math.abs(this.value) - 1);
+        }
+        Object object = kn = this.value > 0 ? GLFW.glfwGetKeyName((int)this.value, (int)GLFW.glfwGetKeyScancode((int)this.value)) : "None";
         if (kn == null) {
             try {
                 for (Field declaredField : GLFW.class.getDeclaredFields()) {
-                    if (declaredField.getName().startsWith("GLFW_KEY_")) {
-                        int a = (int) declaredField.get(null);
-                        if (a == this.key) {
-                            String nb = declaredField.getName().substring("GLFW_KEY_".length());
-                            kn = nb.substring(0, 1).toUpperCase() + nb.substring(1).toLowerCase();
-                        }
-                    }
+                    int a;
+                    if (!declaredField.getName().startsWith("GLFW_KEY_") || (a = ((Integer)declaredField.get(null)).intValue()) != this.value) continue;
+                    String nb = declaredField.getName().substring("GLFW_KEY_".length());
+                    kn = nb.substring(0, 1).toUpperCase() + nb.substring(1).toLowerCase();
                 }
-            } catch (Exception ignored) {
+            }
+            catch (Exception var8) {
                 kn = "None";
             }
         }
-
-        return kn.toUpperCase();
+        return kn == null ? "Unknown " + this.value : ((String)kn).toUpperCase();
     }
 
-    public void setListening(boolean set) {
-        isListening = set;
-    }
-
-    public boolean isListening() {
-        return isListening;
+    public boolean isPressed() {
+        return this.pressed;
     }
 
     public void setPressed(boolean pressed) {
         this.pressed = pressed;
     }
 
-    public boolean isPressed() {
-        return pressed;
+    public boolean isHoldEnable() {
+        return this.holdEnable;
     }
 
     public void setHoldEnable(boolean holdEnable) {
         this.holdEnable = holdEnable;
     }
 
-    public boolean isHoldEnable() {
-        return holdEnable;
+    public int getDefaultValue() {
+        return this.defaultValue;
     }
 }
+

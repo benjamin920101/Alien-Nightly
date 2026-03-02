@@ -1,40 +1,70 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1309
+ *  net.minecraft.class_1671
+ *  net.minecraft.class_2394
+ *  net.minecraft.class_2398
+ *  net.minecraft.class_243
+ *  net.minecraft.class_3417
+ *  net.minecraft.class_3419
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.Shadow
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.At$Shift
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.Redirect
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+ */
 package dev.luminous.asm.mixins;
 
 import dev.luminous.Alien;
+import dev.luminous.api.events.impl.FireworkShooterRotationEvent;
 import dev.luminous.api.events.impl.RemoveFireworkEvent;
 import dev.luminous.api.utils.Wrapper;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.class_1309;
+import net.minecraft.class_1671;
+import net.minecraft.class_2394;
+import net.minecraft.class_2398;
+import net.minecraft.class_243;
+import net.minecraft.class_3417;
+import net.minecraft.class_3419;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-
-@Mixin(FireworkRocketEntity.class)
-public class MixinFireworkRocketEntity implements Wrapper {
-
+@Mixin(value={class_1671.class})
+public class MixinFireworkRocketEntity
+implements Wrapper {
     @Shadow
-    private int life;
+    private int field_7613;
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/" +
-            "FireworkRocketEntity;updateRotation()V", shift = At.Shift.AFTER), cancellable = true)
+    @Inject(method={"method_5773"}, at={@At(value="INVOKE", target="Lnet/minecraft/class_1671;method_26962()V", shift=At.Shift.AFTER)}, cancellable=true)
     private void hookTickPre(CallbackInfo ci) {
-        FireworkRocketEntity rocketEntity = ((FireworkRocketEntity) (Object) this);
-        RemoveFireworkEvent removeFireworkEvent = new RemoveFireworkEvent(rocketEntity);
+        class_1671 rocketEntity = (class_1671)class_1671.class.cast(this);
+        RemoveFireworkEvent removeFireworkEvent = RemoveFireworkEvent.get(rocketEntity);
         Alien.EVENT_BUS.post(removeFireworkEvent);
         if (removeFireworkEvent.isCancelled()) {
             ci.cancel();
-            if (life == 0 && !rocketEntity.isSilent()) {
-                mc.world.playSound(null, rocketEntity.getX(), rocketEntity.getY(), rocketEntity.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.AMBIENT, 3.0f, 1.0f);
+            if (this.field_7613 == 0 && !rocketEntity.method_5701()) {
+                MixinFireworkRocketEntity.mc.field_1687.method_43128(null, rocketEntity.method_23317(), rocketEntity.method_23318(), rocketEntity.method_23321(), class_3417.field_14702, class_3419.field_15256, 3.0f, 1.0f);
             }
-            ++life;
-            if (mc.world.isClient && life % 2 < 2) {
-                mc.world.addParticle(ParticleTypes.FIREWORK, rocketEntity.getX(), rocketEntity.getY(), rocketEntity.getZ(), mc.world.random.nextGaussian() * 0.05, -rocketEntity.getVelocity().y * 0.5, mc.world.random.nextGaussian() * 0.05);
+            ++this.field_7613;
+            if (MixinFireworkRocketEntity.mc.field_1687.field_9236) {
+                MixinFireworkRocketEntity.mc.field_1687.method_8406((class_2394)class_2398.field_11248, rocketEntity.method_23317(), rocketEntity.method_23318(), rocketEntity.method_23321(), MixinFireworkRocketEntity.mc.field_1687.field_9229.method_43059() * 0.05, -rocketEntity.method_18798().field_1351 * 0.5, MixinFireworkRocketEntity.mc.field_1687.field_9229.method_43059() * 0.05);
             }
         }
     }
+
+    @Redirect(method={"method_5773"}, at=@At(value="INVOKE", target="Lnet/minecraft/class_1309;method_5720()Lnet/minecraft/class_243;"), require=0)
+    public class_243 hook(class_1309 instance) {
+        FireworkShooterRotationEvent event = FireworkShooterRotationEvent.get(instance, instance.method_36454(), instance.method_36455());
+        Alien.EVENT_BUS.post(event);
+        return event.isCancelled() ? event.getRotationVector() : instance.method_5720();
+    }
 }
+

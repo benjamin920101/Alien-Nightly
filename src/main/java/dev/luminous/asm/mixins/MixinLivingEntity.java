@@ -1,20 +1,55 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1291
+ *  net.minecraft.class_1294
+ *  net.minecraft.class_1297
+ *  net.minecraft.class_1297$class_5529
+ *  net.minecraft.class_1299
+ *  net.minecraft.class_1309
+ *  net.minecraft.class_1320
+ *  net.minecraft.class_1322
+ *  net.minecraft.class_1324
+ *  net.minecraft.class_1937
+ *  net.minecraft.class_310
+ *  net.minecraft.class_5131
+ *  net.minecraft.class_5134
+ *  net.minecraft.class_6880
+ *  org.jetbrains.annotations.Nullable
+ *  org.spongepowered.asm.mixin.Final
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.Shadow
+ *  org.spongepowered.asm.mixin.Unique
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.Redirect
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
+ */
 package dev.luminous.asm.mixins;
 
 import dev.luminous.Alien;
-import dev.luminous.api.events.Event;
+import dev.luminous.api.events.impl.LerpToEvent;
 import dev.luminous.api.events.impl.SprintEvent;
-import dev.luminous.mod.modules.impl.exploit.NoBadEffects;
 import dev.luminous.mod.modules.impl.movement.ElytraFly;
-import dev.luminous.mod.modules.impl.movement.Glide;
+import dev.luminous.mod.modules.impl.movement.NoSlow;
+import dev.luminous.mod.modules.impl.movement.Velocity;
+import dev.luminous.mod.modules.impl.player.AntiEffects;
 import dev.luminous.mod.modules.impl.render.ViewModel;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.*;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.world.World;
+import net.minecraft.class_1291;
+import net.minecraft.class_1294;
+import net.minecraft.class_1297;
+import net.minecraft.class_1299;
+import net.minecraft.class_1309;
+import net.minecraft.class_1320;
+import net.minecraft.class_1322;
+import net.minecraft.class_1324;
+import net.minecraft.class_1937;
+import net.minecraft.class_310;
+import net.minecraft.class_5131;
+import net.minecraft.class_5134;
+import net.minecraft.class_6880;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,85 +61,96 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends Entity {
-    public MixinLivingEntity(EntityType<?> type, World world) {
+@Mixin(value={class_1309.class})
+public abstract class MixinLivingEntity
+extends class_1297 {
+    @Final
+    @Shadow
+    private static class_1322 field_6231;
+    @Unique
+    private boolean previousElytra = false;
+    @Unique
+    private long lastLerp = 0L;
+
+    public MixinLivingEntity(class_1299<?> type, class_1937 world) {
         super(type, world);
     }
 
-    @Redirect(method = "tickMovement",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"),
-            require = 0)
-    private boolean tickMovementHook(LivingEntity instance, StatusEffect effect) {
-        if (Glide.INSTANCE != null && Glide.INSTANCE.isOn() && Glide.INSTANCE.onlyFall.getValue())
-            return false;
-        return instance.hasStatusEffect(effect);
-    }
-    @Final
-    @Shadow
-    private static EntityAttributeModifier SPRINTING_SPEED_BOOST;
-
     @Shadow
     @Nullable
-    public EntityAttributeInstance getAttributeInstance(EntityAttribute attribute) {
-        return this.getAttributes().getCustomInstance(attribute);
+    public class_1324 method_5996(class_6880<class_1320> attribute) {
+        return this.method_6127().method_45329(attribute);
     }
 
     @Shadow
-    public AttributeContainer getAttributes() {
+    public class_5131 method_6127() {
         return null;
     }
 
-    @Shadow public abstract void remove(RemovalReason reason);
+    @Shadow
+    public abstract void method_5650(class_1297.class_5529 var1);
 
-    @Inject(method = {"getHandSwingDuration"}, at = {@At("HEAD")}, cancellable = true)
-    private void getArmSwingAnimationEnd(final CallbackInfoReturnable<Integer> info) {
-        if (ViewModel.INSTANCE.isOn() && ViewModel.INSTANCE.slowAnimation.getValue())
-            info.setReturnValue(ViewModel.INSTANCE.slowAnimationVal.getValueInt());
+    @Inject(method={"method_6028"}, at={@At(value="HEAD")}, cancellable=true)
+    private void getArmSwingAnimationEnd(CallbackInfoReturnable<Integer> info) {
+        if (ViewModel.INSTANCE.isOn() && ViewModel.INSTANCE.slowAnimation.getValue()) {
+            info.setReturnValue((Object)ViewModel.INSTANCE.slowAnimationVal.getValueInt());
+        }
     }
 
-    @Unique
-    private boolean previousElytra = false;
-    @Inject(method = "isFallFlying", at = @At("TAIL"), cancellable = true)
+    @Inject(method={"method_6128"}, at={@At(value="TAIL")}, cancellable=true)
     public void recastOnLand(CallbackInfoReturnable<Boolean> cir) {
-        boolean elytra = cir.getReturnValue();
-        if (previousElytra && !elytra && ElytraFly.INSTANCE.isOn() && ElytraFly.INSTANCE.mode.is(ElytraFly.Mode.Bounce)) {
-            cir.setReturnValue(ElytraFly.recastElytra(MinecraftClient.getInstance().player));
+        boolean elytra = (Boolean)cir.getReturnValue();
+        if (this.previousElytra && !elytra && ElytraFly.INSTANCE.isOn() && ElytraFly.INSTANCE.mode.is(ElytraFly.Mode.Bounce)) {
+            cir.setReturnValue((Object)ElytraFly.recastElytra(class_310.method_1551().field_1724));
         }
-        previousElytra = elytra;
+        this.previousElytra = elytra;
     }
 
-    @Redirect(method = "travel",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"),
-            require = 0)
-    private boolean travelEffectHook(LivingEntity instance, StatusEffect effect) {
-        if (NoBadEffects.INSTANCE.isOn()) {
-            if (effect == StatusEffects.SLOW_FALLING && NoBadEffects.INSTANCE.slowFalling.getValue()) {
+    @Redirect(method={"method_6091"}, at=@At(value="INVOKE", target="Lnet/minecraft/class_1309;method_6059(Lnet/minecraft/class_6880;)Z"), require=0)
+    private boolean travelEffectHook(class_1309 instance, class_6880<class_1291> effect) {
+        if (AntiEffects.INSTANCE.isOn()) {
+            if (effect == class_1294.field_5906 && AntiEffects.INSTANCE.slowFalling.getValue()) {
                 return false;
             }
-            if (effect == StatusEffects.LEVITATION && NoBadEffects.INSTANCE.levitation.getValue()) {
+            if (effect == class_1294.field_5902 && AntiEffects.INSTANCE.levitation.getValue()) {
                 return false;
             }
         }
-        return instance.hasStatusEffect(effect);
+        return instance.method_6059(effect);
     }
-    @Inject(method = {"setSprinting"}, at = {@At("HEAD")}, cancellable = true)
+
+    @Redirect(method={"method_26318"}, at=@At(value="INVOKE", target="Lnet/minecraft/class_1309;method_6101()Z"), require=0)
+    public boolean climbingHook(class_1309 instance) {
+        return Velocity.INSTANCE.isOn() && Velocity.INSTANCE.noClimb.getValue() && class_1309.class.cast((Object)this) == class_310.method_1551().field_1724 ? false : instance.method_6101();
+    }
+
+    @Redirect(method={"method_18801"}, at=@At(value="INVOKE", target="Lnet/minecraft/class_1309;method_6101()Z"), require=0)
+    public boolean climbingHook2(class_1309 instance) {
+        return NoSlow.INSTANCE.climb() && class_1309.class.cast((Object)this) == class_310.method_1551().field_1724 ? false : instance.method_6101();
+    }
+
+    @Inject(method={"method_5759"}, at={@At(value="HEAD")})
+    private void lerpToHook(double x, double y, double z, float yRot, float xRot, int steps, CallbackInfo ci) {
+        Alien.EVENT_BUS.post(LerpToEvent.get((class_1309)class_1309.class.cast((Object)this), x, y, z, yRot, xRot, this.lastLerp));
+        this.lastLerp = System.currentTimeMillis();
+    }
+
+    @Inject(method={"method_5728"}, at={@At(value="HEAD")}, cancellable=true)
     public void setSprintingHook(boolean sprinting, CallbackInfo ci) {
-        if ((Object) this == MinecraftClient.getInstance().player) {
-            SprintEvent event = new SprintEvent(Event.Stage.Pre);
+        if (class_1309.class.cast((Object)this) == class_310.method_1551().field_1724) {
+            SprintEvent event = SprintEvent.get();
             Alien.EVENT_BUS.post(event);
             if (event.isCancelled()) {
                 ci.cancel();
                 sprinting = event.isSprint();
-                super.setSprinting(sprinting);
-                EntityAttributeInstance entityAttributeInstance = this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-                entityAttributeInstance.removeModifier(SPRINTING_SPEED_BOOST.getId());
+                super.method_5728(sprinting);
+                class_1324 entityAttributeInstance = this.method_5996((class_6880<class_1320>)class_5134.field_23719);
+                entityAttributeInstance.method_6200(field_6231.comp_2447());
                 if (sprinting) {
-                    entityAttributeInstance.addTemporaryModifier(SPRINTING_SPEED_BOOST);
+                    entityAttributeInstance.method_26835(field_6231);
                 }
             }
         }
     }
 }
+

@@ -1,37 +1,49 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1268
+ *  net.minecraft.class_1799
+ *  net.minecraft.class_4587
+ */
 package dev.luminous.api.events.impl;
 
-import dev.luminous.api.events.Event;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.class_1268;
+import net.minecraft.class_1799;
+import net.minecraft.class_4587;
 
-public class HeldItemRendererEvent extends Event {
-    private final Hand hand;
-    private final ItemStack item;
-    private final float ep;
-    private final MatrixStack stack;
+public class HeldItemRendererEvent {
+    private static final HeldItemRendererEvent INSTANCE = new HeldItemRendererEvent();
+    private class_1268 hand;
+    private class_1799 item;
+    private float ep;
+    private class_4587 stack;
 
-    public HeldItemRendererEvent(Hand hand, ItemStack item, float equipProgress, MatrixStack stack) {
-        super(Stage.Pre);
-        this.hand = hand;
-        this.item = item;
-        this.ep = equipProgress;
-        this.stack = stack;
+    private HeldItemRendererEvent() {
     }
 
-    public Hand getHand() {
-        return hand;
+    public static HeldItemRendererEvent get(class_1268 hand, class_1799 item, float equipProgress, class_4587 stack) {
+        HeldItemRendererEvent.INSTANCE.hand = hand;
+        HeldItemRendererEvent.INSTANCE.item = item;
+        HeldItemRendererEvent.INSTANCE.ep = equipProgress;
+        HeldItemRendererEvent.INSTANCE.stack = stack;
+        return INSTANCE;
     }
 
-    public ItemStack getItem() {
-        return item;
+    public class_1268 getHand() {
+        return this.hand;
+    }
+
+    public class_1799 getItem() {
+        return this.item;
     }
 
     public float getEp() {
-        return ep;
+        return this.ep;
     }
 
-    public MatrixStack getStack() {
-        return stack;
+    public class_4587 getStack() {
+        return this.stack;
     }
 }
+

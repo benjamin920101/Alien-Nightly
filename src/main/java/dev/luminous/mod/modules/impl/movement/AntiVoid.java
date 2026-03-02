@@ -1,36 +1,42 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2246
+ *  net.minecraft.class_2338
+ */
 package dev.luminous.mod.modules.impl.movement;
 
-import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import dev.luminous.api.utils.entity.MovementUtil;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.UpdateEvent;
+import dev.luminous.api.utils.player.MovementUtil;
 import dev.luminous.api.utils.world.BlockPosX;
 import dev.luminous.mod.modules.Module;
-import net.minecraft.block.Blocks;
+import dev.luminous.mod.modules.settings.impl.SliderSetting;
+import net.minecraft.class_2246;
+import net.minecraft.class_2338;
 
-
-public class AntiVoid extends Module {
-
-    private final SliderSetting voidHeight =
-            add(new SliderSetting("VoidHeight", -64, -64, 319, 1));
-    private final SliderSetting height =
-            add(new SliderSetting("Height", 100, -40, 256, 1));
+public class AntiVoid
+extends Module {
+    private final SliderSetting voidHeight = this.add(new SliderSetting("VoidHeight", -64.0, -64.0, 319.0, 1.0));
+    private final SliderSetting height = this.add(new SliderSetting("Height", 100.0, -40.0, 256.0, 1.0));
 
     public AntiVoid() {
-        super("AntiVoid", "Allows you to fly over void blocks", Category.Movement);
-        setChinese("反虚空");
+        super("AntiVoid", "Allows you to fly over void blocks", Module.Category.Movement);
+        this.setChinese("\u53cd\u865a\u7a7a");
     }
 
-    @Override
-    public void onUpdate() {
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
         boolean isVoid = true;
-
-        for (int i = (int) mc.player.getY(); i > voidHeight.getValueInt() - 1; --i) {
-            if (!mc.world.getBlockState(new BlockPosX(mc.player.getX(), i, mc.player.getZ())).isAir() && mc.world.getBlockState(new BlockPosX(mc.player.getX(), i, mc.player.getZ())).getBlock() != Blocks.VOID_AIR) {
-                isVoid = false;
-                break;
-            }
+        for (int i = (int)AntiVoid.mc.field_1724.method_23318(); i > this.voidHeight.getValueInt() - 1; --i) {
+            if (AntiVoid.mc.field_1687.method_8320((class_2338)new BlockPosX(AntiVoid.mc.field_1724.method_23317(), i, AntiVoid.mc.field_1724.method_23321())).method_26215() || AntiVoid.mc.field_1687.method_8320((class_2338)new BlockPosX(AntiVoid.mc.field_1724.method_23317(), i, AntiVoid.mc.field_1724.method_23321())).method_26204() == class_2246.field_10243) continue;
+            isVoid = false;
+            break;
         }
-        if (mc.player.getY() < height.getValue() + voidHeight.getValue() && isVoid) {
-            MovementUtil.setMotionY(0);
+        if (AntiVoid.mc.field_1724.method_23318() < this.height.getValue() + this.voidHeight.getValue() && isVoid) {
+            MovementUtil.setMotionY(0.0);
         }
     }
 }
+

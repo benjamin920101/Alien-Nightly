@@ -1,71 +1,64 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.mod.modules.impl.movement;
 
-import baritone.api.BaritoneAPI;
-import baritone.api.IBaritone;
-import baritone.api.pathing.goals.GoalXZ;
-import baritone.api.process.ICustomGoalProcess;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.UpdateEvent;
+import dev.luminous.api.utils.path.BaritoneUtil;
 import dev.luminous.mod.modules.Module;
-import dev.luminous.mod.modules.impl.client.BaritoneModule;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
-import net.minecraft.util.math.Direction;
 
-public class AutoWalk extends Module {
-    public AutoWalk() {
-        super("AutoWalk", Category.Movement);
-        setChinese("自动前进");
-        INSTANCE = this;
-    }
-    public enum Mode {
-        Forward,
-        Path
-    }
-
-    EnumSetting<Mode> mode = add(new EnumSetting<>("Mode", Mode.Forward));
+public class AutoWalk
+extends Module {
     public static AutoWalk INSTANCE;
+    private final EnumSetting<Mode> mode = this.add(new EnumSetting<Mode>("Mode", Mode.Forward));
     boolean start = false;
 
+    public AutoWalk() {
+        super("AutoWalk", Module.Category.Movement);
+        this.setChinese("\u81ea\u52a8\u524d\u8fdb");
+        INSTANCE = this;
+    }
+
     @Override
-    public void onEnable() {
-        start = false;
+    public boolean onEnable() {
+        this.start = false;
+        return false;
     }
 
     @Override
     public void onLogout() {
-        disable();
+        this.disable();
     }
 
-    @Override
-    public void onUpdate() {
-        if (mode.is(Mode.Forward)) {
-            mc.options.forwardKey.setPressed(true);
-        } else if (mode.is(Mode.Path)) {
-            if (!start) {
-                Direction direction = mc.player.getHorizontalFacing();
-                var x = mc.player.getBlockX() + direction.getVector().getX() * 30000000;
-                var z = mc.player.getBlockZ() + direction.getVector().getZ() * 30000000;
-
-                BaritoneModule.cancelEverything();
-                IBaritone primary = BaritoneAPI.getProvider().getPrimaryBaritone();
-                if (primary != null) {
-                    ICustomGoalProcess customGoalProcess = primary.getCustomGoalProcess();
-                    if (customGoalProcess != null) {
-                        customGoalProcess.setGoalAndPath(new GoalXZ(x, (int) z));
-                    }
-                }
-                start = true;
-            } else if (!BaritoneModule.isActive()) {
-                disable();
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        if (this.mode.is(Mode.Forward)) {
+            AutoWalk.mc.field_1690.field_1894.method_23481(true);
+        } else if (this.mode.is(Mode.Path)) {
+            if (!this.start) {
+                BaritoneUtil.forward();
+                this.start = true;
+            } else if (!BaritoneUtil.isActive()) {
+                this.disable();
             }
         }
     }
 
     @Override
     public void onDisable() {
-        BaritoneModule.cancelEverything();
+        BaritoneUtil.cancelEverything();
     }
-
 
     public boolean forward() {
-        return isOn() && mode.is(Mode.Forward);
+        return this.isOn() && this.mode.is(Mode.Forward);
+    }
+
+    public static enum Mode {
+        Forward,
+        Path;
+
     }
 }
+

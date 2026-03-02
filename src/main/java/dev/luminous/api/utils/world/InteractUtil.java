@@ -1,48 +1,65 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1297
+ *  net.minecraft.class_1309
+ *  net.minecraft.class_1675
+ *  net.minecraft.class_238
+ *  net.minecraft.class_239
+ *  net.minecraft.class_243
+ *  net.minecraft.class_3532
+ *  net.minecraft.class_3959
+ *  net.minecraft.class_3959$class_242
+ *  net.minecraft.class_3959$class_3960
+ *  net.minecraft.class_3966
+ */
 package dev.luminous.api.utils.world;
 
 import dev.luminous.api.utils.Wrapper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
+import net.minecraft.class_1297;
+import net.minecraft.class_1309;
+import net.minecraft.class_1675;
+import net.minecraft.class_238;
+import net.minecraft.class_239;
+import net.minecraft.class_243;
+import net.minecraft.class_3532;
+import net.minecraft.class_3959;
+import net.minecraft.class_3966;
 
-public class InteractUtil implements Wrapper {
-    public static HitResult getRtxTarget(float yaw, float pitch, double x, double y, double z) {
-        HitResult result = rayTrace(5, yaw, pitch, x, y, z);
-        Vec3d vec3d = new Vec3d(x, y, z).add(0, mc.player.getEyeHeight(mc.player.getPose()), 0);
-        double distancePow2 = 25;
-        if (result != null)
-            distancePow2 = result.getPos().squaredDistanceTo(vec3d);
-        Vec3d vec3d2 = getRotationVector(yaw, pitch);
-        Vec3d vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
-        Box box = new Box(x - .3, y, z - .3, x + .3, y + mc.player.getEyeHeight(mc.player.getPose()), z + .3).stretch(vec3d2.multiply(5)).expand(1.0, 1.0, 1.0);
-        EntityHitResult entityHitResult = ProjectileUtil.raycast(mc.player, vec3d, vec3d3, box, (entity) -> !entity.isSpectator() && entity.canHit(), distancePow2);
+public class InteractUtil
+implements Wrapper {
+    public static class_239 getRtxTarget(float yaw, float pitch, double x, double y, double z) {
+        class_238 box;
+        class_239 result = InteractUtil.rayTrace(5.0, yaw, pitch, x, y, z);
+        class_243 vec3d = new class_243(x, y, z);
+        double distancePow2 = 25.0;
+        if (result != null) {
+            distancePow2 = result.method_17784().method_1025(vec3d);
+        }
+        class_243 vec3d2 = InteractUtil.getRotationVector(pitch, yaw);
+        class_243 vec3d3 = vec3d.method_1031(vec3d2.field_1352 * 5.0, vec3d2.field_1351 * 5.0, vec3d2.field_1350 * 5.0);
+        class_3966 entityHitResult = class_1675.method_18075((class_1297)InteractUtil.mc.field_1724, (class_243)vec3d, (class_243)vec3d3, (class_238)(box = new class_238(x - 0.3, y, z - 0.3, x + 0.3, y + 1.8, z + 0.3).method_18804(vec3d2.method_1021(5.0)).method_1009(1.0, 1.0, 1.0)), entity -> !entity.method_7325() && entity.method_5863(), (double)distancePow2);
         if (entityHitResult != null) {
-            Entity entity2 = entityHitResult.getEntity();
-            Vec3d vec3d4 = entityHitResult.getPos();
-            double g = vec3d.squaredDistanceTo(vec3d4);
-            if (g < distancePow2 || result == null) {
-                if (entity2 instanceof LivingEntity) {
-                    return entityHitResult;
-                }
+            class_1297 entity2 = entityHitResult.method_17782();
+            class_243 vec3d4 = entityHitResult.method_17784();
+            double g = vec3d.method_1025(vec3d4);
+            if ((g < distancePow2 || result == null) && entity2 instanceof class_1309) {
+                return entityHitResult;
             }
         }
         return result;
     }
 
-    public static HitResult rayTrace(double dst, float yaw, float pitch, double x, double y, double z) {
-        Vec3d vec3d = new Vec3d(x, y, z);
-        Vec3d vec3d2 = getRotationVector(pitch, yaw);
-        Vec3d vec3d3 = vec3d.add(vec3d2.x * dst, vec3d2.y * dst, vec3d2.z * dst);
-        return mc.world.raycast(new RaycastContext(vec3d, vec3d3, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player));
+    public static class_239 rayTrace(double dst, float yaw, float pitch, double x, double y, double z) {
+        class_243 vec3d = new class_243(x, y, z);
+        class_243 vec3d2 = InteractUtil.getRotationVector(pitch, yaw);
+        class_243 vec3d3 = vec3d.method_1031(vec3d2.field_1352 * dst, vec3d2.field_1351 * dst, vec3d2.field_1350 * dst);
+        return InteractUtil.mc.field_1687.method_17742(new class_3959(vec3d, vec3d3, class_3959.class_3960.field_17559, class_3959.class_242.field_1348, (class_1297)InteractUtil.mc.field_1724));
     }
 
-    private static Vec3d getRotationVector(float yaw, float pitch) {
-        return new Vec3d(MathHelper.sin(-pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F), -MathHelper.sin(yaw * 0.017453292F), MathHelper.cos(-pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F));
+    private static class_243 getRotationVector(float yaw, float pitch) {
+        return new class_243((double)(class_3532.method_15374((float)(-pitch * ((float)Math.PI / 180))) * class_3532.method_15362((float)(yaw * ((float)Math.PI / 180)))), (double)(-class_3532.method_15374((float)(yaw * ((float)Math.PI / 180)))), (double)(class_3532.method_15362((float)(-pitch * ((float)Math.PI / 180))) * class_3532.method_15362((float)(yaw * ((float)Math.PI / 180)))));
     }
 }
+

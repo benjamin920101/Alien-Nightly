@@ -1,58 +1,37 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.utils.math;
 
 public class Timer {
+    private long startTime = -1L;
 
     public Timer() {
-        reset();
-    }
-    private long time = -1L;
-
-    public Timer reset() {
-        time = System.nanoTime();
-        return this;
+        this.reset();
     }
 
-    public boolean tick(int tick) {
-        return passedMs(tick * 50L);
+    public void reset() {
+        this.startTime = System.currentTimeMillis();
     }
-    public boolean passedTicks(int tick) {
-        return passedMs(tick * 50L);
+
+    public long getMs() {
+        return System.currentTimeMillis() - this.startTime;
     }
+
     public boolean passedS(double s) {
-        return passedMs(s * 1000);
-    }
-
-    public boolean passedMs(long ms) {
-        return passedNS(convertToNS(ms));
+        return this.passed((long)s * 1000L);
     }
 
     public boolean passedMs(double ms) {
-        return passedMs((long) ms);
+        return this.passed((long)ms);
     }
-    public boolean passed(long ms) {
-        return passedMs(ms);
-    }
-    public boolean passed(double ms) {
-        return passedMs((long) ms);
-    }
+
     public void setMs(long ms) {
-        time = System.nanoTime() - convertToNS(ms);
+        this.startTime = System.currentTimeMillis() - ms;
     }
 
-    public boolean passedNS(long ns) {
-        return System.nanoTime() - time >= ns;
+    public boolean passed(long ms) {
+        return System.currentTimeMillis() - this.startTime >= ms;
     }
-
-    public long getPassedTimeMs() {
-        return getMs(System.nanoTime() - time);
-    }
-
-    public long getMs(long time) {
-        return time / 1000000L;
-    }
-
-    public long convertToNS(long time) {
-        return time * 1000000L;
-    }
-
 }
+

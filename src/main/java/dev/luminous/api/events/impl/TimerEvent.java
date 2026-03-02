@@ -1,13 +1,24 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
 
-public class TimerEvent extends Event {
+public class TimerEvent
+extends Event {
+    private static final TimerEvent instance = new TimerEvent();
     private float timer;
     private boolean modified;
-    public TimerEvent() {
-        super(Stage.Pre);
-        timer = 1f;
+
+    private TimerEvent() {
+    }
+
+    public static TimerEvent getEvent() {
+        TimerEvent.instance.timer = 1.0f;
+        TimerEvent.instance.modified = false;
+        instance.setCancelled(false);
+        return instance;
     }
 
     public float get() {
@@ -23,3 +34,4 @@ public class TimerEvent extends Event {
         return this.modified;
     }
 }
+

@@ -1,454 +1,599 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1268
+ *  net.minecraft.class_1297
+ *  net.minecraft.class_1303
+ *  net.minecraft.class_1511
+ *  net.minecraft.class_1531
+ *  net.minecraft.class_1542
+ *  net.minecraft.class_1667
+ *  net.minecraft.class_1683
+ *  net.minecraft.class_1802
+ *  net.minecraft.class_1922
+ *  net.minecraft.class_1923
+ *  net.minecraft.class_1937
+ *  net.minecraft.class_1941
+ *  net.minecraft.class_2199
+ *  net.minecraft.class_2231
+ *  net.minecraft.class_2237
+ *  net.minecraft.class_2244
+ *  net.minecraft.class_2246
+ *  net.minecraft.class_2248
+ *  net.minecraft.class_2269
+ *  net.minecraft.class_2304
+ *  net.minecraft.class_2323
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2349
+ *  net.minecraft.class_2350
+ *  net.minecraft.class_238
+ *  net.minecraft.class_2406
+ *  net.minecraft.class_2428
+ *  net.minecraft.class_243
+ *  net.minecraft.class_2533
+ *  net.minecraft.class_2586
+ *  net.minecraft.class_2596
+ *  net.minecraft.class_265
+ *  net.minecraft.class_2680
+ *  net.minecraft.class_2818
+ *  net.minecraft.class_2846
+ *  net.minecraft.class_2846$class_2847
+ *  net.minecraft.class_2885
+ *  net.minecraft.class_3711
+ *  net.minecraft.class_3713
+ *  net.minecraft.class_3718
+ *  net.minecraft.class_3965
+ *  net.minecraft.class_5329
+ *  net.minecraft.class_638
+ *  net.minecraft.class_746
+ *  org.jetbrains.annotations.Nullable
+ */
 package dev.luminous.api.utils.world;
 
-import dev.luminous.api.utils.Wrapper;
-import dev.luminous.api.utils.entity.EntityUtil;
 import dev.luminous.Alien;
+import dev.luminous.api.utils.Wrapper;
+import dev.luminous.api.utils.math.MathUtil;
+import dev.luminous.api.utils.player.EntityUtil;
+import dev.luminous.api.utils.world.BlockPosX;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.impl.client.AntiCheat;
 import dev.luminous.mod.modules.impl.client.ClientSetting;
 import dev.luminous.mod.modules.impl.combat.AutoCrystal;
 import dev.luminous.mod.modules.impl.combat.AutoWeb;
-import dev.luminous.mod.modules.settings.Placement;
-import dev.luminous.mod.modules.settings.SwingSide;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ExperienceOrbEntity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.thrown.ExperienceBottleEntity;
-import net.minecraft.item.Items;
-import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.*;
-import net.minecraft.world.chunk.WorldChunk;
-
+import dev.luminous.mod.modules.impl.player.AirPlace;
+import dev.luminous.mod.modules.settings.enums.SwingSide;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.minecraft.class_1268;
+import net.minecraft.class_1297;
+import net.minecraft.class_1303;
+import net.minecraft.class_1511;
+import net.minecraft.class_1531;
+import net.minecraft.class_1542;
+import net.minecraft.class_1667;
+import net.minecraft.class_1683;
+import net.minecraft.class_1802;
+import net.minecraft.class_1922;
+import net.minecraft.class_1923;
+import net.minecraft.class_1937;
+import net.minecraft.class_1941;
+import net.minecraft.class_2199;
+import net.minecraft.class_2231;
+import net.minecraft.class_2237;
+import net.minecraft.class_2244;
+import net.minecraft.class_2246;
+import net.minecraft.class_2248;
+import net.minecraft.class_2269;
+import net.minecraft.class_2304;
+import net.minecraft.class_2323;
+import net.minecraft.class_2338;
+import net.minecraft.class_2349;
+import net.minecraft.class_2350;
+import net.minecraft.class_238;
+import net.minecraft.class_2406;
+import net.minecraft.class_2428;
+import net.minecraft.class_243;
+import net.minecraft.class_2533;
+import net.minecraft.class_2586;
+import net.minecraft.class_2596;
+import net.minecraft.class_265;
+import net.minecraft.class_2680;
+import net.minecraft.class_2818;
+import net.minecraft.class_2846;
+import net.minecraft.class_2885;
+import net.minecraft.class_3711;
+import net.minecraft.class_3713;
+import net.minecraft.class_3718;
+import net.minecraft.class_3965;
+import net.minecraft.class_5329;
+import net.minecraft.class_638;
+import net.minecraft.class_746;
+import org.jetbrains.annotations.Nullable;
 
-public class BlockUtil implements Wrapper {
-    public static final List<Block> shiftBlocks = Arrays.asList(
-            Blocks.ENDER_CHEST, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.CRAFTING_TABLE,
-            Blocks.BIRCH_TRAPDOOR, Blocks.BAMBOO_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.CHERRY_TRAPDOOR,
-            Blocks.ANVIL, Blocks.BREWING_STAND, Blocks.HOPPER, Blocks.DROPPER, Blocks.DISPENSER,
-            Blocks.ACACIA_TRAPDOOR, Blocks.ENCHANTING_TABLE, Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX,
-            Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX,
-            Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX,
-            Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX
-    );
-    public static boolean canPlace(BlockPos pos) {
-        return canPlace(pos, 1000);
+public class BlockUtil
+implements Wrapper {
+    public static final List<class_2338> placedPos = new ArrayList<class_2338>();
+    private static final double MIN_EYE_HEIGHT = 0.4;
+    private static final double MAX_EYE_HEIGHT = 1.62;
+    private static final double MOVEMENT_THRESHOLD = 2.0E-4;
+
+    public static boolean canPlace(class_2338 pos) {
+        return BlockUtil.canPlace(pos, 1000.0);
     }
 
-    public static boolean canPlace(BlockPos pos, double distance) {
-        if (getPlaceSide(pos, distance) == null) return false;
-        if (!canReplace(pos)) return false;
-        return !hasEntity(pos, false);
+    public static boolean canPlace(class_2338 pos, double distance) {
+        if (BlockUtil.getPlaceSide(pos, distance) == null) {
+            return false;
+        }
+        return !BlockUtil.canReplace(pos) ? false : !BlockUtil.hasEntity(pos, false);
     }
 
-    public static boolean canPlace(BlockPos pos, double distance, boolean ignoreCrystal) {
-        if (getPlaceSide(pos, distance) == null) return false;
-        if (!canReplace(pos)) return false;
-        return !hasEntity(pos, ignoreCrystal);
+    public static boolean canPlace(class_2338 pos, double distance, boolean ignoreCrystal) {
+        if (BlockUtil.getPlaceSide(pos, distance) == null) {
+            return false;
+        }
+        return !BlockUtil.canReplace(pos) ? false : !BlockUtil.hasEntity(pos, ignoreCrystal);
     }
 
-    public static boolean clientCanPlace(BlockPos pos) {
-        return clientCanPlace(pos, false);
-    }
-    public static boolean clientCanPlace(BlockPos pos, boolean ignoreCrystal) {
-        if (!canReplace(pos)) return false;
-        return !hasEntity(pos, ignoreCrystal);
+    public static boolean clientCanPlace(class_2338 pos, boolean ignoreCrystal) {
+        return !BlockUtil.canReplace(pos) ? false : !BlockUtil.hasEntity(pos, ignoreCrystal);
     }
 
-    public static List<Entity> getEntities(Box box) {
-        List<Entity> list = new ArrayList<>();
-        for (Entity entity : mc.world.getEntities()) {
-            if (entity == null) continue;
-            if (entity.getBoundingBox().intersects(box)) {
-                list.add(entity);
-            }
+    public static List<class_1297> getEntities(class_238 box) {
+        ArrayList<class_1297> list = new ArrayList<class_1297>();
+        for (class_1297 entity : Alien.THREAD.getEntities()) {
+            if (entity == null || entity instanceof class_1531 && AntiCheat.INSTANCE.ignoreArmorStand.getValue() || !entity.method_5829().method_994(box)) continue;
+            list.add(entity);
         }
         return list;
     }
 
-    public static List<EndCrystalEntity> getEndCrystals(Box box) {
-        List<EndCrystalEntity> list = new ArrayList<>();
-        for (Entity entity : mc.world.getEntities()) {
-            if (entity instanceof EndCrystalEntity crystal) {
-                if (crystal.getBoundingBox().intersects(box)) {
-                    list.add(crystal);
-                }
-            }
+    public static List<class_1511> getEndCrystals(class_238 box) {
+        ArrayList<class_1511> list = new ArrayList<class_1511>();
+        for (class_1297 entity : Alien.THREAD.getEntities()) {
+            class_1511 crystal;
+            if (!(entity instanceof class_1511) || !(crystal = (class_1511)entity).method_5829().method_994(box)) continue;
+            list.add(crystal);
         }
         return list;
     }
-    public static boolean hasEntity(BlockPos pos, boolean ignoreCrystal) {
-        for (Entity entity : getEntities(new Box(pos))) {
-            if (!entity.isAlive() || entity instanceof ItemEntity || entity instanceof ExperienceOrbEntity || entity instanceof ExperienceBottleEntity || entity instanceof ArrowEntity || ignoreCrystal && entity instanceof EndCrystalEntity || entity instanceof ArmorStandEntity && AntiCheat.INSTANCE.obsMode.getValue())
-                continue;
+
+    public static boolean hasEntity(class_2338 pos, boolean ignoreCrystal) {
+        return BlockUtil.hasEntity(new class_238(pos), ignoreCrystal);
+    }
+
+    public static boolean hasEntity(class_238 box, boolean ignoreCrystal) {
+        for (class_1297 entity : BlockUtil.getEntities(box)) {
+            if (!entity.method_5805() || entity instanceof class_1542 || entity instanceof class_1303 || entity instanceof class_1683 || entity instanceof class_1667 || ignoreCrystal && entity instanceof class_1511 && BlockUtil.mc.field_1724.method_33571().method_1022(MathUtil.getClosestPoint(entity)) <= AntiCheat.INSTANCE.ieRange.getValue()) continue;
             return true;
         }
         return false;
     }
 
-    public static boolean hasCrystal(BlockPos pos) {
-        for (Entity entity : getEndCrystals(new Box(pos))) {
-            if (!entity.isAlive() || !(entity instanceof EndCrystalEntity))
-                continue;
+    public static boolean hasCrystal(class_2338 pos) {
+        for (class_1297 class_12972 : BlockUtil.getEndCrystals(new class_238(pos))) {
+            if (!class_12972.method_5805() || !(class_12972 instanceof class_1511)) continue;
             return true;
         }
         return false;
     }
 
-    public static boolean hasEntityBlockCrystal(BlockPos pos, boolean ignoreCrystal) {
-        for (Entity entity : getEntities(new Box(pos))) {
-            if (!entity.isAlive() || ignoreCrystal && entity instanceof EndCrystalEntity || entity instanceof ArmorStandEntity && AntiCheat.INSTANCE.obsMode.getValue())
-                continue;
-            return true;
-        }
-        return false;
+    public static boolean noEntityBlockCrystal(class_2338 pos, boolean ignoreCrystal) {
+        return BlockUtil.noEntityBlockCrystal(pos, ignoreCrystal, false);
     }
 
-    public static boolean hasEntityBlockCrystal(BlockPos pos, boolean ignoreCrystal, boolean ignoreItem) {
-        for (Entity entity : getEntities(new Box(pos))) {
-            if (!entity.isAlive() || ignoreItem && entity instanceof ItemEntity || ignoreCrystal && entity instanceof EndCrystalEntity || entity instanceof ArmorStandEntity && AntiCheat.INSTANCE.obsMode.getValue())
-                continue;
-            return true;
+    public static boolean noEntityBlockCrystal(class_2338 pos, boolean ignoreCrystal, boolean ignoreItem) {
+        for (class_1297 entity : BlockUtil.getEntities(new class_238(pos))) {
+            if (!entity.method_5805() || ignoreItem && entity instanceof class_1542 || ignoreCrystal && entity instanceof class_1511 && BlockUtil.mc.field_1724.method_33571().method_1022(MathUtil.getClosestPoint(entity)) <= AntiCheat.INSTANCE.ieRange.getValue()) continue;
+            return false;
         }
-        return false;
+        return true;
     }
 
+    public static boolean canPlaceCrystal(class_2338 pos) {
+        class_2338 obsPos = pos.method_10074();
+        class_2338 boost = obsPos.method_10084();
+        return !(BlockUtil.getBlock(obsPos) != class_2246.field_9987 && BlockUtil.getBlock(obsPos) != class_2246.field_10540 || BlockUtil.getClickSideStrict(obsPos) == null || !BlockUtil.mc.field_1687.method_22347(boost) || !BlockUtil.noEntityBlockCrystal(boost, false) || !BlockUtil.noEntityBlockCrystal(boost.method_10084(), false) || ClientSetting.INSTANCE.lowVersion.getValue() && !BlockUtil.mc.field_1687.method_22347(boost.method_10084()));
+    }
 
-    public static Direction getBestNeighboring(BlockPos pos, Direction facing) {
-        for (Direction i : Direction.values()) {
-            if (facing != null && pos.offset(i).equals(pos.offset(facing, -1)) || i == Direction.DOWN) continue;
-            if (getPlaceSide(pos, false, true) != null) return i;
-        }
-        Direction bestFacing = null;
-        double distance = 0;
-        for (Direction i : Direction.values()) {
-            if (facing != null && pos.offset(i).equals(pos.offset(facing, -1)) || i == Direction.DOWN) continue;
-            if (getPlaceSide(pos) != null) {
-                if (bestFacing == null || mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos()) < distance) {
-                    bestFacing = i;
-                    distance = mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos());
-                }
-            }
-        }
-        return bestFacing;
-    }
-    public static boolean canPlaceCrystal(BlockPos pos) {
-        BlockPos obsPos = pos.down();
-        BlockPos boost = obsPos.up();
-        return (getBlock(obsPos) == Blocks.BEDROCK || getBlock(obsPos) == Blocks.OBSIDIAN)
-                && getClickSideStrict(obsPos) != null
-                && (mc.world.isAir(boost))
-                && !hasEntityBlockCrystal(boost, false)
-                && !hasEntityBlockCrystal(boost.up(), false)
-                && (!ClientSetting.INSTANCE.lowVersion.getValue() || mc.world.isAir(boost.up()));
-    }
-    public static void placeCrystal(BlockPos pos, boolean rotate) {
-        boolean offhand = mc.player.getOffHandStack().getItem() == Items.END_CRYSTAL;
-        BlockPos obsPos = pos.down();
-        Direction facing = getClickSide(obsPos);
-        Vec3d vec = obsPos.toCenterPos().add(facing.getVector().getX() * 0.5,facing.getVector().getY() * 0.5,facing.getVector().getZ() * 0.5);
+    public static void placeCrystal(class_2338 pos, boolean rotate) {
+        boolean offhand = BlockUtil.mc.field_1724.method_6079().method_7909() == class_1802.field_8301;
+        class_2338 obsPos = pos.method_10074();
+        class_2350 facing = BlockUtil.getClickSide(obsPos);
+        class_243 vec = obsPos.method_46558().method_1031((double)facing.method_10163().method_10263() * 0.5, (double)facing.method_10163().method_10264() * 0.5, (double)facing.method_10163().method_10260() * 0.5);
         if (rotate) {
             Alien.ROTATION.lookAt(vec);
         }
-        clickBlock(obsPos, facing, false, offhand ? Hand.OFF_HAND : Hand.MAIN_HAND);
-    }
-    public static final CopyOnWriteArrayList<BlockPos> placedPos = new CopyOnWriteArrayList<>();
-
-    public static void placeBlock(BlockPos pos, boolean rotate) {
-        placeBlock(pos, rotate, AntiCheat.INSTANCE.packetPlace.getValue());
+        BlockUtil.clickBlock(obsPos, facing, false, offhand ? class_1268.field_5810 : class_1268.field_5808);
     }
 
-    public static void placeBlock(BlockPos pos, boolean rotate, boolean packet) {
-        if (airPlace()) {
+    public static void placeBlock(class_2338 pos, boolean rotate) {
+        BlockUtil.placeBlock(pos, rotate, AntiCheat.INSTANCE.packetPlace.getValue());
+    }
+
+    public static void placeBlock(class_2338 pos, boolean rotate, boolean packet) {
+        if (BlockUtil.allowAirPlace()) {
             placedPos.add(pos);
-            clickBlock(pos, Direction.DOWN, rotate, Hand.MAIN_HAND, packet);
-            return;
+            BlockUtil.airPlace(pos, rotate, class_1268.field_5808, packet);
+        } else {
+            class_2350 side = BlockUtil.getPlaceSide(pos);
+            if (side != null) {
+                placedPos.add(pos);
+                BlockUtil.clickBlock(pos.method_10093(side), side.method_10153(), rotate, class_1268.field_5808, packet);
+            }
         }
-        Direction side = getPlaceSide(pos);
-        if (side == null) return;
-        placedPos.add(pos);
-        clickBlock(pos.offset(side), side.getOpposite(), rotate, Hand.MAIN_HAND, packet);
     }
 
-    public static void clickBlock(BlockPos pos, Direction side, boolean rotate) {
-        clickBlock(pos, side, rotate, Hand.MAIN_HAND);
+    public static void clickBlock(class_2338 pos, class_2350 side, boolean rotate) {
+        BlockUtil.clickBlock(pos, side, rotate, class_1268.field_5808);
     }
 
-    public static void clickBlock(BlockPos pos, Direction side, boolean rotate, Hand hand) {
-        clickBlock(pos, side, rotate, hand, AntiCheat.INSTANCE.packetPlace.getValue());
+    public static void clickBlock(class_2338 pos, class_2350 side, boolean rotate, class_1268 hand) {
+        BlockUtil.clickBlock(pos, side, rotate, hand, AntiCheat.INSTANCE.packetPlace.getValue());
     }
 
-    public static void clickBlock(BlockPos pos, Direction side, boolean rotate, boolean packet) {
-        clickBlock(pos, side, rotate, Hand.MAIN_HAND, packet);
+    public static void clickBlock(class_2338 pos, class_2350 side, boolean rotate, boolean packet) {
+        BlockUtil.clickBlock(pos, side, rotate, class_1268.field_5808, packet);
     }
 
-    public static void clickBlock(BlockPos pos, Direction side, boolean rotate, Hand hand, boolean packet) {
-        Vec3d directionVec = new Vec3d(pos.getX() + 0.5 + side.getVector().getX() * 0.5, pos.getY() + 0.5 + side.getVector().getY() * 0.5, pos.getZ() + 0.5 + side.getVector().getZ() * 0.5);
+    public static void clickBlock(class_2338 pos, class_2350 side, boolean rotate, class_1268 hand, boolean packet) {
+        class_243 directionVec = new class_243((double)pos.method_10263() + 0.5 + (double)side.method_10163().method_10263() * 0.5, (double)pos.method_10264() + 0.5 + (double)side.method_10163().method_10264() * 0.5, (double)pos.method_10260() + 0.5 + (double)side.method_10163().method_10260() * 0.5);
         if (rotate) {
             Alien.ROTATION.lookAt(directionVec);
         }
-        EntityUtil.swingHand(hand, AntiCheat.INSTANCE.swingMode.getValue());
-        BlockHitResult result = new BlockHitResult(directionVec, side, pos, false);
+        EntityUtil.swingHand(hand, AntiCheat.INSTANCE.interactSwing.getValue());
+        class_3965 result = new class_3965(directionVec, side, pos, false);
         if (packet) {
-            Module.sendSequencedPacket(id -> new PlayerInteractBlockC2SPacket(hand, result, id));
+            Module.sendSequencedPacket(id -> new class_2885(hand, result, id));
         } else {
-            mc.interactionManager.interactBlock(mc.player, hand, result);
+            BlockUtil.mc.field_1761.method_2896(BlockUtil.mc.field_1724, hand, result);
         }
-        if (rotate && AntiCheat.INSTANCE.snapBack.getValue()) {
+        BlockUtil.mc.field_1752 = 4;
+        if (rotate) {
             Alien.ROTATION.snapBack();
         }
     }
 
-    public static void clickBlock(BlockPos pos, Direction side, boolean rotate, Hand hand, SwingSide swingSide) {
-        Vec3d directionVec = new Vec3d(pos.getX() + 0.5 + side.getVector().getX() * 0.5, pos.getY() + 0.5 + side.getVector().getY() * 0.5, pos.getZ() + 0.5 + side.getVector().getZ() * 0.5);
+    public static void clickBlock(class_2338 pos, class_2350 side, boolean rotate, class_1268 hand, SwingSide swingSide) {
+        class_243 directionVec = new class_243((double)pos.method_10263() + 0.5 + (double)side.method_10163().method_10263() * 0.5, (double)pos.method_10264() + 0.5 + (double)side.method_10163().method_10264() * 0.5, (double)pos.method_10260() + 0.5 + (double)side.method_10163().method_10260() * 0.5);
         if (rotate) {
             Alien.ROTATION.lookAt(directionVec);
         }
         EntityUtil.swingHand(hand, swingSide);
-        BlockHitResult result = new BlockHitResult(directionVec, side, pos, false);
-        Module.sendSequencedPacket(id -> new PlayerInteractBlockC2SPacket(hand, result, id));
-        if (rotate && AntiCheat.INSTANCE.snapBack.getValue()) {
+        class_3965 result = new class_3965(directionVec, side, pos, false);
+        Module.sendSequencedPacket(id -> new class_2885(hand, result, id));
+        BlockUtil.mc.field_1752 = 4;
+        if (rotate) {
             Alien.ROTATION.snapBack();
         }
     }
 
-    public static Direction getPlaceSide(BlockPos pos) {
-        return getPlaceSide(pos, AntiCheat.INSTANCE.placement.getValue() == Placement.Strict, AntiCheat.INSTANCE.placement.getValue() == Placement.Legit);
+    public static void airPlace(class_2338 pos, boolean rotate) {
+        BlockUtil.airPlace(pos, rotate, class_1268.field_5808, AntiCheat.INSTANCE.packetPlace.getValue());
     }
 
-    public static Direction getPlaceSide(BlockPos pos, boolean strict, boolean legit) {
-        if (pos == null) return null;
-        double dis = 114514;
-        Direction side = null;
-        for (Direction i : Direction.values()) {
-            if (canClick(pos.offset(i)) && !canReplace(pos.offset(i))) {
-                if (legit) {
-                    if (!EntityUtil.canSee(pos.offset(i), i.getOpposite())) continue;
-                }
-                if (strict) {
-                    if (!isStrictDirection(pos.offset(i), i.getOpposite())) continue;
-                }
-                double vecDis = mc.player.getEyePos().squaredDistanceTo(pos.toCenterPos().add(i.getVector().getX() * 0.5, i.getVector().getY() * 0.5, i.getVector().getZ() * 0.5));
-                if (side == null || vecDis < dis) {
-                    side = i;
-                    dis = vecDis;
-                }
-            }
+    public static void airPlace(class_2338 pos, boolean rotate, class_1268 hand, boolean packet) {
+        boolean bypass;
+        boolean bl = bypass = hand == class_1268.field_5808 && AirPlace.INSTANCE.grimBypass.getValue();
+        if (bypass) {
+            mc.method_1562().method_52787((class_2596)new class_2846(class_2846.class_2847.field_12969, new class_2338(0, 0, 0), class_2350.field_11033));
+            hand = class_1268.field_5810;
         }
-        if (airPlace()) return Direction.DOWN;
-        return side;
+        class_2350 side = BlockUtil.getClickSide(pos);
+        class_243 directionVec = new class_243((double)pos.method_10263() + 0.5 + (double)side.method_10163().method_10263() * 0.5, (double)pos.method_10264() + 0.5 + (double)side.method_10163().method_10264() * 0.5, (double)pos.method_10260() + 0.5 + (double)side.method_10163().method_10260() * 0.5);
+        if (rotate) {
+            Alien.ROTATION.lookAt(directionVec);
+        }
+        EntityUtil.swingHand(hand, AntiCheat.INSTANCE.interactSwing.getValue());
+        class_3965 result = new class_3965(directionVec, side, pos, false);
+        if (packet) {
+            class_1268 finalHand = hand;
+            Module.sendSequencedPacket(id -> new class_2885(finalHand, result, id));
+        } else {
+            BlockUtil.mc.field_1761.method_2896(BlockUtil.mc.field_1724, hand, result);
+        }
+        BlockUtil.mc.field_1752 = 4;
+        if (rotate) {
+            Alien.ROTATION.snapBack();
+        }
+        if (bypass) {
+            mc.method_1562().method_52787((class_2596)new class_2846(class_2846.class_2847.field_12969, new class_2338(0, 0, 0), class_2350.field_11033));
+        }
     }
 
-    public static double distanceToXZ(final double x, final double z, double x2, double z2) {
-        final double dx = x2 - x;
-        final double dz = z2 - z;
+    public static double distanceToXZ(double x, double z, double x2, double z2) {
+        double dx = x2 - x;
+        double dz = z2 - z;
         return Math.sqrt(dx * dx + dz * dz);
     }
 
-    public static double distanceToXZ(final double x, final double z) {
-        return distanceToXZ(x, z, mc.player.getX(), mc.player.getZ());
+    public static double distanceToXZ(double x, double z) {
+        return BlockUtil.distanceToXZ(x, z, BlockUtil.mc.field_1724.method_23317(), BlockUtil.mc.field_1724.method_23321());
     }
-    public static Direction getPlaceSide(BlockPos pos, double distance) {
-        if (airPlace()) return Direction.DOWN;
-        double dis = 114514;
-        Direction side = null;
-        for (Direction i : Direction.values()) {
-            if (canClick(pos.offset(i)) && !canReplace(pos.offset(i))) {
-                if (AntiCheat.INSTANCE.placement.getValue() == Placement.Legit) {
-                    if (!EntityUtil.canSee(pos.offset(i), i.getOpposite())) continue;
-                } else if (AntiCheat.INSTANCE.placement.getValue() == Placement.Strict) {
-                    if (!isStrictDirection(pos.offset(i), i.getOpposite())) continue;
-                }
-                double vecDis = mc.player.getEyePos().squaredDistanceTo(pos.toCenterPos().add(i.getVector().getX() * 0.5, i.getVector().getY() * 0.5, i.getVector().getZ() * 0.5));
-                if (MathHelper.sqrt((float) vecDis) > distance) {
-                    continue;
-                }
-                if (side == null || vecDis < dis) {
-                    side = i;
-                    dis = vecDis;
-                }
-            }
+
+    public static class_2350 getPlaceSide(class_2338 pos) {
+        if (BlockUtil.allowAirPlace()) {
+            return BlockUtil.getClickSide(pos);
+        }
+        double minDistance = Double.MAX_VALUE;
+        class_2350 side = null;
+        for (class_2350 i : class_2350.values()) {
+            double vecDis;
+            if (!BlockUtil.canClick(pos.method_10093(i)) || BlockUtil.canReplace(pos.method_10093(i)) || !BlockUtil.isStrictDirection(pos.method_10093(i), i.method_10153()) || (vecDis = BlockUtil.mc.field_1724.method_33571().method_1025(pos.method_46558().method_1031((double)i.method_10163().method_10263() * 0.5, (double)i.method_10163().method_10264() * 0.5, (double)i.method_10163().method_10260() * 0.5))) > minDistance) continue;
+            side = i;
+            minDistance = vecDis;
         }
         return side;
     }
 
-    public static Direction getClickSide(BlockPos pos) {
-        Direction side = null;
-        double range = 100;
-        for (Direction i : Direction.values()) {
-            if (!EntityUtil.canSee(pos, i)) continue;
-            if (MathHelper.sqrt((float) mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos())) > range) continue;
-            side = i;
-            range = MathHelper.sqrt((float) mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos()));
+    public static class_2350 getBestNeighboring(class_2338 pos, class_2350 facing) {
+        class_2350 bestFacing = null;
+        double distance = 0.0;
+        for (class_2350 i : class_2350.values()) {
+            if (facing != null && pos.method_10093(i).equals((Object)pos.method_10079(facing, -1)) || i == class_2350.field_11033 || BlockUtil.getPlaceSide(pos) == null || bestFacing != null && !(BlockUtil.mc.field_1724.method_33571().method_1025(pos.method_10093(i).method_46558()) < distance)) continue;
+            bestFacing = i;
+            distance = BlockUtil.mc.field_1724.method_33571().method_1025(pos.method_10093(i).method_46558());
         }
-        if (side != null)
-            return side;
-        side = Direction.UP;
-        for (Direction i : Direction.values()) {
-            if (AntiCheat.INSTANCE.placement.getValue() == Placement.Strict) {
-                if (!isStrictDirection(pos, i)) continue;
-                if (AntiCheat.INSTANCE.blockCheck.getValue() && !mc.world.isAir(pos.offset(i))) continue;
-            }
-            if (MathHelper.sqrt((float) mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos())) > range) continue;
+        return bestFacing;
+    }
+
+    public static class_2350 getPlaceSide(class_2338 pos, double reachDistance) {
+        if (BlockUtil.allowAirPlace()) {
+            class_2350 i = BlockUtil.getClickSide(pos);
+            double vecDis = BlockUtil.mc.field_1724.method_33571().method_1025(pos.method_46558().method_1031((double)i.method_10163().method_10263() * 0.5, (double)i.method_10163().method_10264() * 0.5, (double)i.method_10163().method_10260() * 0.5));
+            return Math.sqrt(vecDis) > reachDistance ? null : class_2350.field_11033;
+        }
+        double minDistance = Double.MAX_VALUE;
+        class_2350 side = null;
+        for (class_2350 i : class_2350.values()) {
+            double vecDis;
+            if (!BlockUtil.canClick(pos.method_10093(i)) || BlockUtil.canReplace(pos.method_10093(i)) || !BlockUtil.isStrictDirection(pos.method_10093(i), i.method_10153()) || Math.sqrt(vecDis = BlockUtil.mc.field_1724.method_33571().method_1025(pos.method_46558().method_1031((double)i.method_10163().method_10263() * 0.5, (double)i.method_10163().method_10264() * 0.5, (double)i.method_10163().method_10260() * 0.5))) > reachDistance || vecDis > minDistance) continue;
             side = i;
-            range = MathHelper.sqrt((float) mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos()));
+            minDistance = vecDis;
         }
         return side;
     }
 
-    public static Direction getClickSideStrict(BlockPos pos) {
-        Direction side = null;
-        double range = 100;
-        for (Direction i : Direction.values()) {
-            if (!EntityUtil.canSee(pos, i)) continue;
-            if (MathHelper.sqrt((float) mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos())) > range) continue;
+    public static class_2350 getClickSide(class_2338 pos) {
+        class_2350 side = class_2350.field_11036;
+        double minDistance = Double.MAX_VALUE;
+        for (class_2350 i : class_2350.values()) {
+            double disSq;
+            if (!BlockUtil.isStrictDirection(pos, i) || (disSq = BlockUtil.mc.field_1724.method_33571().method_1025(pos.method_10093(i).method_46558())) > minDistance) continue;
             side = i;
-            range = MathHelper.sqrt((float) mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos()));
-        }
-        if (side != null)
-            return side;
-        side = null;
-        for (Direction i : Direction.values()) {
-            if (AntiCheat.INSTANCE.placement.getValue() == Placement.Strict) {
-                if (!isStrictDirection(pos, i)) continue;
-                if (AntiCheat.INSTANCE.blockCheck.getValue() && !mc.world.isAir(pos.offset(i))) continue;
-            }
-            if (MathHelper.sqrt((float) mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos())) > range) continue;
-            side = i;
-            range = MathHelper.sqrt((float) mc.player.getEyePos().squaredDistanceTo(pos.offset(i).toCenterPos()));
+            minDistance = disSq;
         }
         return side;
     }
 
-    public static boolean isStrictDirection(BlockPos pos, Direction side) {
-        if (mc.player.getBlockY() - pos.getY() >= 0 && side == Direction.DOWN) return false;
-        if (!AntiCheat.INSTANCE.oldNCP.getValue()) {
-            if (side == Direction.UP && pos.getY() + 1 > mc.player.getEyePos().getY()) {
-                return false;
+    public static class_2350 getClickSideStrict(class_2338 pos) {
+        class_2350 side = null;
+        double minDistance = Double.MAX_VALUE;
+        for (class_2350 i : class_2350.values()) {
+            double disSq;
+            if (!BlockUtil.isStrictDirection(pos, i) || (disSq = BlockUtil.mc.field_1724.method_33571().method_1025(pos.method_10093(i).method_46558())) > minDistance) continue;
+            side = i;
+            minDistance = disSq;
+        }
+        return side;
+    }
+
+    public static boolean isStrictDirection(class_2338 pos, class_2350 side, double reachDistance) {
+        double vecDis = BlockUtil.mc.field_1724.method_33571().method_1025(pos.method_46558().method_1031((double)side.method_10163().method_10263() * 0.5, (double)side.method_10163().method_10264() * 0.5, (double)side.method_10163().method_10260() * 0.5));
+        return Math.sqrt(vecDis) > reachDistance ? false : BlockUtil.isStrictDirection(pos, side);
+    }
+
+    public static boolean isStrictDirection(class_2338 pos, class_2350 side) {
+        switch (AntiCheat.INSTANCE.placement.getValue()) {
+            case Vanilla: {
+                return true;
+            }
+            case Legit: {
+                return EntityUtil.canSee(pos, side);
+            }
+            case Grim: {
+                return BlockUtil.grimStrictDirectionCheck(pos, side, BlockUtil.mc.field_1687, BlockUtil.mc.field_1724);
+            }
+            case NCP: {
+                if (BlockUtil.mc.field_1687.method_8320(pos.method_10093(side)).method_26234((class_1922)BlockUtil.mc.field_1687, pos.method_10093(side))) {
+                    return false;
+                }
+                class_243 eyePos = BlockUtil.mc.field_1724.method_33571();
+                class_243 blockCenter = pos.method_46558();
+                ArrayList<class_2350> validAxis = new ArrayList<class_2350>();
+                validAxis.addAll(BlockUtil.checkAxis(eyePos.field_1352 - blockCenter.field_1352, class_2350.field_11039, class_2350.field_11034, false));
+                validAxis.addAll(BlockUtil.checkAxis(eyePos.field_1351 - blockCenter.field_1351, class_2350.field_11033, class_2350.field_11036, true));
+                validAxis.addAll(BlockUtil.checkAxis(eyePos.field_1350 - blockCenter.field_1350, class_2350.field_11043, class_2350.field_11035, false));
+                return validAxis.contains(side);
+            }
+        }
+        return true;
+    }
+
+    public static boolean grimStrictDirectionCheck(class_2338 pos, class_2350 direction, class_638 level, class_746 player) {
+        class_238 combined = BlockUtil.getCombinedBox(pos, (class_1937)level);
+        class_238 eyePositions = new class_238(player.method_23317(), player.method_23318() + 0.4, player.method_23321(), player.method_23317(), player.method_23318() + 1.62, player.method_23321()).method_1014(2.0E-4);
+        if (BlockUtil.isIntersected(eyePositions, combined)) {
+            return true;
+        }
+        switch (direction) {
+            case field_11043: {
+                if (eyePositions.field_1321 > combined.field_1321) break;
+                return true;
+            }
+            case field_11035: {
+                if (eyePositions.field_1324 < combined.field_1324) break;
+                return true;
+            }
+            case field_11034: {
+                if (eyePositions.field_1320 < combined.field_1320) break;
+                return true;
+            }
+            case field_11039: {
+                if (eyePositions.field_1323 > combined.field_1323) break;
+                return true;
+            }
+            case field_11036: {
+                if (eyePositions.field_1325 < combined.field_1325) break;
+                return true;
+            }
+            case field_11033: {
+                if (eyePositions.field_1322 > combined.field_1322) break;
+                return true;
+            }
+            default: {
+                throw new MatchException(null, null);
+            }
+        }
+        return false;
+    }
+
+    private static class_238 getCombinedBox(class_2338 pos, class_1937 level) {
+        class_265 shape = level.method_8320(pos).method_26220((class_1922)level, pos).method_1096((double)pos.method_10263(), (double)pos.method_10264(), (double)pos.method_10260());
+        class_238 combined = new class_238(pos);
+        for (class_238 box : shape.method_1090()) {
+            double minX = Math.max(box.field_1323, combined.field_1323);
+            double minY = Math.max(box.field_1322, combined.field_1322);
+            double minZ = Math.max(box.field_1321, combined.field_1321);
+            double maxX = Math.min(box.field_1320, combined.field_1320);
+            double maxY = Math.min(box.field_1325, combined.field_1325);
+            double maxZ = Math.min(box.field_1324, combined.field_1324);
+            combined = new class_238(minX, minY, minZ, maxX, maxY, maxZ);
+        }
+        return combined;
+    }
+
+    private static boolean isIntersected(class_238 bb, class_238 other) {
+        return other.field_1320 - 1.0E-7 > bb.field_1323 && other.field_1323 + 1.0E-7 < bb.field_1320 && other.field_1325 - 1.0E-7 > bb.field_1322 && other.field_1322 + 1.0E-7 < bb.field_1325 && other.field_1324 - 1.0E-7 > bb.field_1321 && other.field_1321 + 1.0E-7 < bb.field_1324;
+    }
+
+    public static ArrayList<class_2350> checkAxis(double diff, class_2350 negativeSide, class_2350 positiveSide, boolean vertical) {
+        ArrayList<class_2350> valid = new ArrayList<class_2350>();
+        if (vertical) {
+            if (diff < -0.5) {
+                valid.add(negativeSide);
+            }
+            if (AntiCheat.INSTANCE.upDirectionLimit.getValue()) {
+                if (diff > 0.5) {
+                    valid.add(positiveSide);
+                }
+            } else if (diff > -0.5) {
+                valid.add(positiveSide);
             }
         } else {
-            if (side == Direction.UP && pos.getY() > mc.player.getEyePos().getY()) {
-                return false;
+            if (diff < -0.5) {
+                valid.add(negativeSide);
             }
-        }
-
-        if (AntiCheat.INSTANCE.blockCheck.getValue() && (getBlock(pos.offset(side)) == Blocks.OBSIDIAN || getBlock(pos.offset(side)) == Blocks.BEDROCK || getBlock(pos.offset(side)) == Blocks.RESPAWN_ANCHOR)) return false;
-        Vec3d eyePos = EntityUtil.getEyesPos();
-        Vec3d blockCenter = pos.toCenterPos();
-        ArrayList<Direction> validAxis = new ArrayList<>();
-        validAxis.addAll(checkAxis(eyePos.x - blockCenter.x, Direction.WEST, Direction.EAST, false));
-        validAxis.addAll(checkAxis(eyePos.y - blockCenter.y, Direction.DOWN, Direction.UP, true));
-        validAxis.addAll(checkAxis(eyePos.z - blockCenter.z, Direction.NORTH, Direction.SOUTH, false));
-        return validAxis.contains(side);
-    }
-
-    public static ArrayList<Direction> checkAxis(double diff, Direction negativeSide, Direction positiveSide, boolean bothIfInRange) {
-        ArrayList<Direction> valid = new ArrayList<>();
-        if (diff < -0.5) {
-            valid.add(negativeSide);
-        }
-        if (diff > 0.5) {
-            valid.add(positiveSide);
-        }
-        if (bothIfInRange) {
-            if (!valid.contains(negativeSide)) valid.add(negativeSide);
-            if (!valid.contains(positiveSide)) valid.add(positiveSide);
+            if (diff > 0.5) {
+                valid.add(positiveSide);
+            }
         }
         return valid;
     }
 
-    public static ArrayList<BlockEntity> getTileEntities(){
-        return getLoadedChunks().flatMap(chunk -> chunk.getBlockEntities().values().stream()).collect(Collectors.toCollection(ArrayList::new));
+    public static ArrayList<class_2586> getTileEntities() {
+        return BlockUtil.getLoadedChunks().flatMap(chunk -> chunk.method_12214().values().stream()).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static Stream<WorldChunk> getLoadedChunks(){
-        int radius = Math.max(2, mc.options.getClampedViewDistance()) + 3;
+    public static Stream<class_2818> getLoadedChunks() {
+        int radius = Math.max(2, BlockUtil.mc.field_1690.method_38521()) + 3;
         int diameter = radius * 2 + 1;
-
-        ChunkPos center = mc.player.getChunkPos();
-        ChunkPos min = new ChunkPos(center.x - radius, center.z - radius);
-        ChunkPos max = new ChunkPos(center.x + radius, center.z + radius);
-
+        class_1923 center = BlockUtil.mc.field_1724.method_31476();
+        class_1923 min = new class_1923(center.field_9181 - radius, center.field_9180 - radius);
+        class_1923 max = new class_1923(center.field_9181 + radius, center.field_9180 + radius);
         return Stream.iterate(min, pos -> {
-                    int x = pos.x;
-                    int z = pos.z;
-                    x++;
-
-                    if(x > max.x)
-                    {
-                        x = min.x;
-                        z++;
-                    }
-
-                    return new ChunkPos(x, z);
-
-                }).limit((long) diameter *diameter)
-                .filter(c -> mc.world.isChunkLoaded(c.x, c.z))
-                .map(c -> mc.world.getChunk(c.x, c.z)).filter(Objects::nonNull);
+            int x = pos.field_9181;
+            int z = pos.field_9180;
+            if (++x > max.field_9181) {
+                x = min.field_9181;
+                ++z;
+            }
+            return new class_1923(x, z);
+        }).limit((long)diameter * (long)diameter).filter(c -> BlockUtil.mc.field_1687.method_8393(c.field_9181, c.field_9180)).map(c -> BlockUtil.mc.field_1687.method_8497(c.field_9181, c.field_9180)).filter(Objects::nonNull);
     }
 
-    public static ArrayList<BlockPos> getSphere(float range) {
-       return getSphere(range, mc.player.getEyePos());
+    public static ArrayList<class_2338> getSphere(float range) {
+        return BlockUtil.getSphere(range, BlockUtil.mc.field_1724.method_33571());
     }
-    public static ArrayList<BlockPos> getSphere(float range, Vec3d pos) {
-        ArrayList<BlockPos> list = new ArrayList<>();
-        for (double x = pos.getX() - range; x < pos.getX() + range; ++x) {
-            for (double z = pos.getZ() - range; z < pos.getZ() + range; ++z) {
-                for (double y = pos.getY() - range; y < pos.getY() + range; ++y) {
-                    BlockPos curPos = new BlockPosX(x, y, z);
-                    if (curPos.toCenterPos().distanceTo(pos) > range) continue;
-                    if (!list.contains(curPos)) {
-                        list.add(curPos);
-                    }
+
+    public static class_2338 getBlock(class_2248 block, float range) {
+        for (class_2338 pos : BlockUtil.getSphere(range)) {
+            if (BlockUtil.mc.field_1687.method_8320(pos).method_26204() != block) continue;
+            return pos;
+        }
+        return null;
+    }
+
+    public static class_2338 getBlock(Class<?> block, float range) {
+        for (class_2338 pos : BlockUtil.getSphere(range)) {
+            if (!block.isInstance(BlockUtil.mc.field_1687.method_8320(pos).method_26204())) continue;
+            return pos;
+        }
+        return null;
+    }
+
+    public static ArrayList<class_2338> getSphere(float range, class_243 pos) {
+        ArrayList<class_2338> list = new ArrayList<class_2338>();
+        for (double y = pos.method_10214() + (double)range; y > pos.method_10214() - (double)range; y -= 1.0) {
+            if (y < -64.0) continue;
+            for (double x = pos.method_10216() - (double)range; x < pos.method_10216() + (double)range; x += 1.0) {
+                for (double z = pos.method_10215() - (double)range; z < pos.method_10215() + (double)range; z += 1.0) {
+                    BlockPosX curPos = new BlockPosX(x, y, z);
+                    if (curPos.method_46558().method_1022(pos) > (double)range) continue;
+                    list.add(curPos);
                 }
             }
         }
         return list;
     }
 
-    public static Block getBlock(BlockPos pos) {
-        return mc.world.getBlockState(pos).getBlock();
+    public static class_2248 getBlock(class_2338 pos) {
+        return BlockUtil.mc.field_1687.method_8320(pos).method_26204();
     }
 
-    public static boolean canReplace(BlockPos pos) {
-        if (pos.getY() >= 320) return false;
+    public static boolean canReplace(class_2338 pos) {
+        if (pos.method_10264() >= 320) {
+            return false;
+        }
+        if (AntiCheat.INSTANCE.multiPlace.getValue() && placedPos.contains(pos)) {
+            return false;
+        }
+        class_2680 state = BlockUtil.mc.field_1687.method_8320(pos);
+        return state.method_26204() == class_2246.field_10343 && AutoWeb.ignore && AutoCrystal.INSTANCE.replace.getValue() || state.method_45474();
+    }
+
+    public static boolean canClick(class_2338 pos) {
         if (AntiCheat.INSTANCE.multiPlace.getValue() && placedPos.contains(pos)) {
             return true;
         }
-        if (mc.world.getBlockState(pos).getBlock() == Blocks.COBWEB) {
-            if (AutoWeb.ignore && AutoCrystal.INSTANCE.replace.getValue()) return true;
-        }
-        return mc.world.getBlockState(pos).isReplaceable();
+        class_2680 state = BlockUtil.mc.field_1687.method_8320(pos);
+        class_2248 block = state.method_26204();
+        return block == class_2246.field_10343 && AutoWeb.ignore ? AutoCrystal.INSTANCE.airPlace.getValue() : BlockUtil.mc.field_1724.method_5715() || !BlockUtil.isClickable(block);
     }
 
-    public static boolean canClick(BlockPos pos) {
-        if (AntiCheat.INSTANCE.multiPlace.getValue() && placedPos.contains(pos)) {
+    public static boolean isClickable(class_2248 block) {
+        return block instanceof class_2304 || block instanceof class_2199 || block instanceof class_2406 || block instanceof class_3711 || block instanceof class_3713 || block instanceof class_3718 || block instanceof class_2269 || block instanceof class_2231 || block instanceof class_2237 || block instanceof class_2244 || block instanceof class_2349 || block instanceof class_2323 || block instanceof class_2428 || block instanceof class_2533;
+    }
+
+    public static boolean canCollide(class_238 box) {
+        return BlockUtil.canCollide((class_1297)BlockUtil.mc.field_1724, box);
+    }
+
+    public static boolean canCollide(@Nullable class_1297 entity, class_238 box) {
+        class_5329 blockCollisionSpliterator = new class_5329((class_1941)BlockUtil.mc.field_1687, entity, box, false, (pos, voxelShape) -> voxelShape);
+        while (blockCollisionSpliterator.hasNext()) {
+            if (((class_265)blockCollisionSpliterator.next()).method_1110()) continue;
             return true;
         }
-        if (mc.world.getBlockState(pos).getBlock() == Blocks.COBWEB) {
-            if (AutoWeb.ignore) {
-                return AutoCrystal.INSTANCE.airPlace.getValue();
-            }
-        }
-        return mc.world.getBlockState(pos).isSolid() && (!(shiftBlocks.contains(getBlock(pos)) || getBlock(pos) instanceof BedBlock) || mc.player.isSneaking());
+        return false;
     }
 
-    public static boolean airPlace() {
-        return AntiCheat.INSTANCE.placement.getValue() == Placement.AirPlace;
+    public static boolean allowAirPlace() {
+        return AirPlace.INSTANCE.isOn() && AirPlace.INSTANCE.module.getValue();
     }
 }
+

@@ -1,209 +1,163 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1297
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_238
+ *  net.minecraft.class_239$class_240
+ *  net.minecraft.class_243
+ *  net.minecraft.class_2680
+ *  net.minecraft.class_2708
+ *  net.minecraft.class_3959
+ *  net.minecraft.class_3959$class_242
+ *  net.minecraft.class_3959$class_3960
+ *  net.minecraft.class_3965
+ */
 package dev.luminous.mod.modules.impl.movement;
 
-import dev.luminous.api.events.eventbus.EventHandler;
+import dev.luminous.Alien;
+import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.MoveEvent;
 import dev.luminous.api.events.impl.PacketEvent;
 import dev.luminous.api.events.impl.TimerEvent;
-import dev.luminous.api.utils.entity.MovementUtil;
+import dev.luminous.api.events.impl.UpdateEvent;
 import dev.luminous.api.utils.math.Timer;
+import dev.luminous.api.utils.player.MovementUtil;
 import dev.luminous.api.utils.world.BlockPosX;
-import dev.luminous.Alien;
 import dev.luminous.mod.modules.Module;
+import dev.luminous.mod.modules.impl.movement.Fly;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.block.BlockState;
-import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-
 import java.util.HashMap;
-import java.util.Map;
+import net.minecraft.class_1297;
+import net.minecraft.class_1657;
+import net.minecraft.class_2338;
+import net.minecraft.class_238;
+import net.minecraft.class_239;
+import net.minecraft.class_243;
+import net.minecraft.class_2680;
+import net.minecraft.class_2708;
+import net.minecraft.class_3959;
+import net.minecraft.class_3965;
 
-
-public class FastFall extends Module {
-
-    private final EnumSetting<Mode> mode =
-            add(new EnumSetting<>("Mode", Mode.Fast));
-    private final BooleanSetting noLag =
-            add(new BooleanSetting("NoLag", true, () -> mode.getValue() == Mode.Fast));
-    private final BooleanSetting useTimerSetting =
-            add(new BooleanSetting("UseTimer", false));
-    private final SliderSetting timer =
-            add(new SliderSetting("Timer", 2.5, 1, 8, 0.1, () -> useTimerSetting.getValue()));
-    private final BooleanSetting anchor =
-            add(new BooleanSetting("Anchor", true));
-    private final SliderSetting height =
-            add(new SliderSetting("Height", 10, 1, 20, 0.5));
-
+public class FastFall
+extends Module {
+    private final EnumSetting<Mode> mode = this.add(new EnumSetting<Mode>("Mode", Mode.Fast));
+    private final BooleanSetting noLag = this.add(new BooleanSetting("NoLag", true, () -> this.mode.getValue() == Mode.Fast));
+    private final BooleanSetting useTimerSetting = this.add(new BooleanSetting("UseTimer", false));
+    private final SliderSetting timer = this.add(new SliderSetting("Timer", 2.5, 1.0, 8.0, 0.1, this.useTimerSetting::getValue));
+    private final BooleanSetting anchor = this.add(new BooleanSetting("Anchor", true));
+    private final SliderSetting height = this.add(new SliderSetting("Height", 10.0, 1.0, 20.0, 0.5));
     private final Timer lagTimer = new Timer();
-
+    boolean onGround = false;
     private boolean useTimer;
 
     public FastFall() {
-        super("FastFall", "Miyagi son simulator", Category.Movement);
-        setChinese("快速坠落");
+        super("FastFall", "Miyagi son simulator", Module.Category.Movement);
+        this.setChinese("\u5feb\u901f\u5760\u843d");
     }
 
     @Override
     public void onDisable() {
-        useTimer = false;
+        this.useTimer = false;
     }
 
     @Override
     public String getInfo() {
-        return mode.getValue().name();
+        return this.mode.getValue().name();
     }
 
-    @EventHandler(priority = -100)
-            public void onMove(MoveEvent event) {
-        if (nullCheck()) return;
-        if (mc.player.isOnGround() && anchor.getValue()) {
-            if (traceDown() != 0 && traceDown() <= height.getValue() && trace()) {
-                event.setX(event.getX() * 0.05);
-                event.setZ(event.getZ() * 0.05);
-            }
+    @EventListener(priority=-100)
+    public void onMove(MoveEvent event) {
+        if (!FastFall.nullCheck() && FastFall.mc.field_1724.method_24828() && this.anchor.getValue() && this.traceDown() != 0 && (double)this.traceDown() <= this.height.getValue() && this.trace()) {
+            event.setX(event.getX() * 0.05);
+            event.setZ(event.getZ() * 0.05);
         }
     }
-    boolean onGround = false;
-    @Override
-    public void onUpdate() {
-        if ((height.getValue() > 0 && (traceDown() > height.getValue()))
-                || mc.player.isInsideWall()
-                || mc.player.isSubmergedInWater()
-                || mc.player.isInLava()
-                || mc.player.isHoldingOntoLadder()
-                || !lagTimer.passedMs(1000)
-                || mc.player.isFallFlying()
-                || Fly.INSTANCE.isOn()
-                || nullCheck()) {
-            return;
-        }
 
-        if (Alien.PLAYER.isInWeb(mc.player)) return;
-
-        if (mc.player.isOnGround()) {
-
-            if (mode.getValue() == Mode.Fast) {
-                MovementUtil.setMotionY(MovementUtil.getMotionY() - (noLag.getValue() ? 0.62f : 1));
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        if (!(this.height.getValue() > 0.0 && (double)this.traceDown() > this.height.getValue() || FastFall.mc.field_1724.method_5757() || FastFall.mc.field_1724.method_5869() || FastFall.mc.field_1724.method_5771() || FastFall.mc.field_1724.method_21754() || !this.lagTimer.passed(1000L) || FastFall.mc.field_1724.method_6128() || Fly.INSTANCE.isOn() || FastFall.nullCheck() || Alien.PLAYER.isInWeb((class_1657)FastFall.mc.field_1724))) {
+            if (FastFall.mc.field_1724.method_24828() && this.mode.getValue() == Mode.Fast) {
+                MovementUtil.setMotionY(MovementUtil.getMotionY() - (double)(this.noLag.getValue() ? 0.62f : 1.0f));
             }
-        }
-
-        if (useTimerSetting.getValue()) {
-            if (!mc.player.isOnGround()) {
-                if (onGround) {
-                    useTimer = true;
+            if (this.useTimerSetting.getValue()) {
+                if (!FastFall.mc.field_1724.method_24828()) {
+                    if (this.onGround) {
+                        this.useTimer = true;
+                    }
+                    if (MovementUtil.getMotionY() >= 0.0) {
+                        this.useTimer = false;
+                    }
+                    this.onGround = false;
+                } else {
+                    this.useTimer = false;
+                    MovementUtil.setMotionY(-0.08);
+                    this.onGround = true;
                 }
-                if (MovementUtil.getMotionY() >= 0) {
-                    useTimer = false;
-                }
-                onGround = false;
             } else {
-                useTimer = false;
-                MovementUtil.setMotionY(-0.08);
-                onGround = true;
+                this.useTimer = false;
             }
-        } else {
-            useTimer = false;
         }
     }
 
-    @EventHandler
+    @EventListener
     public void onTimer(TimerEvent event) {
-        if (nullCheck()) return;
-        if (!mc.player.isOnGround() && useTimer) {
-            event.set(timer.getValueFloat());
+        if (!FastFall.nullCheck() && !FastFall.mc.field_1724.method_24828() && this.useTimer) {
+            event.set(this.timer.getValueFloat());
         }
     }
-    @EventHandler
+
+    @EventListener
     public void onPacket(PacketEvent.Receive event) {
-        if (!nullCheck()) {
-            if (event.getPacket() instanceof PlayerPositionLookS2CPacket) {
-                lagTimer.reset();
-            }
+        if (!FastFall.nullCheck() && event.getPacket() instanceof class_2708) {
+            this.lagTimer.reset();
         }
     }
 
     private int traceDown() {
+        int y;
         int retval = 0;
-
-        int y = (int) Math.round(mc.player.getY()) - 1;
-
-        for (int tracey = y; tracey >= 0; tracey--) {
-
-            HitResult trace = mc.world.raycast(new RaycastContext(
-                    mc.player.getPos(),
-                    new Vec3d(mc.player.getX(), tracey, mc.player.getZ()),
-                    RaycastContext.ShapeType.COLLIDER,
-                    RaycastContext.FluidHandling.NONE,
-                    mc.player
-            ));
-
-
-            if (trace != null && trace.getType() == HitResult.Type.BLOCK) return retval;
-
-            retval++;
+        for (int tracey = y = (int)Math.round(FastFall.mc.field_1724.method_23318()) - 1; tracey >= 0; --tracey) {
+            class_3965 trace = FastFall.mc.field_1687.method_17742(new class_3959(FastFall.mc.field_1724.method_19538(), new class_243(FastFall.mc.field_1724.method_23317(), (double)tracey, FastFall.mc.field_1724.method_23321()), class_3959.class_3960.field_17558, class_3959.class_242.field_1348, (class_1297)FastFall.mc.field_1724));
+            if (trace != null && trace.method_17783() == class_239.class_240.field_1332) {
+                return retval;
+            }
+            ++retval;
         }
         return retval;
     }
 
     private boolean trace() {
-        Box bbox = mc.player.getBoundingBox();
-        Vec3d basepos = bbox.getCenter();
-
-        double minX = bbox.minX;
-        double minZ = bbox.minZ;
-        double maxX = bbox.maxX;
-        double maxZ = bbox.maxZ;
-
-        Map<Vec3d, Vec3d> positions = new HashMap<>();
-
-        positions.put(
-                basepos,
-                new Vec3d(basepos.x, basepos.y - 1, basepos.z));
-
-        positions.put(
-                new Vec3d(minX, basepos.y, minZ),
-                new Vec3d(minX, basepos.y - 1, minZ));
-
-        positions.put(
-                new Vec3d(maxX, basepos.y, minZ),
-                new Vec3d(maxX, basepos.y - 1, minZ));
-
-        positions.put(
-                new Vec3d(minX, basepos.y, maxZ),
-                new Vec3d(minX, basepos.y - 1, maxZ));
-
-        positions.put(
-                new Vec3d(maxX, basepos.y, maxZ),
-                new Vec3d(maxX, basepos.y - 1, maxZ));
-
-        for (Vec3d key : positions.keySet()) {
-            RaycastContext context = new RaycastContext(
-                    key,
-                    positions.get(key),
-                    RaycastContext.ShapeType.COLLIDER,
-                    RaycastContext.FluidHandling.NONE,
-                    mc.player
-            );
-
-            BlockHitResult result = mc.world.raycast(context);
-
-            if (result != null && result.getType() == HitResult.Type.BLOCK) {
-                return false;
-            }
+        class_238 bbox = FastFall.mc.field_1724.method_5829();
+        class_243 basepos = bbox.method_1005();
+        double minX = bbox.field_1323;
+        double minZ = bbox.field_1321;
+        double maxX = bbox.field_1320;
+        double maxZ = bbox.field_1324;
+        HashMap<class_243, class_243> positions = new HashMap<class_243, class_243>();
+        positions.put(basepos, new class_243(basepos.field_1352, basepos.field_1351 - 1.0, basepos.field_1350));
+        positions.put(new class_243(minX, basepos.field_1351, minZ), new class_243(minX, basepos.field_1351 - 1.0, minZ));
+        positions.put(new class_243(maxX, basepos.field_1351, minZ), new class_243(maxX, basepos.field_1351 - 1.0, minZ));
+        positions.put(new class_243(minX, basepos.field_1351, maxZ), new class_243(minX, basepos.field_1351 - 1.0, maxZ));
+        positions.put(new class_243(maxX, basepos.field_1351, maxZ), new class_243(maxX, basepos.field_1351 - 1.0, maxZ));
+        for (class_243 key : positions.keySet()) {
+            class_3959 context = new class_3959(key, (class_243)positions.get(key), class_3959.class_3960.field_17558, class_3959.class_242.field_1348, (class_1297)FastFall.mc.field_1724);
+            class_3965 result = FastFall.mc.field_1687.method_17742(context);
+            if (result == null || result.method_17783() != class_239.class_240.field_1332) continue;
+            return false;
         }
-
-        BlockState state = mc.world.getBlockState(new BlockPosX(mc.player.getX(), mc.player.getY() - 1, mc.player.getZ()));
-
-        return state.isAir();
+        class_2680 state = FastFall.mc.field_1687.method_8320((class_2338)new BlockPosX(FastFall.mc.field_1724.method_23317(), FastFall.mc.field_1724.method_23318() - 1.0, FastFall.mc.field_1724.method_23321()));
+        return state.method_26215();
     }
 
-    private enum Mode {
+    private static enum Mode {
         Fast,
-        None
+        None;
+
     }
 }
+

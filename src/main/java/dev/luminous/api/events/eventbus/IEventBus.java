@@ -1,65 +1,29 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.events.eventbus;
 
-/**
- * Manages event listeners.
- */
+import dev.luminous.api.events.eventbus.ICancellable;
+import dev.luminous.api.events.eventbus.IListener;
+import dev.luminous.api.events.eventbus.LambdaListener;
+
 public interface IEventBus {
-    /**
-     * Registers a lambda factory to use with the specified package.
-     * @param packagePrefix Package prefix that this factory will be used for, eg "meteordevelopment.orbit"
-     * @param factory The factory to use
-     */
-    void registerLambdaFactory(LambdaListener.Factory factory);
+    public void registerLambdaFactory(LambdaListener.Factory var1);
 
-    /**
-     * Posts an event to all subscribed event listeners.
-     * @param event Event to post
-     * @param <T> Type of the event
-     * @return Event passed in
-     */
-    <T> T post(T event);
+    public <T> T post(T var1);
 
-    /**
-     * Posts a cancellable event to all subscribed event listeners. Stops after the event was cancelled.
-     * @param event Event to post
-     * @param <T> Type of the event
-     * @return Event passed in
-     */
-    <T extends ICancellable> T post(T event);
+    public <T extends ICancellable> T post(T var1);
 
-    /**
-     * Finds all correct (static and non-static) methods with {@link EventHandler} annotation and subscribes them.
-     * @param object The object to scan for methods
-     */
-    void subscribe(Object object);
+    public void subscribe(Object var1);
 
-    /**
-     * Finds all correct (static only) methods with {@link EventHandler} annotation and subscribes them.
-     * @param klass The class to scan for methods
-     */
-    void subscribe(Class<?> klass);
+    public void subscribe(Class<?> var1);
 
-    /**
-     * Subscribes the listener (both static and non-static).
-     * @param listener Listener to subscribe
-     */
-    void subscribe(IListener listener);
+    public void subscribe(IListener var1);
 
-    /**
-     * Finds all correct (static and non-static) methods with {@link EventHandler} annotation and unsubscribes them.
-     * @param object The object to scan for methods
-     */
-    void unsubscribe(Object object);
+    public void unsubscribe(Object var1);
 
-    /**
-     * Finds all correct (static only) methods with {@link EventHandler} annotation and unsubscribes them.
-     * @param klass The class to scan for methods
-     */
-    void unsubscribe(Class<?> klass);
+    public void unsubscribe(Class<?> var1);
 
-    /**
-     * Unsubscribes the listener (both static and non-static).
-     * @param listener Listener to unsubscribe
-     */
-    void unsubscribe(IListener listener);
+    public void unsubscribe(IListener var1);
 }
+

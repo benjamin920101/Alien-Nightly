@@ -1,196 +1,166 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.llamalad7.mixinextras.sugar.Local
+ *  net.minecraft.class_2561
+ *  net.minecraft.class_303
+ *  net.minecraft.class_303$class_7590
+ *  net.minecraft.class_310
+ *  net.minecraft.class_327
+ *  net.minecraft.class_332
+ *  net.minecraft.class_338
+ *  net.minecraft.class_5481
+ *  net.minecraft.class_7469
+ *  net.minecraft.class_7591
+ *  org.spongepowered.asm.mixin.Final
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.Shadow
+ *  org.spongepowered.asm.mixin.Unique
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.At$Shift
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.ModifyVariable
+ *  org.spongepowered.asm.mixin.injection.Redirect
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+ */
 package dev.luminous.asm.mixins;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import dev.luminous.asm.accessors.IChatHud;
-import dev.luminous.mod.modules.impl.client.ClientSetting;
 import dev.luminous.api.interfaces.IChatHudHook;
-import dev.luminous.api.interfaces.IChatHudLine;
-import dev.luminous.core.impl.CommandManager;
+import dev.luminous.api.interfaces.IChatHudLineHook;
 import dev.luminous.api.utils.math.FadeUtils;
 import dev.luminous.api.utils.render.ColorUtil;
-import dev.luminous.api.utils.render.TextUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.ChatHudLine;
-import net.minecraft.client.gui.hud.MessageIndicator;
-import net.minecraft.network.message.MessageSignatureData;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.Nullable;
+import dev.luminous.asm.accessors.IChatHud;
+import dev.luminous.mod.modules.impl.client.ClientSetting;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import net.minecraft.class_2561;
+import net.minecraft.class_303;
+import net.minecraft.class_310;
+import net.minecraft.class_327;
+import net.minecraft.class_332;
+import net.minecraft.class_338;
+import net.minecraft.class_5481;
+import net.minecraft.class_7469;
+import net.minecraft.class_7591;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-@Mixin(ChatHud.class)
-public abstract class MixinChatHud implements IChatHudHook {
-    @Final
-    @Shadow
-    private List<ChatHudLine.Visible> visibleMessages;
-    @Shadow
-    @Final
-    private List<ChatHudLine> messages;
+@Mixin(value={class_338.class})
+public abstract class MixinChatHud
+implements IChatHudHook {
     @Unique
     private int nextMessageId = 0;
+    @Unique
+    private boolean nextSync;
+    @Unique
+    private int chatLineIndex;
+    @Final
     @Shadow
-    public abstract void addMessage(Text message);
+    private List<class_303.class_7590> field_2064;
+    @Shadow
+    @Final
+    private List<class_303> field_2061;
 
-    @Inject(method = "<init>", at = @At("TAIL"))
-    public void onInit(MinecraftClient client, CallbackInfo ci) {
-        ((IChatHud) this).setMessages(new CopyOnWriteArrayList<>());
-        ((IChatHud) this).setVisibleMessages(new CopyOnWriteArrayList<>());
+    @Inject(method={"<init>"}, at={@At(value="TAIL")})
+    public void onInit(class_310 client, CallbackInfo ci) {
+        ((IChatHud)((Object)this)).setMessages(new CopyOnWriteArrayList<class_303.class_7590>());
+        ((IChatHud)((Object)this)).setVisibleMessages(new CopyOnWriteArrayList<class_303.class_7590>());
     }
+
     @Override
-    public void addMessage(Text message, int id) {
-        nextMessageId = id;
-        addMessage(message);
-        nextMessageId = 0;
-    }
-    
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V", at = @At(value = "INVOKE", target = "Ljava/util/List;add(ILjava/lang/Object;)V", ordinal = 0, shift = At.Shift.AFTER))
-    private void onAddMessageAfterNewChatHudLineVisible(Text message, MessageSignatureData signature, int ticks, MessageIndicator indicator, boolean refresh, CallbackInfo info) {
-        ((IChatHudLine) (Object) visibleMessages.get(0)).setMessageId(nextMessageId);
+    public void alienClient$addMessage(class_2561 message, int id) {
+        this.nextMessageId = id;
+        this.nextSync = true;
+        this.method_1812(message);
+        this.nextSync = false;
+        this.nextMessageId = 0;
     }
 
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V", at = @At(value = "INVOKE", target = "Ljava/util/List;add(ILjava/lang/Object;)V", ordinal = 1, shift = At.Shift.AFTER))
-    private void onAddMessageAfterNewChatHudLine(Text message, MessageSignatureData signature, int ticks, MessageIndicator indicator, boolean refresh, CallbackInfo info) {
-        ((IChatHudLine) (Object) messages.get(0)).setMessageId(nextMessageId);
-    }
-    
-    @Inject(at = @At("HEAD"), method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V")
-    private void onAddMessage(Text message, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh, CallbackInfo info) {
-       if (nextMessageId != 0) {
-           visibleMessages.removeIf(msg -> msg == null || ((IChatHudLine) (Object) msg).getMessageId() == nextMessageId);
-           messages.removeIf(msg -> msg == null || ((IChatHudLine) (Object) msg).getMessageId() == nextMessageId);
-       }
+    @Override
+    public void alienClient$addMessage(class_2561 message) {
+        this.nextSync = true;
+        this.method_1812(message);
+        this.nextSync = false;
     }
 
-    @Redirect(method = {"addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V"},
-            at = @At(value = "INVOKE", target = "Ljava/util/List;size()I", ordinal = 2, remap = false))
-    public int chatLinesSize(List<ChatHudLine.Visible> list) {
+    @Override
+    public void alienClient$addMessageOutSync(class_2561 message, int id) {
+        this.nextMessageId = id;
+        this.method_1812(message);
+        this.nextMessageId = 0;
+    }
+
+    @Inject(method={"method_1815"}, at={@At(value="INVOKE", target="Ljava/util/List;add(ILjava/lang/Object;)V", ordinal=0, shift=At.Shift.AFTER)})
+    private void onAddMessageAfterNewChatHudLineVisible(class_303 message, CallbackInfo ci) {
+        IChatHudLineHook line = (IChatHudLineHook)this.field_2064.getFirst();
+        if (line != null) {
+            line.alienClient$setMessageId(this.nextMessageId);
+            line.alienClient$setSync(this.nextSync);
+            line.alienClient$setFade(new FadeUtils(ClientSetting.INSTANCE.animationTime.getValueInt()));
+        }
+    }
+
+    @Inject(method={"method_58744(Lnet/minecraft/class_303;)V"}, at={@At(value="INVOKE", target="Ljava/util/List;add(ILjava/lang/Object;)V", ordinal=0, shift=At.Shift.AFTER)})
+    private void onAddMessageAfterNewChatHudLine(class_303 message, CallbackInfo ci) {
+        IChatHudLineHook line = (IChatHudLineHook)this.field_2061.getFirst();
+        if (line != null) {
+            line.alienClient$setMessageId(this.nextMessageId);
+            line.alienClient$setSync(this.nextSync);
+            line.alienClient$setFade(new FadeUtils(ClientSetting.INSTANCE.animationTime.getValueInt()));
+        }
+    }
+
+    @Inject(at={@At(value="HEAD")}, method={"method_44811(Lnet/minecraft/class_2561;Lnet/minecraft/class_7469;Lnet/minecraft/class_7591;)V"})
+    private void onAddMessage(class_2561 message, class_7469 signatureData, class_7591 indicator, CallbackInfo ci) {
+        if (this.nextMessageId != 0) {
+            this.field_2064.removeIf(msg -> ((IChatHudLineHook)msg).alienClient$getMessageId() == this.nextMessageId);
+            this.field_2061.removeIf(msg -> ((IChatHudLineHook)msg).alienClient$getMessageId() == this.nextMessageId);
+        }
+    }
+
+    @Redirect(method={"method_1815"}, at=@At(value="INVOKE", target="Ljava/util/List;size()I", ordinal=2, remap=false), require=0)
+    public int chatLinesSize(List<class_303.class_7590> list) {
         return ClientSetting.INSTANCE.isOn() && ClientSetting.INSTANCE.infiniteChat.getValue() ? -2147483647 : list.size();
     }
 
-    @Redirect(method = {"render"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I"))
-    private int drawStringWithShadow(DrawContext drawContext, TextRenderer textRenderer, OrderedText text, int x, int y, int color) {
-        if (ClientSetting.chatMessage.containsKey(text) && ClientSetting.chatMessage.get(text).getString().startsWith(CommandManager.syncCode)) {
-            if (ClientSetting.INSTANCE.pulse.booleanValue) {
-                return TextUtil.drawStringPulse(drawContext, text, x, y, ColorUtil.injectAlpha(ClientSetting.INSTANCE.color.getValue(), ((color >> 24) & 0xff)),ColorUtil.injectAlpha(ClientSetting.INSTANCE.pulse.getValue(), ((color >> 24) & 0xff)), ClientSetting.INSTANCE.pulseSpeed.getValue(), ClientSetting.INSTANCE.pulseCounter.getValueInt());
-            }
-            return drawContext.drawTextWithShadow(textRenderer, text, x, y, ColorUtil.injectAlpha(ClientSetting.INSTANCE.color.getValue(), ((color >> 24) & 0xff)).getRGB());
+    @Redirect(method={"method_1805"}, at=@At(value="INVOKE", target="Lnet/minecraft/class_332;method_35720(Lnet/minecraft/class_327;Lnet/minecraft/class_5481;III)I"), require=0)
+    private int drawStringWithShadow(class_332 drawContext, class_327 textRenderer, class_5481 text, int x, int y, int color) {
+        IChatHudLineHook line = (IChatHudLineHook)this.field_2064.get(this.chatLineIndex);
+        if (line != null) {
+            FadeUtils fadeUtils = line.alienClient$getFade();
+            double ease = fadeUtils == null ? 0.0 : fadeUtils.ease(ClientSetting.INSTANCE.ease.getValue());
+            double fade = 1.0 - ease;
+            double c = Math.max(10.0, (double)(color >> 24 & 0xFF) * ease);
+            return line.alienClient$getSync() ? drawContext.method_35720(textRenderer, text, x, y, ColorUtil.injectAlpha(ClientSetting.INSTANCE.color.getValue(), ClientSetting.INSTANCE.fade.getValue() ? (int)c : color >> 24 & 0xFF).getRGB()) : drawContext.method_35720(textRenderer, text, x += (int)(fade * ClientSetting.INSTANCE.animateOffset.getValue()), y, ColorUtil.injectAlpha(color, ClientSetting.INSTANCE.fade.getValue() ? (int)c : color >> 24 & 0xFF));
         }
-        return drawContext.drawTextWithShadow(textRenderer, text, x, y, color);
-    }
-    @Unique
-    private final HashMap<ChatHudLine.Visible, FadeUtils> map = new HashMap<>();
-    @Unique
-    private ChatHudLine.Visible last;
-
-    @ModifyArg(method = {"render"}, at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;", ordinal = 0, remap = false))
-    private int get(int i) {
-        last = visibleMessages.get(i);
-        if (last != null && !map.containsKey(last)) {
-            map.put(last, new FadeUtils(ClientSetting.INSTANCE.animateTime.getValueInt()));
-        }
-        return i;
+        return drawContext.method_35720(textRenderer, text, x, y, color);
     }
 
-    @Inject(method = {"render"}, at = {@At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I", ordinal = 0, shift = At.Shift.BEFORE)})
-    private void translate(DrawContext context, int currentTick, int mouseX, int mouseY, CallbackInfo ci) {
-        if (map.containsKey(last)) {
-            context.getMatrices().translate(ClientSetting.INSTANCE.animateOffset.getValue() * (1 - map.get(last).ease(ClientSetting.INSTANCE.ease.getValue())), 0.0, 0.0f);
-        }
-    }
-
-    @Shadow private int scrolledLines;
-    @Shadow private int getLineHeight() { return 0; }
-    @Shadow public int getWidth() { return 0; }
-
-    @Unique private final ArrayList<FadeUtils> messageTimestamps = new ArrayList<>();
-    @Unique private float fadeTime = 150;
-
-    @Unique private int chatLineIndex;
-    @Unique private int chatDisplacementY = 0;
-
-    @Inject(method = "render", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/hud/ChatHudLine$Visible;addedTime()I"
-    ))
-    public void getChatLineIndex(CallbackInfo ci, @Local(ordinal = 13) int chatLineIndex) {
-        // Capture which chat line is currently being rendered
+    @Inject(method={"method_1805"}, at={@At(value="INVOKE", target="Lnet/minecraft/class_303$class_7590;comp_895()I")})
+    public void getChatLineIndex(CallbackInfo ci, @Local(ordinal=13) int chatLineIndex) {
         this.chatLineIndex = chatLineIndex;
     }
 
-    @Unique
-    private void calculateYOffset() {
-        // Calculate current required offset to achieve slide in from bottom effect
-        try {
-            int lineHeight = this.getLineHeight();
-            float maxDisplacement = (float)lineHeight;// * fadeOffsetYScale;
-            double quad = messageTimestamps.get(chatLineIndex).ease(FadeUtils.Ease.In2);
-            if (chatLineIndex == 0 && quad < 1 && this.scrolledLines == 0) {
-                chatDisplacementY = (int)(maxDisplacement - quad *maxDisplacement);
-            }
-        } catch (Exception ignored) {}
+    @ModifyVariable(method={"method_1805"}, at=@At(value="STORE"))
+    private class_7591 removeMessageIndicator(class_7591 messageIndicator) {
+        return ClientSetting.INSTANCE.hideIndicator.getValue() ? null : messageIndicator;
     }
 
-    @ModifyArg(method = "render", index = 1, at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V",
-            ordinal = 1
-    ))
-    private float applyYOffset(float y) {
-        fadeTime = ClientSetting.INSTANCE.fadeTime.getValueFloat();
-        if (ClientSetting.INSTANCE.yAnim.getValue()) {
-            calculateYOffset();
-            return y + chatDisplacementY;
-        } else {
-            return y;
-        }
-    }
+    @Shadow
+    public abstract void method_1812(class_2561 var1);
 
-    @ModifyVariable(method = "render", ordinal = 3, at = @At(
-            value = "STORE"
-    ))
-    private double modifyOpacity(double originalOpacity) {
-        double opacity = originalOpacity;
-        if (ClientSetting.INSTANCE.fade.getValue()) {
-            try {
-                double quad = messageTimestamps.get(chatLineIndex).ease(ClientSetting.INSTANCE.ease.getValue());
-                if (quad < 1 && this.scrolledLines == 0) {
-                    opacity = opacity * (0.5 + MathHelper.clamp(quad, 0, 1) / 2);
-                }
-            } catch (Exception ignored) {
-            }
-        }
-        return opacity;
-    }
-
-    @ModifyVariable(method = "render", at = @At(
-            value = "STORE"
-    ))
-    private MessageIndicator removeMessageIndicator(MessageIndicator messageIndicator) {
-        if (ClientSetting.INSTANCE.hideIndicator.getValue()) {
-            return null;
-        }
-        return messageIndicator;
-    }
-
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V", at = @At("TAIL"))
-    private void addMessage(Text message, MessageSignatureData signature, int ticks, MessageIndicator indicator, boolean refresh, CallbackInfo ci) {
-        messageTimestamps.add(0, new FadeUtils((long) fadeTime));
-        while (this.messageTimestamps.size() > this.visibleMessages.size()) {
-            this.messageTimestamps.remove(this.messageTimestamps.size() - 1);
-        }
+    @Shadow
+    public int method_1811() {
+        return 0;
     }
 }
+

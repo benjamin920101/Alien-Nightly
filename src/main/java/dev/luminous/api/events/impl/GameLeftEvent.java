@@ -1,9 +1,12 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.events.impl;
 
-import dev.luminous.api.events.Event;
+public class GameLeftEvent {
+    public static final GameLeftEvent INSTANCE = new GameLeftEvent();
 
-public class GameLeftEvent extends Event {
-    public GameLeftEvent() {
-        super(Stage.Post);
+    private GameLeftEvent() {
     }
 }
+

@@ -1,89 +1,97 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_243
+ */
 package dev.luminous.mod.commands.impl;
 
-import dev.luminous.Alien;
-import dev.luminous.core.impl.CommandManager;
+import dev.luminous.core.impl.RotationManager;
 import dev.luminous.mod.commands.Command;
-import net.minecraft.util.math.Vec3d;
-
 import java.text.DecimalFormat;
 import java.util.List;
+import net.minecraft.class_243;
 
-public class AimCommand extends Command {
+public class AimCommand
+extends Command {
+    public AimCommand() {
+        super("aim", "[x] [y] [z]");
+    }
 
-	public AimCommand() {
-		super("aim", "[x] [y] [z]");
-	}
+    @Override
+    public void runCommand(String[] parameters) {
+        if (parameters.length != 3) {
+            this.sendUsage();
+        } else {
+            double z;
+            double y;
+            double x;
+            if (this.isNumeric(parameters[0])) {
+                x = Double.parseDouble(parameters[0]);
+            } else {
+                if (!parameters[0].startsWith("~")) {
+                    this.sendUsage();
+                    return;
+                }
+                if (this.isNumeric(parameters[0].replace("~", ""))) {
+                    x = AimCommand.mc.field_1724.method_23317() + Double.parseDouble(parameters[0].replace("~", ""));
+                } else {
+                    if (!parameters[0].replace("~", "").isEmpty()) {
+                        this.sendUsage();
+                        return;
+                    }
+                    x = AimCommand.mc.field_1724.method_23317();
+                }
+            }
+            if (this.isNumeric(parameters[1])) {
+                y = Double.parseDouble(parameters[1]);
+            } else {
+                if (!parameters[1].startsWith("~")) {
+                    this.sendUsage();
+                    return;
+                }
+                if (this.isNumeric(parameters[1].replace("~", ""))) {
+                    y = AimCommand.mc.field_1724.method_23318() + Double.parseDouble(parameters[1].replace("~", ""));
+                } else {
+                    if (!parameters[1].replace("~", "").isEmpty()) {
+                        this.sendUsage();
+                        return;
+                    }
+                    y = AimCommand.mc.field_1724.method_23318();
+                }
+            }
+            if (this.isNumeric(parameters[2])) {
+                z = Double.parseDouble(parameters[2]);
+            } else {
+                if (!parameters[2].startsWith("~")) {
+                    this.sendUsage();
+                    return;
+                }
+                if (this.isNumeric(parameters[2].replace("~", ""))) {
+                    z = AimCommand.mc.field_1724.method_23321() + Double.parseDouble(parameters[2].replace("~", ""));
+                } else {
+                    if (!parameters[2].replace("~", "").isEmpty()) {
+                        this.sendUsage();
+                        return;
+                    }
+                    z = AimCommand.mc.field_1724.method_23321();
+                }
+            }
+            float[] angle = RotationManager.getRotation(new class_243(x, y, z));
+            AimCommand.mc.field_1724.method_36456(angle[0]);
+            AimCommand.mc.field_1724.method_36457(angle[1]);
+            DecimalFormat df = new DecimalFormat("0.0");
+            this.sendChatMessage("\u00a7fAim to \u00a7eX:" + df.format(x) + " Y:" + df.format(y) + " Z:" + df.format(z));
+        }
+    }
 
-	@Override
-	public void runCommand(String[] parameters) {
-		if (parameters.length != 3)
-		{
-			sendUsage();
-			return;
-		}
-		double x;
-		double y;
-		double z;
-		if (isNumeric(parameters[0])) {
-			x = Double.parseDouble(parameters[0]);
-		} else if (parameters[0].startsWith("~")) {
-			if (isNumeric(parameters[0].replace("~", ""))) {
-				x = mc.player.getX() + Double.parseDouble(parameters[0].replace("~", ""));
-			} else if (parameters[0].replace("~", "").equals("")) {
-				x = mc.player.getX();
-			} else {
-				sendUsage();
-				return;
-			}
-		} else {
-			sendUsage();
-			return;
-		}
+    private boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
 
-		if (isNumeric(parameters[1])) {
-			y = Double.parseDouble(parameters[1]);
-		} else if (parameters[1].startsWith("~")) {
-			if (isNumeric(parameters[1].replace("~", ""))) {
-				y = mc.player.getY() + Double.parseDouble(parameters[1].replace("~", ""));
-			} else if (parameters[1].replace("~", "").equals("")) {
-				y = mc.player.getY();
-			} else {
-				sendUsage();
-				return;
-			}
-		} else {
-			sendUsage();
-			return;
-		}
-
-		if (isNumeric(parameters[2])) {
-			z = Double.parseDouble(parameters[2]);
-		} else if (parameters[2].startsWith("~")) {
-			if (isNumeric(parameters[2].replace("~", ""))) {
-				z = mc.player.getZ() + Double.parseDouble(parameters[2].replace("~", ""));
-			} else if (parameters[2].replace("~", "").equals("")) {
-				z = mc.player.getZ();
-			} else {
-				sendUsage();
-				return;
-			}
-		} else {
-			sendUsage();
-			return;
-		}
-		float[] angle = Alien.ROTATION.getRotation(new Vec3d(x, y, z));
-		mc.player.setYaw(angle[0]);
-		mc.player.setPitch(angle[1]);
-		DecimalFormat df = new DecimalFormat("0.0");
-		CommandManager.sendChatMessage("§fAim to §eX:" + df.format(x) + " Y:" +  df.format(y) + " Z:" + df.format(z));
-	}
-
-	private boolean isNumeric(String str) {
-		return str.matches("-?\\d+(\\.\\d+)?");
-	}
-
-	@Override
-	public String[] getAutocorrect(int count, List<String> seperated) {
-		return new String[] {"~ "};
-	}
+    @Override
+    public String[] getAutocorrect(int count, List<String> seperated) {
+        return new String[]{"~ "};
+    }
 }
+

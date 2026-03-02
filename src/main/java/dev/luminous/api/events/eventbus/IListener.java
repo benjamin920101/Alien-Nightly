@@ -1,27 +1,15 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.events.eventbus;
 
-/**
- * Base type for all listeners.
- */
 public interface IListener {
-    /**
-     * Calls the listener with the specified event.
-     * @param event Event to pass in
-     */
-    void call(Object event);
+    public void call(Object var1);
 
-    /**
-     * @return The target event type this listener is for
-     */
-    Class<?> getTarget();
+    public Class<?> getTarget();
 
-    /**
-     * @return The priority for this listener
-     */
-    int getPriority();
+    public int getPriority();
 
-    /**
-     * @return True if this listener is for static methods
-     */
-    boolean isStatic();
+    public boolean isStatic();
 }
+

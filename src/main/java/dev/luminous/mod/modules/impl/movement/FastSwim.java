@@ -1,67 +1,69 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.mod.modules.impl.movement;
 
-import dev.luminous.api.events.eventbus.EventHandler;
+import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.KeyboardInputEvent;
 import dev.luminous.api.events.impl.MoveEvent;
+import dev.luminous.api.utils.player.MovementUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 
-import static dev.luminous.api.utils.entity.MovementUtil.*;
-
-public class FastSwim extends Module {
+public class FastSwim
+extends Module {
     public static FastSwim INSTANCE;
+    public final SliderSetting speed = this.add(new SliderSetting("Speed", 0.2, 0.0, 1.0, 0.01));
+    public final SliderSetting downFactor = this.add(new SliderSetting("DownFactor", 0.0, 0.0, 1.0, 1.0E-6));
+    private final SliderSetting sneakDownSpeed = this.add(new SliderSetting("DownSpeed", 0.2, 0.0, 1.0, 0.01));
+    private final SliderSetting upSpeed = this.add(new SliderSetting("UpSpeed", 0.2, 0.0, 1.0, 0.01));
+    private MoveEvent event;
 
     public FastSwim() {
-        super("FastSwim", Category.Movement);
-        setChinese("快速游泳");
+        super("FastSwim", Module.Category.Movement);
+        this.setChinese("\u5feb\u901f\u6e38\u6cf3");
         INSTANCE = this;
     }
-    @EventHandler
+
+    @EventListener
     public void onKeyboardInput(KeyboardInputEvent event) {
-        if (mc.player.isInFluid()) {
-            mc.player.input.sneaking = false;
+        if (FastSwim.mc.field_1724.method_52535()) {
+            FastSwim.mc.field_1724.field_3913.field_3903 = false;
         }
     }
 
-    public final SliderSetting speed = add(new SliderSetting("Speed", 0.2, 0, 1, 0.01));
-    private final SliderSetting sneakDownSpeed = add(new SliderSetting("DownSpeed", 0.2, 0, 1, 0.01));
-    private final SliderSetting upSpeed = add(new SliderSetting("UpSpeed", 0.2, 0, 1, 0.01));
-    public final SliderSetting downFactor = add(new SliderSetting("DownFactor", 0, 0.0, 1, 0.000001));
-    private MoveEvent event;
-    @EventHandler
+    @EventListener
     public void onMove(MoveEvent event) {
-        if (nullCheck()) return;
-        if (mc.player.isInFluid()) {
+        if (!FastSwim.nullCheck() && FastSwim.mc.field_1724.method_52535()) {
             this.event = event;
-            if (!(mc.options.sneakKey.isPressed() && mc.player.input.jumping)) {
-                if (mc.options.sneakKey.isPressed()) {
-                    setY(-sneakDownSpeed.getValue());
-                } else if (mc.player.input.jumping) {
-                    setY(upSpeed.getValue());
-                } else {
-                    setY(-downFactor.getValue());
-                }
+            if (FastSwim.mc.field_1690.field_1832.method_1434() && FastSwim.mc.field_1724.field_3913.field_3904) {
+                this.setY(0.0);
+            } else if (FastSwim.mc.field_1690.field_1832.method_1434()) {
+                this.setY(-this.sneakDownSpeed.getValue());
+            } else if (FastSwim.mc.field_1724.field_3913.field_3904) {
+                this.setY(this.upSpeed.getValue());
             } else {
-                setY(0);
+                this.setY(-this.downFactor.getValue());
             }
-            double[] dir = directionSpeed(speed.getValue());
-            setX(dir[0]);
-            setZ(dir[1]);
+            double[] dir = MovementUtil.directionSpeed(this.speed.getValue());
+            this.setX(dir[0]);
+            this.setZ(dir[1]);
         }
     }
 
     private void setX(double f) {
-        event.setX(f);
-        setMotionX(f);
+        this.event.setX(f);
+        MovementUtil.setMotionX(f);
     }
 
     private void setY(double f) {
-        event.setY(f);
-        setMotionY(f);
+        this.event.setY(f);
+        MovementUtil.setMotionY(f);
     }
 
     private void setZ(double f) {
-        event.setZ(f);
-        setMotionZ(f);
+        this.event.setZ(f);
+        MovementUtil.setMotionZ(f);
     }
 }
+

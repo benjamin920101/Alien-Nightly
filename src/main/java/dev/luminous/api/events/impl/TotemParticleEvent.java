@@ -1,16 +1,27 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
+import java.awt.Color;
 
-import java.awt.*;
-
-public class TotemParticleEvent extends Event {
-    public double velocityX, velocityY, velocityZ;
+public class TotemParticleEvent
+extends Event {
+    private static final TotemParticleEvent instance = new TotemParticleEvent();
+    public double velocityX;
+    public double velocityY;
+    public double velocityZ;
     public Color color;
-    public TotemParticleEvent(double velocityX, double velocityY, double velocityZ) {
-        super(Stage.Pre);
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.velocityZ = velocityZ;
+
+    private TotemParticleEvent() {
+    }
+
+    public static TotemParticleEvent get(double velocityX, double velocityY, double velocityZ) {
+        TotemParticleEvent.instance.velocityX = velocityX;
+        TotemParticleEvent.instance.velocityY = velocityY;
+        TotemParticleEvent.instance.velocityZ = velocityZ;
+        return instance;
     }
 }
+

@@ -1,44 +1,117 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2561
+ */
 package dev.luminous.core.impl;
 
 import dev.luminous.Alien;
 import dev.luminous.api.interfaces.IChatHudHook;
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.mod.commands.Command;
-import dev.luminous.mod.commands.impl.*;
+import dev.luminous.mod.commands.impl.AimCommand;
+import dev.luminous.mod.commands.impl.BindCommand;
+import dev.luminous.mod.commands.impl.BindsCommand;
+import dev.luminous.mod.commands.impl.CleanerCommand;
+import dev.luminous.mod.commands.impl.ClipCommand;
+import dev.luminous.mod.commands.impl.EsuCommand;
+import dev.luminous.mod.commands.impl.FakePlayerCommand;
+import dev.luminous.mod.commands.impl.FriendCommand;
+import dev.luminous.mod.commands.impl.GamemodeCommand;
+import dev.luminous.mod.commands.impl.GcCommand;
+import dev.luminous.mod.commands.impl.KitCommand;
+import dev.luminous.mod.commands.impl.LoadCommand;
+import dev.luminous.mod.commands.impl.PeekCommand;
+import dev.luminous.mod.commands.impl.PingCommand;
+import dev.luminous.mod.commands.impl.PrefixCommand;
+import dev.luminous.mod.commands.impl.RejoinCommand;
+import dev.luminous.mod.commands.impl.ReloadCommand;
+import dev.luminous.mod.commands.impl.SaveCommand;
+import dev.luminous.mod.commands.impl.TCommand;
+import dev.luminous.mod.commands.impl.TeleportCommand;
+import dev.luminous.mod.commands.impl.ToggleCommand;
+import dev.luminous.mod.commands.impl.TradeCommand;
+import dev.luminous.mod.commands.impl.WatermarkCommand;
+import dev.luminous.mod.commands.impl.XrayCommand;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.impl.client.ClientSetting;
-import net.minecraft.text.Text;
-
 import java.util.HashMap;
+import net.minecraft.class_2561;
 
-public class CommandManager implements Wrapper {
-    public static final String syncCode = "§)";
-    private final HashMap<String, Command> commands = new HashMap<>();
+public class CommandManager
+implements Wrapper {
+    private final HashMap<String, Command> commands = new HashMap();
 
     public CommandManager() {
-        registerCommand(new AimCommand());
-        registerCommand(new BindCommand());
-        registerCommand(new BindsCommand());
-        registerCommand(new ClipCommand());
-        registerCommand(new FriendCommand());
-        registerCommand(new XrayCommand());
-        registerCommand(new GamemodeCommand());
-        registerCommand(new LoadCommand());
-        registerCommand(new PingCommand());
-        registerCommand(new PrefixCommand());
-        registerCommand(new RejoinCommand());
-        registerCommand(new ReloadCommand());
-        registerCommand(new ReloadAllCommand());
-        registerCommand(new SaveCommand());
-        registerCommand(new TeleportCommand());
-        registerCommand(new TCommand());
-        registerCommand(new ToggleCommand());
-        registerCommand(new TradeCommand());
-        registerCommand(new WatermarkCommand());
+        this.init();
+    }
+
+    public void init() {
+        this.registerCommand(new AimCommand());
+        this.registerCommand(new BindCommand());
+        this.registerCommand(new BindsCommand());
+        this.registerCommand(new CleanerCommand());
+        this.registerCommand(new ClipCommand());
+        this.registerCommand(new EsuCommand());
+        this.registerCommand(new FakePlayerCommand());
+        this.registerCommand(new FriendCommand());
+        this.registerCommand(new XrayCommand());
+        this.registerCommand(new GamemodeCommand());
+        this.registerCommand(new KitCommand());
+        this.registerCommand(new LoadCommand());
+        this.registerCommand(new PingCommand());
+        this.registerCommand(new PrefixCommand());
+        this.registerCommand(new RejoinCommand());
+        this.registerCommand(new ReloadCommand());
+        this.registerCommand(new SaveCommand());
+        this.registerCommand(new TeleportCommand());
+        this.registerCommand(new TCommand());
+        this.registerCommand(new ToggleCommand());
+        this.registerCommand(new TradeCommand());
+        this.registerCommand(new WatermarkCommand());
+        this.registerCommand(new PeekCommand());
+        this.registerCommand(new GcCommand());
+    }
+
+    public static void sendMessage(String message) {
+        mc.execute(() -> {
+            if (!Module.nullCheck()) {
+                if (ClientSetting.INSTANCE.messageStyle.getValue() == ClientSetting.Style.Earth) {
+                    CommandManager.mc.field_1705.method_1743().method_1812(class_2561.method_30163((String)message));
+                } else if (ClientSetting.INSTANCE.messageStyle.getValue() == ClientSetting.Style.Moon) {
+                    CommandManager.mc.field_1705.method_1743().method_1812(class_2561.method_30163((String)("\u00a7f[\u00a7b" + ClientSetting.INSTANCE.hackName.getValue() + "\u00a7f] " + message)));
+                } else {
+                    ((IChatHudHook)CommandManager.mc.field_1705.method_1743()).alienClient$addMessage(class_2561.method_30163((String)(ClientSetting.INSTANCE.hackName.getValue() + "\u00a7f " + message)));
+                }
+            }
+        });
+    }
+
+    public static void sendMessageId(String message, int id) {
+        mc.execute(() -> {
+            if (!Module.nullCheck()) {
+                if (ClientSetting.INSTANCE.messageStyle.getValue() == ClientSetting.Style.Earth) {
+                    ((IChatHudHook)CommandManager.mc.field_1705.method_1743()).alienClient$addMessage(class_2561.method_30163((String)message), id);
+                } else if (ClientSetting.INSTANCE.messageStyle.getValue() == ClientSetting.Style.Moon) {
+                    ((IChatHudHook)CommandManager.mc.field_1705.method_1743()).alienClient$addMessage(class_2561.method_30163((String)("\u00a7f[\u00a7b" + ClientSetting.INSTANCE.hackName.getValue() + "\u00a7f] " + message)), id);
+                } else {
+                    ((IChatHudHook)CommandManager.mc.field_1705.method_1743()).alienClient$addMessage(class_2561.method_30163((String)(ClientSetting.INSTANCE.hackName.getValue() + "\u00a7f " + message)), id);
+                }
+            }
+        });
+    }
+
+    public static void sendChatMessageWidthIdNoSync(String message, int id) {
+        mc.execute(() -> {
+            if (!Module.nullCheck()) {
+                ((IChatHudHook)CommandManager.mc.field_1705.method_1743()).alienClient$addMessageOutSync(class_2561.method_30163((String)("\u00a7f" + message)), id);
+            }
+        });
     }
 
     private void registerCommand(Command command) {
-        commands.put(command.getName(), command);
+        this.commands.put(command.getName(), command);
     }
 
     public Command getCommandBySyntax(String string) {
@@ -50,45 +123,18 @@ public class CommandManager implements Wrapper {
     }
 
     public void command(String[] commandIn) {
-
-        // Get the command from the user's message. (Index 0 is Username)
-        Command command = commands.get(commandIn[0].substring(Alien.PREFIX.length()).toLowerCase());
-
-        // If the command does not exist, throw an error.
-        if (command == null)
-            sendChatMessage("§cInvalid Command");
-        else {
-            // Otherwise, create a new parameter list.
+        Command command = this.commands.get(commandIn[0].substring(Alien.getPrefix().length()).toLowerCase());
+        if (command == null) {
+            CommandManager.sendMessage("\u00a74Invalid Command!");
+        } else {
             String[] parameterList = new String[commandIn.length - 1];
             System.arraycopy(commandIn, 1, parameterList, 0, commandIn.length - 1);
             if (parameterList.length == 1 && parameterList[0].equals("help")) {
                 command.sendUsage();
                 return;
             }
-            // Runs the command.
             command.runCommand(parameterList);
         }
     }
-    public static void sendChatMessage(String message) {
-        if (Module.nullCheck()) return;
-        if (ClientSetting.INSTANCE.messageStyle.getValue() == ClientSetting.Style.Moon) {
-            mc.inGameHud.getChatHud().addMessage(Text.of("§f[§b" + ClientSetting.INSTANCE.hackName.getValue() + "§f] " + message));
-            return;
-        }
-        mc.inGameHud.getChatHud().addMessage(Text.of(syncCode + "§r" + ClientSetting.INSTANCE.hackName.getValue() + "§f " + message));
-    }
-
-    public static void sendChatMessageWidthId(String message, int id) {
-        if (Module.nullCheck()) return;
-        if (ClientSetting.INSTANCE.messageStyle.getValue() == ClientSetting.Style.Moon) {
-            ((IChatHudHook) mc.inGameHud.getChatHud()).addMessage(Text.of("§f[§b" + ClientSetting.INSTANCE.hackName.getValue() + "§f] " + message), id);
-            return;
-        }
-        ((IChatHudHook) mc.inGameHud.getChatHud()).addMessage(Text.of(syncCode + "§r" + ClientSetting.INSTANCE.hackName.getValue() + "§f " + message), id);
-    }
-
-    public static void sendChatMessageWidthIdNoSync(String message, int id) {
-        if (Module.nullCheck()) return;
-        ((IChatHudHook) mc.inGameHud.getChatHud()).addMessage(Text.of("§f" + message), id);
-    }
 }
+

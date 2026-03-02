@@ -1,116 +1,206 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.blaze3d.systems.RenderSystem
+ *  net.minecraft.class_1297
+ *  net.minecraft.class_1511
+ *  net.minecraft.class_1921
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_3532
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_4588
+ *  net.minecraft.class_4597
+ *  net.minecraft.class_4608
+ *  net.minecraft.class_5617$class_5618
+ *  net.minecraft.class_5944
+ *  net.minecraft.class_630
+ *  net.minecraft.class_757
+ *  net.minecraft.class_7833
+ *  net.minecraft.class_892
+ *  net.minecraft.class_895
+ *  net.minecraft.class_897
+ *  net.minecraft.class_918
+ *  org.joml.Quaternionf
+ *  org.spongepowered.asm.mixin.Final
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.Mutable
+ *  org.spongepowered.asm.mixin.Shadow
+ *  org.spongepowered.asm.mixin.Unique
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+ */
 package dev.luminous.asm.mixins;
 
-import dev.luminous.mod.modules.impl.render.CrystalChams;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EndCrystalEntityRenderer;
-import net.minecraft.client.render.entity.EnderDragonEntityRenderer;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
+import com.mojang.blaze3d.systems.RenderSystem;
+import dev.luminous.api.utils.render.ModelPlayer;
+import dev.luminous.mod.modules.impl.render.Chams;
+import net.minecraft.class_1297;
+import net.minecraft.class_1511;
+import net.minecraft.class_1921;
+import net.minecraft.class_2338;
+import net.minecraft.class_2960;
+import net.minecraft.class_3532;
+import net.minecraft.class_4587;
+import net.minecraft.class_4588;
+import net.minecraft.class_4597;
+import net.minecraft.class_4608;
+import net.minecraft.class_5617;
+import net.minecraft.class_5944;
+import net.minecraft.class_630;
+import net.minecraft.class_757;
+import net.minecraft.class_7833;
+import net.minecraft.class_892;
+import net.minecraft.class_895;
+import net.minecraft.class_897;
+import net.minecraft.class_918;
 import org.joml.Quaternionf;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.*;
-
-@Mixin(EndCrystalEntityRenderer.class)
-public abstract class MixinEndCrystalEntityRenderer extends EntityRenderer<EndCrystalEntity> {
-    protected MixinEndCrystalEntityRenderer(EntityRendererFactory.Context ctx) {
-        super(ctx);
-    }
+@Mixin(value={class_892.class})
+public abstract class MixinEndCrystalEntityRenderer
+extends class_897<class_1511> {
     @Mutable
     @Final
     @Shadow
-    private static RenderLayer END_CRYSTAL;
+    private static class_1921 field_21736;
     @Shadow
     @Final
-    private static Identifier TEXTURE;
+    private static class_2960 field_4663;
+    @Unique
+    private static final class_2960 BLANK;
+    @Unique
+    private static final class_1921 END_CRYSTAL_BLANK;
+    @Unique
+    private static final class_1921 END_CRYSTAL_CUSTOM;
     @Final
     @Shadow
-    private static float SINE_45_DEGREES;
+    private static float field_21002;
     @Final
     @Shadow
-    private ModelPart core;
+    private class_630 field_21003;
     @Final
     @Shadow
-    private ModelPart frame;
+    private class_630 field_21004;
     @Final
     @Shadow
-    private ModelPart bottom;
+    private class_630 field_21005;
 
-    @Unique
-    final Identifier BLANK = new Identifier("textures/blank.png");
-    @Unique
-    private float yOffset(EndCrystalEntity crystal, float tickDelta) {
-        float f = (crystal.endCrystalAge + tickDelta) * CrystalChams.INSTANCE.floatValue.getValueFloat();
-        float g = MathHelper.sin(f * 0.2F) / 2.0F + 0.5F;
-        g = (g * g + g) * 0.4F * CrystalChams.INSTANCE.bounceHeight.getValueFloat();
-        return g - 1.4F + CrystalChams.INSTANCE.floatOffset.getValueFloat();
+    protected MixinEndCrystalEntityRenderer(class_5617.class_5618 ctx) {
+        super(ctx);
     }
 
-    @Inject(method = "render(Lnet/minecraft/entity/decoration/EndCrystalEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"), cancellable = true)
-    public void render(EndCrystalEntity endCrystalEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        CrystalChams module = CrystalChams.INSTANCE;
-        END_CRYSTAL = RenderLayer.getEntityTranslucent((module.isOn() && !module.texture.getValue()) ? BLANK : TEXTURE);
-        if (module.isOn()) {
+    @Unique
+    private float yOffset(int age, float tickDelta, Chams module) {
+        float f = ((float)age + tickDelta) * module.floatValue.getValueFloat();
+        float g = class_3532.method_15374((float)(f * 0.2f)) / 2.0f + 0.5f;
+        g = (g * g + g) * 0.4f * module.bounceHeight.getValueFloat();
+        return g - 1.4f + module.floatOffset.getValueFloat();
+    }
+
+    @Inject(method={"method_3908(Lnet/minecraft/class_1511;FFLnet/minecraft/class_4587;Lnet/minecraft/class_4597;I)V"}, at={@At(value="HEAD")}, cancellable=true)
+    public void render(class_1511 endCrystalEntity, float f, float g, class_4587 matrixStack, class_4597 vertexConsumerProvider, int i, CallbackInfo ci) {
+        Chams module = Chams.INSTANCE;
+        if (module.customCrystal()) {
             ci.cancel();
-        } else {
-            return;
+            int age = module.spinSync.getValue() ? module.age : endCrystalEntity.field_7034;
+            float h = this.yOffset(age, g, module);
+            float j = ((float)age + g) * 3.0f * module.spinValue.getValueFloat();
+            matrixStack.method_22903();
+            if (module.custom.getValue()) {
+                class_5944 s = RenderSystem.getShader();
+                if (module.depth.getValue()) {
+                    RenderSystem.enableDepthTest();
+                }
+                RenderSystem.enableBlend();
+                if (module.chamsTexture.getValue()) {
+                    RenderSystem.setShaderTexture((int)0, (class_2960)field_4663);
+                    RenderSystem.setShader(class_757::method_34543);
+                } else {
+                    RenderSystem.setShader(class_757::method_34540);
+                }
+                matrixStack.method_22903();
+                matrixStack.method_22905(2.0f * module.scale.getValueFloat(), 2.0f * module.scale.getValueFloat(), 2.0f * module.scale.getValueFloat());
+                matrixStack.method_46416(0.0f, -0.5f, 0.0f);
+                matrixStack.method_22907(class_7833.field_40716.rotationDegrees(j));
+                matrixStack.method_46416(0.0f, 1.5f + h / 2.0f, 0.0f);
+                matrixStack.method_22907(new Quaternionf().setAngleAxis(1.0471976f, field_21002, 0.0f, field_21002));
+                if (module.outerFrame.booleanValue) {
+                    ModelPlayer.render(matrixStack, this.field_21004, module.fill, module.line, 1.0, module.chamsTexture.getValue());
+                }
+                matrixStack.method_22905(0.875f, 0.875f, 0.875f);
+                matrixStack.method_22907(new Quaternionf().setAngleAxis(1.0471976f, field_21002, 0.0f, field_21002));
+                matrixStack.method_22907(class_7833.field_40716.rotationDegrees(j));
+                if (module.innerFrame.booleanValue) {
+                    ModelPlayer.render(matrixStack, this.field_21004, module.fill, module.line, 1.0, module.chamsTexture.getValue());
+                }
+                matrixStack.method_22905(0.875f, 0.875f, 0.875f);
+                matrixStack.method_22907(new Quaternionf().setAngleAxis(1.0471976f, field_21002, 0.0f, field_21002));
+                matrixStack.method_22907(class_7833.field_40716.rotationDegrees(j));
+                if (module.core.booleanValue) {
+                    ModelPlayer.render(matrixStack, this.field_21003, module.fill, module.line, 1.0, module.chamsTexture.getValue());
+                }
+                matrixStack.method_22909();
+                RenderSystem.setShader(() -> s);
+                RenderSystem.disableBlend();
+                RenderSystem.disableDepthTest();
+            }
+            class_4588 vertexConsumer = class_918.method_29711((class_4597)vertexConsumerProvider, (class_1921)(module.texture.getValue() ? END_CRYSTAL_CUSTOM : END_CRYSTAL_BLANK), (boolean)false, (boolean)module.glint.getValue());
+            matrixStack.method_22903();
+            matrixStack.method_22905(2.0f * module.scale.getValueFloat(), 2.0f * module.scale.getValueFloat(), 2.0f * module.scale.getValueFloat());
+            matrixStack.method_46416(0.0f, -0.5f, 0.0f);
+            int k = class_4608.field_21444;
+            if (endCrystalEntity.method_6836()) {
+                this.field_21005.method_22698(matrixStack, vertexConsumer, i, k);
+            }
+            matrixStack.method_22907(class_7833.field_40716.rotationDegrees(j));
+            matrixStack.method_46416(0.0f, 1.5f + h / 2.0f, 0.0f);
+            matrixStack.method_22907(new Quaternionf().setAngleAxis(1.0471976f, field_21002, 0.0f, field_21002));
+            if (module.outerFrame.booleanValue) {
+                this.field_21004.method_22699(matrixStack, vertexConsumer, i, k, module.outerFrame.getValue().getRGB());
+            }
+            matrixStack.method_22905(0.875f, 0.875f, 0.875f);
+            matrixStack.method_22907(new Quaternionf().setAngleAxis(1.0471976f, field_21002, 0.0f, field_21002));
+            matrixStack.method_22907(class_7833.field_40716.rotationDegrees(j));
+            if (module.innerFrame.booleanValue) {
+                this.field_21004.method_22699(matrixStack, vertexConsumer, i, k, module.innerFrame.getValue().getRGB());
+            }
+            matrixStack.method_22905(0.875f, 0.875f, 0.875f);
+            matrixStack.method_22907(new Quaternionf().setAngleAxis(1.0471976f, field_21002, 0.0f, field_21002));
+            matrixStack.method_22907(class_7833.field_40716.rotationDegrees(j));
+            if (module.core.booleanValue) {
+                this.field_21003.method_22699(matrixStack, vertexConsumer, i, k, module.core.getValue().getRGB());
+            }
+            matrixStack.method_22909();
+            matrixStack.method_22909();
+            class_2338 blockPos = endCrystalEntity.method_6838();
+            if (blockPos != null) {
+                float m = (float)blockPos.method_10263() + 0.5f;
+                float n = (float)blockPos.method_10264() + 0.5f;
+                float o = (float)blockPos.method_10260() + 0.5f;
+                float p = (float)((double)m - endCrystalEntity.method_23317());
+                float q = (float)((double)n - endCrystalEntity.method_23318());
+                float r = (float)((double)o - endCrystalEntity.method_23321());
+                matrixStack.method_46416(p, q, r);
+                class_895.method_3917((float)(-p), (float)(-q + h), (float)(-r), (float)g, (int)endCrystalEntity.field_7034, (class_4587)matrixStack, (class_4597)vertexConsumerProvider, (int)i);
+            }
+            super.method_3936((class_1297)endCrystalEntity, f, g, matrixStack, vertexConsumerProvider, i);
         }
+    }
 
-        matrixStack.push();
-        float h = yOffset(endCrystalEntity, g);
-        float j = (float) ((endCrystalEntity.endCrystalAge + g) * 3.0F * module.spinValue.getValue());
-        VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(END_CRYSTAL);
-        matrixStack.push();
-        matrixStack.scale(2.0F * module.scale.getValueFloat(), 2.0F * module.scale.getValueFloat(), 2.0F * module.scale.getValueFloat());
-        matrixStack.translate(0.0F, -0.5F, 0.0F);
-        int k = OverlayTexture.DEFAULT_UV;
-        if (endCrystalEntity.shouldShowBottom()) {
-            this.bottom.render(matrixStack, vertexConsumer, i, k);
-        }
-
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(j));
-        matrixStack.translate(0.0F, 1.5F + h / 2.0F, 0.0F);
-        matrixStack.multiply((new Quaternionf()).setAngleAxis(1.0471976F, SINE_45_DEGREES, 0.0F, SINE_45_DEGREES));
-        Color color = module.outerFrame.getValue();
-        if (module.outerFrame.booleanValue) this.frame.render(matrixStack, vertexConsumer, i, k, color.getRed() /255f, color.getGreen() /255f, color.getBlue() /255f, color.getAlpha() /255f);
-        matrixStack.scale(0.875F, 0.875F, 0.875F);
-        matrixStack.multiply((new Quaternionf()).setAngleAxis(1.0471976F, SINE_45_DEGREES, 0.0F, SINE_45_DEGREES));
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(j));
-        color = module.innerFrame.getValue();
-        if (module.innerFrame.booleanValue) this.frame.render(matrixStack, vertexConsumer, i, k, color.getRed() /255f, color.getGreen() /255f, color.getBlue() /255f, color.getAlpha() /255f);
-        matrixStack.scale(0.875F, 0.875F, 0.875F);
-        matrixStack.multiply((new Quaternionf()).setAngleAxis(1.0471976F, SINE_45_DEGREES, 0.0F, SINE_45_DEGREES));
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(j));
-        color = module.core.getValue();
-        if (module.core.booleanValue) this.core.render(matrixStack, vertexConsumer, i, k, color.getRed() /255f, color.getGreen() /255f, color.getBlue() /255f, color.getAlpha() /255f);
-        matrixStack.pop();
-        matrixStack.pop();
-
-        BlockPos blockPos = endCrystalEntity.getBeamTarget();
-        if (blockPos != null) {
-            float m = (float)blockPos.getX() + 0.5F;
-            float n = (float)blockPos.getY() + 0.5F;
-            float o = (float)blockPos.getZ() + 0.5F;
-            float p = (float)((double)m - endCrystalEntity.getX());
-            float q = (float)((double)n - endCrystalEntity.getY());
-            float r = (float)((double)o - endCrystalEntity.getZ());
-            matrixStack.translate(p, q, r);
-            EnderDragonEntityRenderer.renderCrystalBeam(-p, -q + h, -r, g, endCrystalEntity.endCrystalAge, matrixStack, vertexConsumerProvider, i);
-        }
-
-        super.render(endCrystalEntity, f, g, matrixStack, vertexConsumerProvider, i);
+    static {
+        BLANK = class_2960.method_60654((String)"textures/blank.png");
+        END_CRYSTAL_BLANK = class_1921.method_23580((class_2960)BLANK);
+        END_CRYSTAL_CUSTOM = class_1921.method_23580((class_2960)field_4663);
     }
 }
+

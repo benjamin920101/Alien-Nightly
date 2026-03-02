@@ -1,13 +1,18 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
 
-public class RotateEvent extends Event {
+public class RotateEvent
+extends Event {
     private float yaw;
     private float pitch;
     private boolean modified;
+
     public RotateEvent(float yaw, float pitch) {
-        super(Stage.Pre);
+        super(Event.Stage.Pre);
         this.yaw = yaw;
         this.pitch = pitch;
     }
@@ -17,8 +22,8 @@ public class RotateEvent extends Event {
     }
 
     public void setYaw(float yaw) {
-        modified = true;
-        setYawNoModify(yaw);
+        this.modified = true;
+        this.setYawNoModify(yaw);
     }
 
     public float getPitch() {
@@ -26,14 +31,15 @@ public class RotateEvent extends Event {
     }
 
     public void setPitch(float pitch) {
-        modified = true;
-        setPitchNoModify(pitch);
+        this.modified = true;
+        this.setPitchNoModify(pitch);
     }
 
     public boolean isModified() {
-        return modified;
+        return this.modified;
     }
-    public void setRotation(final float yaw, final float pitch) {
+
+    public void setRotation(float yaw, float pitch) {
         this.setYaw(yaw);
         this.setPitch(pitch);
     }
@@ -46,3 +52,4 @@ public class RotateEvent extends Event {
         this.pitch = pitch;
     }
 }
+

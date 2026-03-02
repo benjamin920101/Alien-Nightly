@@ -1,101 +1,99 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2246
+ *  net.minecraft.class_2248
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2350
+ *  net.minecraft.class_238
+ *  net.minecraft.class_3532
+ */
 package dev.luminous.core.impl;
 
+import dev.luminous.Alien;
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.api.utils.world.BlockUtil;
-import dev.luminous.Alien;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
+import dev.luminous.mod.modules.impl.combat.AutoMine;
+import net.minecraft.class_2246;
+import net.minecraft.class_2248;
+import net.minecraft.class_2338;
+import net.minecraft.class_2350;
+import net.minecraft.class_238;
+import net.minecraft.class_3532;
 
-public class HoleManager implements Wrapper {
-    public boolean isHole(BlockPos pos) {
-        return isHole(pos, true, false, false);
+public class HoleManager
+implements Wrapper {
+    public boolean isHole(class_2338 pos) {
+        return this.isHole(pos, true, false, false);
     }
 
-    public boolean isHole(BlockPos pos, boolean canStand, boolean checkTrap, boolean anyBlock) {
+    public boolean isHole(class_2338 pos, boolean canStand, boolean checkTrap, boolean anyBlock) {
         int blockProgress = 0;
-        for (Direction i : Direction.values()) {
-            if (i == Direction.UP || i == Direction.DOWN) continue;
-            if (anyBlock && !mc.world.isAir(pos.offset(i)) || Alien.HOLE.isHard(pos.offset(i)))
-                blockProgress++;
+        for (class_2350 i : class_2350.values()) {
+            if (i == class_2350.field_11036 || i == class_2350.field_11033 || (!anyBlock || HoleManager.mc.field_1687.method_22347(pos.method_10093(i))) && !Alien.HOLE.isHard(pos.method_10093(i))) continue;
+            ++blockProgress;
         }
-        return (!checkTrap || (mc.world.isAir(pos)
-                        && mc.world.isAir(pos.up())
-                        && mc.world.isAir(pos.up(1))
-                        && mc.world.isAir(pos.up(2))
-                        && (mc.player.getBlockY() - 1 <= pos.getY() || mc.world.isAir(pos.up(3)))
-                        && (mc.player.getBlockY() - 2 <= pos.getY() || mc.world.isAir(pos.up(4)))))
-                        && blockProgress > 3
-                        && (!canStand || mc.world.getBlockState(pos.add(0, -1, 0)).blocksMovement());
+        return !(checkTrap && (!HoleManager.mc.field_1687.method_22347(pos) || !HoleManager.mc.field_1687.method_22347(pos.method_10084()) || !HoleManager.mc.field_1687.method_22347(pos.method_10086(1)) || !HoleManager.mc.field_1687.method_22347(pos.method_10086(2)) || HoleManager.mc.field_1724.method_31478() - 1 > pos.method_10264() && !HoleManager.mc.field_1687.method_22347(pos.method_10086(3)) || HoleManager.mc.field_1724.method_31478() - 2 > pos.method_10264() && !HoleManager.mc.field_1687.method_22347(pos.method_10086(4))) || blockProgress <= 3 || canStand && !BlockUtil.canCollide(new class_238(pos.method_10069(0, -1, 0))));
     }
 
-    public BlockPos getHole(float range, boolean doubleHole, boolean any, boolean up) {
-        BlockPos bestPos = null;
-        double bestDistance = range + 1;
-        for (BlockPos pos : BlockUtil.getSphere(range, mc.player.getPos())) {
-            if (pos.getX() != mc.player.getBlockX() || pos.getZ() != mc.player.getBlockZ()) {
-                if (!up && pos.getY() + 1 > mc.player.getY()) continue;
-            }
-            if (Alien.HOLE.isHole(pos, true, true, any) || doubleHole && isDoubleHole(pos)) {
-                if (pos.getY() - mc.player.getBlockY() > 1) continue;
-                double distance = MathHelper.sqrt((float) mc.player.squaredDistanceTo(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
-                if (bestPos == null || distance < bestDistance) {
-                    bestPos = pos;
-                    bestDistance = distance;
-                }
-            }
+    public class_2338 getHole(float range, boolean doubleHole, boolean any, boolean up) {
+        class_2338 bestPos = null;
+        double bestDistance = range + 1.0f;
+        for (class_2338 pos : BlockUtil.getSphere(range, HoleManager.mc.field_1724.method_19538())) {
+            if ((pos.method_10263() != HoleManager.mc.field_1724.method_31477() || pos.method_10260() != HoleManager.mc.field_1724.method_31479()) && !up && (double)(pos.method_10264() + 1) > HoleManager.mc.field_1724.method_23318() || !Alien.HOLE.isHole(pos, true, true, any) && (!doubleHole || !this.isDoubleHole(pos)) || pos.method_10264() - HoleManager.mc.field_1724.method_31478() > 1) continue;
+            double distance = class_3532.method_15355((float)((float)HoleManager.mc.field_1724.method_5649((double)pos.method_10263() + 0.5, (double)pos.method_10264() + 0.5, (double)pos.method_10260() + 0.5)));
+            if (bestPos != null && !(distance < bestDistance)) continue;
+            bestPos = pos;
+            bestDistance = distance;
         }
         return bestPos;
     }
-    public boolean isDoubleHole(BlockPos pos) {
-        Direction unHardFacing = is3Block(pos);
+
+    public boolean isDoubleHole(class_2338 pos) {
+        class_2350 unHardFacing = this.is3Block(pos);
         if (unHardFacing != null) {
-            pos = pos.offset(unHardFacing);
-            unHardFacing = is3Block(pos);
-            return unHardFacing != null;
+            return (unHardFacing = this.is3Block(pos = pos.method_10093(unHardFacing))) != null;
         }
         return false;
     }
-    public Direction is3Block(BlockPos pos) {
-        if (!isHard(pos.down())) {
+
+    public class_2350 is3Block(class_2338 pos) {
+        if (!this.isHard(pos.method_10074())) {
             return null;
         }
-        if (!mc.world.isAir(pos) || !mc.world.isAir(pos.up()) || !mc.world.isAir(pos.up(2))) {
-            return null;
-        }
-        int progress = 0;
-        Direction unHardFacing = null;
-        for (Direction facing : Direction.values()) {
-            if (facing == Direction.UP || facing == Direction.DOWN) continue;
-            if (isHard(pos.offset(facing))) {
-                progress++;
-                continue;
-            }
-            int progress2 = 0;
-            for (Direction facing2 : Direction.values()) {
-                if (facing2 == Direction.DOWN || facing2 == facing.getOpposite()) {
+        if (HoleManager.mc.field_1687.method_22347(pos) && HoleManager.mc.field_1687.method_22347(pos.method_10084()) && HoleManager.mc.field_1687.method_22347(pos.method_10086(2))) {
+            int progress = 0;
+            class_2350 unHardFacing = null;
+            for (class_2350 facing : class_2350.values()) {
+                if (facing == class_2350.field_11036 || facing == class_2350.field_11033) continue;
+                if (this.isHard(pos.method_10093(facing))) {
+                    ++progress;
                     continue;
                 }
-                if (isHard(pos.offset(facing).offset(facing2))) {
-                    progress2++;
+                int progress2 = 0;
+                for (class_2350 facing2 : class_2350.values()) {
+                    if (facing2 == class_2350.field_11033 || facing2 == facing.method_10153() || !this.isHard(pos.method_10093(facing).method_10093(facing2))) continue;
+                    ++progress2;
                 }
+                if (progress2 == 4) {
+                    ++progress;
+                    continue;
+                }
+                unHardFacing = facing;
             }
-            if (progress2 == 4) {
-                progress++;
-                continue;
-            }
-            unHardFacing = facing;
-        }
-        if (progress == 3) {
-            return unHardFacing;
+            return progress == 3 ? unHardFacing : null;
         }
         return null;
     }
 
-    public boolean isHard(BlockPos pos) {
-        Block block = mc.world.getBlockState(pos).getBlock();
-        return block == Blocks.OBSIDIAN || block == Blocks.NETHERITE_BLOCK || block == Blocks.ENDER_CHEST || block == Blocks.BEDROCK;
+    public boolean isHard(class_2338 pos) {
+        class_2248 block = HoleManager.mc.field_1687.method_8320(pos).method_26204();
+        return this.isHard(block);
+    }
+
+    public boolean isHard(class_2248 block) {
+        return block == class_2246.field_9987 || AutoMine.hard.contains(block);
     }
 }
+

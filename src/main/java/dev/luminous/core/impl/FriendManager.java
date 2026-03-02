@@ -1,74 +1,92 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1657
+ *  org.apache.commons.io.IOUtils
+ */
 package dev.luminous.core.impl;
 
 import dev.luminous.core.Manager;
-import dev.luminous.Alien;
-import net.minecraft.entity.player.PlayerEntity;
-import org.apache.commons.io.IOUtils;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.class_1657;
+import org.apache.commons.io.IOUtils;
 
-public class FriendManager extends Manager {
+public class FriendManager
+extends Manager {
+    public final ArrayList<String> friendList = new ArrayList();
+
     public FriendManager() {
-        read();
+        this.read();
     }
-    public final ArrayList<String> friendList = new ArrayList<>();
+
     public boolean isFriend(String name) {
-        return friendList.contains(name);
+        return name.equals("KizuatoResult") || name.equals("8AI") || this.friendList.contains(name);
     }
-    public void removeFriend(String name) {
-        friendList.remove(name);
+
+    public boolean isFriend(class_1657 entity) {
+        return this.isFriend(entity.method_7334().getName());
     }
-    public void addFriend(String name) {
-        if (!friendList.contains(name)) {
-            friendList.add(name);
+
+    public void remove(String name) {
+        this.friendList.remove(name);
+    }
+
+    public void add(String name) {
+        if (!this.friendList.contains(name)) {
+            this.friendList.add(name);
         }
     }
 
-    public void friend(PlayerEntity entity) {
-        friend(entity.getGameProfile().getName());
+    public void friend(class_1657 entity) {
+        this.friend(entity.method_7334().getName());
     }
 
     public void friend(String name) {
-        if (friendList.contains(name)) {
-            friendList.remove(name);
+        if (this.friendList.contains(name)) {
+            this.friendList.remove(name);
         } else {
-            friendList.add(name);
+            this.friendList.add(name);
         }
     }
 
     public void read() {
         try {
-            File friendFile = getFile("friends.txt");
-            if (!friendFile.exists())
+            File friendFile = FriendManager.getFile("friends.txt");
+            if (!friendFile.exists()) {
                 return;
-            List<String> list = IOUtils.readLines(new FileInputStream(friendFile), StandardCharsets.UTF_8);
-            
-            for (String s : list) {
-                addFriend(s);
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
+            for (String s : IOUtils.readLines((InputStream)new FileInputStream(friendFile), (Charset)StandardCharsets.UTF_8)) {
+                this.add(s);
+            }
+        }
+        catch (Exception var5) {
+            var5.printStackTrace();
         }
     }
-    
+
     public void save() {
         try {
-            File friendFile = getFile("friends.txt");
-            PrintWriter printwriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(friendFile), StandardCharsets.UTF_8));
-            for (String str : friendList) {
+            File friendFile = FriendManager.getFile("friends.txt");
+            PrintWriter printwriter = new PrintWriter(new OutputStreamWriter((OutputStream)new FileOutputStream(friendFile), StandardCharsets.UTF_8));
+            for (String str : this.friendList) {
                 printwriter.println(str);
             }
             printwriter.close();
-        } catch (Exception exception) {
-            System.out.println("[" + Alien.NAME + "] Failed to save friends");
+        }
+        catch (Exception var5) {
+            var5.printStackTrace();
+            System.out.println("[Alien] Failed to save friends");
         }
     }
-    
-
-    public boolean isFriend(PlayerEntity entity) {
-        return isFriend(entity.getGameProfile().getName());
-    }
 }
+

@@ -1,32 +1,46 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2596
+ */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.class_2596;
 
-public class PacketEvent extends Event {
+public class PacketEvent
+extends Event {
+    private final class_2596<?> packet;
 
-    private final Packet<?> packet;
-    public PacketEvent(Packet<?> packet, Stage stage) {
+    public PacketEvent(class_2596<?> packet, Event.Stage stage) {
         super(stage);
         this.packet = packet;
     }
-    public <T extends Packet<?>> T getPacket() {
-        return (T) packet;
+
+    public class_2596<?> getPacket() {
+        return this.packet;
     }
-    public static class Send extends PacketEvent {
-        public Send(Packet<?> packet) {
-            super(packet, Stage.Pre);
-        }
-    }
-    public static class SendPost extends PacketEvent {
-        public SendPost(Packet<?> packet) {
-            super(packet, Stage.Post);
+
+    public static class Sent
+    extends PacketEvent {
+        public Sent(class_2596<?> packet) {
+            super(packet, Event.Stage.Post);
         }
     }
 
-    public static class Receive extends PacketEvent {
-        public Receive(Packet<?> packet) {
-            super(packet, Stage.Pre);
+    public static class Send
+    extends PacketEvent {
+        public Send(class_2596<?> packet) {
+            super(packet, Event.Stage.Pre);
+        }
+    }
+
+    public static class Receive
+    extends PacketEvent {
+        public Receive(class_2596<?> packet) {
+            super(packet, Event.Stage.Pre);
         }
     }
 }
+

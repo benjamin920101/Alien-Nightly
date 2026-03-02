@@ -1,148 +1,149 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1297
+ *  net.minecraft.class_1303
+ *  net.minecraft.class_1511
+ *  net.minecraft.class_1542
+ *  net.minecraft.class_1667
+ *  net.minecraft.class_1683
+ *  net.minecraft.class_2246
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2350
+ *  net.minecraft.class_238
+ */
 package dev.luminous.mod.modules.impl.movement;
 
 import dev.luminous.Alien;
-import dev.luminous.api.events.eventbus.EventHandler;
-import dev.luminous.api.events.impl.UpdateWalkingPlayerEvent;
-import dev.luminous.api.utils.entity.EntityUtil;
-import dev.luminous.api.utils.entity.InventoryUtil;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.UpdateEvent;
+import dev.luminous.api.utils.combat.CombatUtil;
 import dev.luminous.api.utils.math.Timer;
+import dev.luminous.api.utils.player.EntityUtil;
+import dev.luminous.api.utils.player.InventoryUtil;
 import dev.luminous.api.utils.world.BlockPosX;
 import dev.luminous.api.utils.world.BlockUtil;
 import dev.luminous.mod.modules.Module;
-import dev.luminous.mod.modules.impl.client.AntiCheat;
+import dev.luminous.mod.modules.impl.exploit.Blink;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ExperienceOrbEntity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.thrown.ExperienceBottleEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
+import net.minecraft.class_1297;
+import net.minecraft.class_1303;
+import net.minecraft.class_1511;
+import net.minecraft.class_1542;
+import net.minecraft.class_1667;
+import net.minecraft.class_1683;
+import net.minecraft.class_2246;
+import net.minecraft.class_2338;
+import net.minecraft.class_2350;
+import net.minecraft.class_238;
 
-public class Flatten extends Module {
-	public static Flatten INSTANCE;
-	private final BooleanSetting rotate =
-			add(new BooleanSetting("Rotate", true));
-	private final BooleanSetting checkMine =
-			add(new BooleanSetting("DetectMining", true));
-	private final BooleanSetting inventory =
-			add(new BooleanSetting("InventorySwap", true));
-	private final BooleanSetting usingPause =
-			add(new BooleanSetting("UsingPause", true));
-	private final SliderSetting blocksPer =
-			add(new SliderSetting("BlocksPer", 2, 1, 8));
-	private final SliderSetting delay =
-			add(new SliderSetting("Delay", 100, 0, 1000));
-	public Flatten() {
-		super("Flatten", Category.Movement);
-		setChinese("填平脚下");
-		INSTANCE = this;
-	}
+public class Flatten
+extends Module {
+    public static Flatten INSTANCE;
+    private final BooleanSetting rotate = this.add(new BooleanSetting("Rotate", true));
+    private final BooleanSetting checkMine = this.add(new BooleanSetting("DetectMining", true));
+    private final BooleanSetting inventory = this.add(new BooleanSetting("InventorySwap", true));
+    private final BooleanSetting usingPause = this.add(new BooleanSetting("UsingPause", true));
+    private final BooleanSetting cover = this.add(new BooleanSetting("Cover", false));
+    private final SliderSetting blocksPer = this.add(new SliderSetting("BlocksPer", 2, 1, 8));
+    private final SliderSetting delay = this.add(new SliderSetting("Delay", 100, 0, 1000));
+    private final Timer timer = new Timer();
+    int progress = 0;
 
-	private final Timer timer = new Timer();
-	int progress = 0;
-	@EventHandler
-	public void onUpdateWalking(UpdateWalkingPlayerEvent event) {
-		if (event.isPost()) return;
-		progress = 0;
-		if (usingPause.getValue() && mc.player.isUsingItem()) {
-			return;
-		}
-		if (!mc.player.isOnGround()) {
-			return;
-		}
-		if (!timer.passedMs(delay.getValueInt())) return;
-		int oldSlot = mc.player.getInventory().selectedSlot;
-		int block;
-		if ((block = getBlock()) == -1) {
-			return;
-		}
-		if (!Alien.PLAYER.insideBlock) return;
+    public Flatten() {
+        super("Flatten", Module.Category.Movement);
+        this.setChinese("\u586b\u5e73\u811a\u4e0b");
+        INSTANCE = this;
+    }
 
-		BlockPos pos1 = new BlockPosX(mc.player.getX() + 0.5, mc.player.getY() + 0.5, mc.player.getZ() + 0.5).down();
-		BlockPos pos2 = new BlockPosX(mc.player.getX() - 0.5, mc.player.getY() + 0.5, mc.player.getZ() + 0.5).down();
-		BlockPos pos3 = new BlockPosX(mc.player.getX() + 0.5, mc.player.getY() + 0.5, mc.player.getZ() - 0.5).down();
-		BlockPos pos4 = new BlockPosX(mc.player.getX() - 0.5, mc.player.getY() + 0.5, mc.player.getZ() - 0.5).down();
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        this.progress = 0;
+        if (!(this.inventory.getValue() && !EntityUtil.inInventory() || Blink.INSTANCE.isOn() && Blink.INSTANCE.pauseModule.getValue() || this.usingPause.getValue() && Flatten.mc.field_1724.method_6115() || !Flatten.mc.field_1724.method_24828() || !this.timer.passed(this.delay.getValueInt()))) {
+            int oldSlot = Flatten.mc.field_1724.method_31548().field_7545;
+            int block = this.getBlock();
+            if (block != -1 && EntityUtil.isInsideBlock()) {
+                class_2338 pos1 = new BlockPosX(Flatten.mc.field_1724.method_23317() + 0.5, Flatten.mc.field_1724.method_23318() + 0.5, Flatten.mc.field_1724.method_23321() + 0.5).method_10074();
+                class_2338 pos2 = new BlockPosX(Flatten.mc.field_1724.method_23317() - 0.5, Flatten.mc.field_1724.method_23318() + 0.5, Flatten.mc.field_1724.method_23321() + 0.5).method_10074();
+                class_2338 pos3 = new BlockPosX(Flatten.mc.field_1724.method_23317() + 0.5, Flatten.mc.field_1724.method_23318() + 0.5, Flatten.mc.field_1724.method_23321() - 0.5).method_10074();
+                class_2338 pos4 = new BlockPosX(Flatten.mc.field_1724.method_23317() - 0.5, Flatten.mc.field_1724.method_23318() + 0.5, Flatten.mc.field_1724.method_23321() - 0.5).method_10074();
+                if (this.canPlace(pos1) || this.canPlace(pos2) || this.canPlace(pos3) || this.canPlace(pos4)) {
+                    CombatUtil.attackCrystal(pos1, this.rotate.getValue(), this.usingPause.getValue());
+                    CombatUtil.attackCrystal(pos2, this.rotate.getValue(), this.usingPause.getValue());
+                    CombatUtil.attackCrystal(pos3, this.rotate.getValue(), this.usingPause.getValue());
+                    CombatUtil.attackCrystal(pos4, this.rotate.getValue(), this.usingPause.getValue());
+                    this.doSwap(block);
+                    this.tryPlaceObsidian(pos1, this.rotate.getValue());
+                    this.tryPlaceObsidian(pos2, this.rotate.getValue());
+                    this.tryPlaceObsidian(pos3, this.rotate.getValue());
+                    this.tryPlaceObsidian(pos4, this.rotate.getValue());
+                    if (this.inventory.getValue()) {
+                        this.doSwap(block);
+                        EntityUtil.syncInventory();
+                    } else {
+                        this.doSwap(oldSlot);
+                    }
+                }
+            }
+        }
+    }
 
-		if (!canPlace(pos1) && !canPlace(pos2) && !canPlace(pos3) && !canPlace(pos4)) {
-			return;
-		}
-		doSwap(block);
-        tryPlaceObsidian(pos1, rotate.getValue());
-        tryPlaceObsidian(pos2, rotate.getValue());
-        tryPlaceObsidian(pos3, rotate.getValue());
-        tryPlaceObsidian(pos4, rotate.getValue());
+    private void tryPlaceObsidian(class_2338 pos, boolean rotate) {
+        if (this.canPlace(pos)) {
+            if (!((double)this.progress < this.blocksPer.getValue())) {
+                return;
+            }
+            if (BlockUtil.allowAirPlace()) {
+                BlockUtil.placedPos.add(pos);
+                BlockUtil.airPlace(pos, rotate);
+                this.timer.reset();
+                ++this.progress;
+                return;
+            }
+            class_2350 side = BlockUtil.getPlaceSide(pos);
+            if (side == null) {
+                return;
+            }
+            ++this.progress;
+            BlockUtil.placedPos.add(pos);
+            BlockUtil.clickBlock(pos.method_10093(side), side.method_10153(), rotate);
+            this.timer.reset();
+        }
+    }
 
-		if (inventory.getValue()) {
-			doSwap(block);
-			EntityUtil.syncInventory();
-		} else {
-			doSwap(oldSlot);
-		}
-	}
+    private void doSwap(int slot) {
+        if (this.inventory.getValue()) {
+            InventoryUtil.inventorySwap(slot, Flatten.mc.field_1724.method_31548().field_7545);
+        } else {
+            InventoryUtil.switchToSlot(slot);
+        }
+    }
 
-	private void tryPlaceObsidian(BlockPos pos, boolean rotate) {
-		if (canPlace(pos)) {
-			if (checkMine.getValue() && Alien.BREAK.isMining(pos)) {
-				return;
-			}
-			if (!(progress < blocksPer.getValue())) return;
-			Direction side;
-			if ((side = BlockUtil.getPlaceSide(pos)) == null) {
-				if (BlockUtil.airPlace()) {
-					BlockUtil.placedPos.add(pos);
-					BlockUtil.clickBlock(pos, Direction.DOWN, rotate);
-					timer.reset();
-					progress++;
-					return;
-				}
-				return;
-			}
-			progress++;
-			BlockUtil.placedPos.add(pos);
-			BlockUtil.clickBlock(pos.offset(side), side.getOpposite(), rotate);
-			timer.reset();
-		}
-	}
+    private boolean canPlace(class_2338 pos) {
+        if (this.checkMine.getValue() && Alien.BREAK.isMining(pos)) {
+            return false;
+        }
+        if (this.cover.getValue() && Flatten.mc.field_1687.method_22347(pos.method_10084())) {
+            return false;
+        }
+        if (BlockUtil.getPlaceSide(pos) == null) {
+            return false;
+        }
+        return !BlockUtil.canReplace(pos) ? false : !this.hasEntity(pos);
+    }
 
-	private void doSwap(int slot) {
-		if (inventory.getValue()) {
-			InventoryUtil.inventorySwap(slot, mc.player.getInventory().selectedSlot);
-		} else {
-			InventoryUtil.switchToSlot(slot);
-		}
-	}
+    private boolean hasEntity(class_2338 pos) {
+        for (class_1297 entity : BlockUtil.getEntities(new class_238(pos))) {
+            if (entity == Flatten.mc.field_1724 || !entity.method_5805() || entity instanceof class_1542 || entity instanceof class_1303 || entity instanceof class_1683 || entity instanceof class_1667 || entity instanceof class_1511) continue;
+            return true;
+        }
+        return false;
+    }
 
-	private boolean canPlace(BlockPos pos) {
-		if (BlockUtil.getPlaceSide(pos) == null) {
-			return false;
-		}
-		if (!BlockUtil.canReplace(pos)) {
-			return false;
-		}
-		return !hasEntity(pos);
-	}
-
-	private boolean hasEntity(BlockPos pos) {
-		for (Entity entity : BlockUtil.getEntities(new Box(pos))) {
-			if (entity == mc.player) continue;
-			if (!entity.isAlive() || entity instanceof ItemEntity || entity instanceof ExperienceOrbEntity || entity instanceof ExperienceBottleEntity || entity instanceof ArrowEntity || entity instanceof EndCrystalEntity || entity instanceof ArmorStandEntity && AntiCheat.INSTANCE.obsMode.getValue())
-				continue;
-			return true;
-		}
-		return false;
-	}
-
-	private int getBlock() {
-		if (inventory.getValue()) {
-				return InventoryUtil.findBlockInventorySlot(Blocks.OBSIDIAN);
-		} else {
-				return InventoryUtil.findBlock(Blocks.OBSIDIAN);
-		}
-	}
+    private int getBlock() {
+        return this.inventory.getValue() ? InventoryUtil.findBlockInventorySlot(class_2246.field_10540) : InventoryUtil.findBlock(class_2246.field_10540);
+    }
 }
+

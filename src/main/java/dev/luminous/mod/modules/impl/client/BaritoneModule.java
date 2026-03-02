@@ -1,102 +1,155 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  baritone.api.BaritoneAPI
+ *  baritone.api.IBaritone
+ *  baritone.api.pathing.calc.IPathingControlManager
+ *  baritone.api.pathing.goals.Goal
+ *  baritone.api.pathing.goals.GoalBlock
+ *  baritone.api.pathing.goals.GoalXZ
+ *  baritone.api.process.IBaritoneProcess
+ *  baritone.api.process.ICustomGoalProcess
+ *  net.minecraft.class_2248
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2350
+ */
 package dev.luminous.mod.modules.impl.client;
 
 import baritone.api.BaritoneAPI;
 import baritone.api.IBaritone;
 import baritone.api.pathing.calc.IPathingControlManager;
+import baritone.api.pathing.goals.Goal;
+import baritone.api.pathing.goals.GoalBlock;
+import baritone.api.pathing.goals.GoalXZ;
+import baritone.api.process.IBaritoneProcess;
 import baritone.api.process.ICustomGoalProcess;
 import dev.luminous.Alien;
-import dev.luminous.api.events.eventbus.EventHandler;
-import dev.luminous.api.events.impl.TickEvent;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.UpdateEvent;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
+import net.minecraft.class_2248;
+import net.minecraft.class_2338;
+import net.minecraft.class_2350;
 
-public class BaritoneModule extends Module {
+public class BaritoneModule
+extends Module {
     public static BaritoneModule INSTANCE;
-    SliderSetting rangeConfig = add(new SliderSetting("Range", 4.0f, 1.0f, 5.0f));
-    BooleanSetting placeConfig = add(new BooleanSetting("Place", true));
-    BooleanSetting breakConfig = add(new BooleanSetting("Break", true));
-    BooleanSetting sprintConfig = add(new BooleanSetting("Sprint", true));
-    BooleanSetting inventoryConfig = add(new BooleanSetting("UseInventory", false));
-    BooleanSetting vinesConfig = add(new BooleanSetting("Vines", true));
-    BooleanSetting jump256Config = add(new BooleanSetting("JumpAt256", false));
-    BooleanSetting waterBucketFallConfig = add(new BooleanSetting("WaterBucketFall", false));
-    BooleanSetting parkourConfig = add(new BooleanSetting("Parkour", true));
-    BooleanSetting parkourPlaceConfig = add(new BooleanSetting("ParkourPlace", false));
-    BooleanSetting parkourAscendConfig = add(new BooleanSetting("ParkourAscend", true));
-    BooleanSetting diagonalAscendConfig = add(new BooleanSetting("DiagonalAscend", false));
-    BooleanSetting diagonalDescendConfig = add(new BooleanSetting("DiagonalDescend", false));
-    BooleanSetting mineDownConfig = add(new BooleanSetting("MineDownward", true));
-    BooleanSetting legitMineConfig = add(new BooleanSetting("LegitMine", false));
-    BooleanSetting logOnArrivalConfig = add(new BooleanSetting("LogOnArrival", false));
-    BooleanSetting freeLookConfig = add(new BooleanSetting("FreeLook", true));
-    BooleanSetting antiCheatConfig = add(new BooleanSetting("AntiCheat", true));
-    BooleanSetting strictLiquidConfig = add(new BooleanSetting("Strict-Liquid", false));
-    BooleanSetting censorCoordsConfig = add(new BooleanSetting("CensorCoords", false));
-    BooleanSetting censorCommandsConfig = add(new BooleanSetting("CensorCommands", false));
-    BooleanSetting chatControl = add(new BooleanSetting("ChatControl", false));
-    BooleanSetting debugConfig = add(new BooleanSetting("Debug", false));
+    private final SliderSetting rangeConfig = this.add(new SliderSetting("Range", 4.0, 1.0, 5.0));
+    private final BooleanSetting placeConfig = this.add(new BooleanSetting("Place", true));
+    private final BooleanSetting breakConfig = this.add(new BooleanSetting("Break", true));
+    private final BooleanSetting sprintConfig = this.add(new BooleanSetting("Sprint", true));
+    private final BooleanSetting inventoryConfig = this.add(new BooleanSetting("UseInventory", false));
+    private final BooleanSetting vinesConfig = this.add(new BooleanSetting("Vines", true));
+    private final BooleanSetting jump256Config = this.add(new BooleanSetting("JumpAt256", false));
+    private final BooleanSetting waterBucketFallConfig = this.add(new BooleanSetting("WaterBucketFall", false));
+    private final BooleanSetting parkourConfig = this.add(new BooleanSetting("Parkour", true));
+    private final BooleanSetting parkourPlaceConfig = this.add(new BooleanSetting("ParkourPlace", false));
+    private final BooleanSetting parkourAscendConfig = this.add(new BooleanSetting("ParkourAscend", true));
+    private final BooleanSetting diagonalAscendConfig = this.add(new BooleanSetting("DiagonalAscend", false));
+    private final BooleanSetting diagonalDescendConfig = this.add(new BooleanSetting("DiagonalDescend", false));
+    private final BooleanSetting mineDownConfig = this.add(new BooleanSetting("MineDownward", true));
+    private final BooleanSetting legitMineConfig = this.add(new BooleanSetting("LegitMine", false));
+    private final BooleanSetting logOnArrivalConfig = this.add(new BooleanSetting("LogOnArrival", false));
+    private final BooleanSetting freeLookConfig = this.add(new BooleanSetting("FreeLook", true));
+    private final BooleanSetting antiCheatConfig = this.add(new BooleanSetting("AntiCheat", true));
+    private final BooleanSetting strictLiquidConfig = this.add(new BooleanSetting("Strict-Liquid", false));
+    private final BooleanSetting censorCoordsConfig = this.add(new BooleanSetting("CensorCoords", false));
+    private final BooleanSetting censorCommandsConfig = this.add(new BooleanSetting("CensorCommands", false));
+    private final BooleanSetting chatControl = this.add(new BooleanSetting("ChatControl", false));
+    private final BooleanSetting debugConfig = this.add(new BooleanSetting("Debug", false));
 
     public BaritoneModule() {
-        super("Baritone", Category.Client);
+        super("Baritone", Module.Category.Client);
         Alien.EVENT_BUS.subscribe(this);
         INSTANCE = this;
+        this.setChinese("\u5bfb\u8def\u8bbe\u7f6e");
     }
 
-    @EventHandler
-    public void onTick(TickEvent event) {
-        if (event.isPre()) {
-            return;
+    public static void forward() {
+        ICustomGoalProcess customGoalProcess;
+        class_2350 direction = BaritoneModule.mc.field_1724.method_5735();
+        int x = BaritoneModule.mc.field_1724.method_31477() + direction.method_10163().method_10263() * 30000000;
+        int z = BaritoneModule.mc.field_1724.method_31479() + direction.method_10163().method_10260() * 30000000;
+        BaritoneModule.cancelEverything();
+        IBaritone baritone = BaritoneAPI.getProvider().getPrimaryBaritone();
+        if (baritone != null && (customGoalProcess = baritone.getCustomGoalProcess()) != null) {
+            customGoalProcess.setGoalAndPath((Goal)new GoalXZ(x, z));
         }
-        BaritoneAPI.getSettings().blockReachDistance.value = rangeConfig.getValueFloat();
-        BaritoneAPI.getSettings().allowPlace.value = placeConfig.getValue();
-        BaritoneAPI.getSettings().allowBreak.value = breakConfig.getValue();
-        BaritoneAPI.getSettings().allowSprint.value = sprintConfig.getValue();
-        BaritoneAPI.getSettings().allowInventory.value = inventoryConfig.getValue();
-        BaritoneAPI.getSettings().allowVines.value = vinesConfig.getValue();
-        BaritoneAPI.getSettings().allowJumpAt256.value = jump256Config.getValue();
-        BaritoneAPI.getSettings().allowWaterBucketFall.value = waterBucketFallConfig.getValue();
-        BaritoneAPI.getSettings().allowParkour.value = parkourConfig.getValue();
-        BaritoneAPI.getSettings().allowParkourAscend.value = parkourAscendConfig.getValue();
-        BaritoneAPI.getSettings().allowParkourPlace.value = parkourPlaceConfig.getValue();
-        BaritoneAPI.getSettings().allowDiagonalAscend.value = diagonalAscendConfig.getValue();
-        BaritoneAPI.getSettings().allowDiagonalDescend.value = diagonalDescendConfig.getValue();
-        BaritoneAPI.getSettings().allowDownward.value = mineDownConfig.getValue();
-        BaritoneAPI.getSettings().legitMine.value = legitMineConfig.getValue();
-        BaritoneAPI.getSettings().disconnectOnArrival.value = logOnArrivalConfig.getValue();
-        BaritoneAPI.getSettings().freeLook.value = freeLookConfig.getValue();
-        BaritoneAPI.getSettings().antiCheatCompatibility.value = antiCheatConfig.getValue();
-        BaritoneAPI.getSettings().strictLiquidCheck.value = strictLiquidConfig.getValue();
-        BaritoneAPI.getSettings().censorCoordinates.value = censorCoordsConfig.getValue();
-        BaritoneAPI.getSettings().censorRanCommands.value = censorCommandsConfig.getValue();
-        BaritoneAPI.getSettings().chatControl.value = chatControl.getValue();
-        BaritoneAPI.getSettings().chatDebug.value = debugConfig.getValue();
     }
 
     public static boolean isPathing() {
-        IBaritone primary = BaritoneAPI.getProvider().getPrimaryBaritone();
-        return primary != null && primary.getPathingBehavior() != null && primary.getPathingBehavior().isPathing();
+        IBaritone baritone = BaritoneAPI.getProvider().getPrimaryBaritone();
+        return baritone != null && baritone.getPathingBehavior() != null && baritone.getPathingBehavior().isPathing();
     }
-    public static void cancelEverything() {
-        IBaritone primary = BaritoneAPI.getProvider().getPrimaryBaritone();
-        if (primary != null && primary.getPathingBehavior() != null) {
-            primary.getPathingBehavior().cancelEverything();
+
+    public static void gotoPos(class_2338 pos) {
+        IBaritone baritone = BaritoneAPI.getProvider().getPrimaryBaritone();
+        if (baritone != null) {
+            ICustomGoalProcess customGoalProcess = baritone.getCustomGoalProcess();
+            if (customGoalProcess == null) {
+                return;
+            }
+            customGoalProcess.setGoalAndPath((Goal)new GoalBlock(pos.method_10263(), pos.method_10264(), pos.method_10260()));
         }
     }
+
+    public static void mine(class_2248 block) {
+        IBaritone baritone = BaritoneAPI.getProvider().getPrimaryBaritone();
+        if (baritone != null) {
+            baritone.getMineProcess().mine(new class_2248[]{block});
+        }
+    }
+
+    public static void cancelEverything() {
+        IBaritone baritone = BaritoneAPI.getProvider().getPrimaryBaritone();
+        if (baritone != null && baritone.getPathingBehavior() != null) {
+            baritone.getPathingBehavior().cancelEverything();
+        }
+    }
+
     public static boolean isActive() {
-        IBaritone primary = BaritoneAPI.getProvider().getPrimaryBaritone();
-        if (primary != null) {
-            ICustomGoalProcess customGoalProcess = primary.getCustomGoalProcess();
+        IBaritone baritone = BaritoneAPI.getProvider().getPrimaryBaritone();
+        if (baritone != null) {
+            ICustomGoalProcess customGoalProcess = baritone.getCustomGoalProcess();
             if (customGoalProcess != null && customGoalProcess.isActive()) {
                 return true;
             }
-
-            IPathingControlManager controlManager = primary.getPathingControlManager();
+            IPathingControlManager controlManager = baritone.getPathingControlManager();
             if (controlManager != null && controlManager.mostRecentInControl().isPresent()) {
-                return controlManager.mostRecentInControl().get().isActive();
+                return ((IBaritoneProcess)controlManager.mostRecentInControl().get()).isActive();
             }
         }
         return false;
+    }
+
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        BaritoneAPI.getSettings().blockReachDistance.value = Float.valueOf(this.rangeConfig.getValueFloat());
+        BaritoneAPI.getSettings().allowPlace.value = this.placeConfig.getValue();
+        BaritoneAPI.getSettings().allowBreak.value = this.breakConfig.getValue();
+        BaritoneAPI.getSettings().allowSprint.value = this.sprintConfig.getValue();
+        BaritoneAPI.getSettings().allowInventory.value = this.inventoryConfig.getValue();
+        BaritoneAPI.getSettings().allowVines.value = this.vinesConfig.getValue();
+        BaritoneAPI.getSettings().allowJumpAt256.value = this.jump256Config.getValue();
+        BaritoneAPI.getSettings().allowWaterBucketFall.value = this.waterBucketFallConfig.getValue();
+        BaritoneAPI.getSettings().allowParkour.value = this.parkourConfig.getValue();
+        BaritoneAPI.getSettings().allowParkourAscend.value = this.parkourAscendConfig.getValue();
+        BaritoneAPI.getSettings().allowParkourPlace.value = this.parkourPlaceConfig.getValue();
+        BaritoneAPI.getSettings().allowDiagonalAscend.value = this.diagonalAscendConfig.getValue();
+        BaritoneAPI.getSettings().allowDiagonalDescend.value = this.diagonalDescendConfig.getValue();
+        BaritoneAPI.getSettings().allowDownward.value = this.mineDownConfig.getValue();
+        BaritoneAPI.getSettings().legitMine.value = this.legitMineConfig.getValue();
+        BaritoneAPI.getSettings().disconnectOnArrival.value = this.logOnArrivalConfig.getValue();
+        BaritoneAPI.getSettings().freeLook.value = this.freeLookConfig.getValue();
+        BaritoneAPI.getSettings().antiCheatCompatibility.value = this.antiCheatConfig.getValue();
+        BaritoneAPI.getSettings().strictLiquidCheck.value = this.strictLiquidConfig.getValue();
+        BaritoneAPI.getSettings().censorCoordinates.value = this.censorCoordsConfig.getValue();
+        BaritoneAPI.getSettings().censorRanCommands.value = this.censorCommandsConfig.getValue();
+        BaritoneAPI.getSettings().chatControl.value = this.chatControl.getValue();
+        BaritoneAPI.getSettings().chatDebug.value = this.debugConfig.getValue();
     }
 
     @Override
@@ -114,3 +167,4 @@ public class BaritoneModule extends Module {
         return true;
     }
 }
+

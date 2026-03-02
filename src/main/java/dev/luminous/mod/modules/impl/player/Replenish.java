@@ -1,62 +1,85 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_1713
+ *  net.minecraft.class_1799
+ */
 package dev.luminous.mod.modules.impl.player;
 
-import dev.luminous.mod.modules.settings.impl.SliderSetting;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.UpdateEvent;
 import dev.luminous.api.utils.math.Timer;
 import dev.luminous.mod.modules.Module;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.SlotActionType;
+import dev.luminous.mod.modules.impl.player.Sorter;
+import dev.luminous.mod.modules.settings.impl.EnumSetting;
+import dev.luminous.mod.modules.settings.impl.SliderSetting;
+import net.minecraft.class_1657;
+import net.minecraft.class_1713;
+import net.minecraft.class_1799;
 
-public class Replenish extends Module {
-    public Replenish() {
-        super("Replenish", Category.Player);
-        setChinese("物品栏补充");
-    }
-
-    private final SliderSetting delay = add(new SliderSetting("Delay", 2, 0, 5, 0.01).setSuffix("s"));
-    private final SliderSetting min = add(new SliderSetting("Min", 50, 1, 64));
-    private final SliderSetting forceDelay = add(new SliderSetting("ForceDelay", 0.2, 0, 4, 0.01).setSuffix("s"));
-    private final SliderSetting forceMin = add(new SliderSetting("ForceMin", 16, 1, 64));
+public class Replenish
+extends Module {
+    private final EnumSetting<Mode> mode = this.add(new EnumSetting<Mode>("Mode", Mode.QuickMove));
+    private final SliderSetting delay = this.add(new SliderSetting("Delay", 2.0, 0.0, 5.0, 0.01).setSuffix("s"));
+    private final SliderSetting min = this.add(new SliderSetting("Min", 50, 1, 100)).setSuffix("%");
+    private final SliderSetting forceDelay = this.add(new SliderSetting("ForceDelay", 0.2, 0.0, 4.0, 0.01).setSuffix("s"));
+    private final SliderSetting forceMin = this.add(new SliderSetting("ForceMin", 16, 1, 100)).setSuffix("%");
     private final Timer timer = new Timer();
 
+    public Replenish() {
+        super("Replenish", Module.Category.Player);
+        this.setChinese("\u7269\u54c1\u680f\u8865\u5145");
+    }
 
-    @Override
-    public void onUpdate() {
-/*        if (mc.currentScreen != null && !(mc.currentScreen instanceof ClickGuiScreen)) return;*/
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
         for (int i = 0; i < 9; ++i) {
-            if (replenish(i)) {
-                timer.reset();
-                return;
-            }
+            if (!this.replenish(i)) continue;
+            this.timer.reset();
+            return;
         }
     }
 
     private boolean replenish(int slot) {
-        ItemStack stack = mc.player.getInventory().getStack(slot);
-
-        if (stack.isEmpty()) return false;
-        if (!stack.isStackable()) return false;
-        if (stack.getCount() > min.getValue()) return false;
-        if (stack.getCount() == stack.getMaxCount()) return false;
-
+        class_1799 stack = Replenish.mc.field_1724.method_31548().method_5438(slot);
+        if (stack.method_7960()) {
+            return false;
+        }
+        if (!stack.method_7946()) {
+            return false;
+        }
+        int percent = (int)((double)stack.method_7947() / (double)stack.method_7914() * 100.0);
+        if ((double)percent > this.min.getValue()) {
+            return false;
+        }
         for (int i = 9; i < 36; ++i) {
-            ItemStack item = mc.player.getInventory().getStack(i);
-            if (item.isEmpty() || !canMerge(stack, item)) continue;
-            if (stack.getCount() > forceMin.getValueFloat()) {
-                if (!timer.passedS(delay.getValue())) {
-                    return false;
+            class_1799 item = Replenish.mc.field_1724.method_31548().method_5438(i);
+            if (item.method_7960() || !Sorter.canMerge(stack, item)) continue;
+            if ((float)percent > this.forceMin.getValueFloat() ? !this.timer.passedS(this.delay.getValue()) : !this.timer.passedS(this.forceDelay.getValue())) {
+                return false;
+            }
+            switch (this.mode.getValue().ordinal()) {
+                case 0: {
+                    Replenish.mc.field_1761.method_2906(Replenish.mc.field_1724.field_7498.field_7763, i, 0, class_1713.field_7794, (class_1657)Replenish.mc.field_1724);
+                    break;
                 }
-            } else {
-                if (!timer.passedS(forceDelay.getValue())) {
-                    return false;
+                case 1: {
+                    Replenish.mc.field_1761.method_2906(Replenish.mc.field_1724.field_7498.field_7763, i, 0, class_1713.field_7790, (class_1657)Replenish.mc.field_1724);
+                    Replenish.mc.field_1761.method_2906(Replenish.mc.field_1724.field_7498.field_7763, slot + 36, 0, class_1713.field_7790, (class_1657)Replenish.mc.field_1724);
+                    Replenish.mc.field_1761.method_2906(Replenish.mc.field_1724.field_7498.field_7763, i, 0, class_1713.field_7790, (class_1657)Replenish.mc.field_1724);
                 }
             }
-            mc.interactionManager.clickSlot(mc.player.playerScreenHandler.syncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
             return true;
         }
         return false;
     }
 
-    private boolean canMerge(ItemStack source, ItemStack stack) {
-        return source.getItem() == stack.getItem() && source.getName().equals(stack.getName());
+    public static enum Mode {
+        QuickMove,
+        ClickSlot;
+
     }
 }
+

@@ -1,128 +1,140 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2708
+ *  net.minecraft.class_332
+ */
 package dev.luminous.mod.modules.impl.player;
 
 import dev.luminous.Alien;
-import dev.luminous.api.events.eventbus.EventHandler;
+import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.PacketEvent;
-import dev.luminous.api.utils.entity.MovementUtil;
+import dev.luminous.api.events.impl.UpdateEvent;
 import dev.luminous.api.utils.math.Easing;
 import dev.luminous.api.utils.math.FadeUtils;
 import dev.luminous.api.utils.math.Timer;
+import dev.luminous.api.utils.player.EntityUtil;
+import dev.luminous.api.utils.player.MovementUtil;
 import dev.luminous.mod.modules.Module;
-import dev.luminous.mod.modules.settings.impl.*;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
-
-import java.awt.*;
+import dev.luminous.mod.modules.settings.impl.BindSetting;
+import dev.luminous.mod.modules.settings.impl.BooleanSetting;
+import dev.luminous.mod.modules.settings.impl.ColorSetting;
+import dev.luminous.mod.modules.settings.impl.EnumSetting;
+import dev.luminous.mod.modules.settings.impl.SliderSetting;
+import java.awt.Color;
 import java.text.DecimalFormat;
+import net.minecraft.class_2708;
+import net.minecraft.class_332;
 
-public class TimerModule extends Module {
-	public final SliderSetting multiplier = add(new SliderSetting("Speed", 1, 0.1, 5, 0.01));
-	public final BindSetting boostKey = add(new BindSetting("BoostKey", -1));
-	public final SliderSetting boost = add(new SliderSetting("Boost", 1, 0.1, 10, 0.01));
-	private final BooleanSetting tickShift = add(new BooleanSetting("TickShift", true).setParent());
-	private final SliderSetting shiftTimer = add(new SliderSetting("ShiftTimer", 2, 1, 10, 0.1, () -> tickShift.isOpen()));
-	private final SliderSetting accumulate = add(new SliderSetting("Charge", 2000f, 1f, 10000f, 50f, () -> tickShift.isOpen()).setSuffix("ms"));
-	private final SliderSetting minAccumulate = add(new SliderSetting("MinCharge", 500f, 1f, 10000f, 50f, () -> tickShift.isOpen()).setSuffix("ms"));
-	private final BooleanSetting smooth = add(new BooleanSetting("Smooth", true, () -> tickShift.isOpen()).setParent());
-	private final EnumSetting<Easing> ease = add(new EnumSetting<>("Ease", Easing.CubicInOut, () -> smooth.isOpen() && tickShift.isOpen()));
-	private final BooleanSetting reset = add(new BooleanSetting("Reset", true, () -> tickShift.isOpen()));
-	private final BooleanSetting indicator = add(new BooleanSetting("Indicator", true, () -> tickShift.isOpen()).setParent());
-	private final ColorSetting work = add(new ColorSetting("Completed", new Color(0, 255, 0), () -> indicator.isOpen() && tickShift.isOpen()));
-	private final ColorSetting charging = add(new ColorSetting("Charging", new Color(255, 0, 0), () -> indicator.isOpen() && tickShift.isOpen()));
-	private final SliderSetting yOffset = add(new SliderSetting("YOffset", 0, -200, 200, 1, () -> indicator.isOpen() && tickShift.isOpen()));
-	public static TimerModule INSTANCE;
-	public TimerModule() {
-		super("Timer", Category.Player);
-		setChinese("时间加速");
-		INSTANCE = this;
-	}
+public class TimerModule
+extends Module {
+    public static TimerModule INSTANCE;
+    public final SliderSetting multiplier = this.add(new SliderSetting("Speed", 1.0, 0.1, 5.0, 0.01));
+    public final BindSetting boostKey = this.add(new BindSetting("HoldKey", -1));
+    public final SliderSetting boost = this.add(new SliderSetting("OnKey", 1.0, 0.1, 10.0, 0.01));
+    final DecimalFormat df = new DecimalFormat("0.0");
+    private final BooleanSetting tickShift = this.add(new BooleanSetting("TickShift", true).setParent());
+    private final SliderSetting shiftTimer = this.add(new SliderSetting("ShiftTimer", 2.0, 1.0, 10.0, 0.1, this.tickShift::isOpen));
+    private final SliderSetting accumulate = this.add(new SliderSetting("Charge", 2000.0, 1.0, 10000.0, 50.0, this.tickShift::isOpen).setSuffix("ms"));
+    private final SliderSetting minAccumulate = this.add(new SliderSetting("MinCharge", 500.0, 1.0, 10000.0, 50.0, this.tickShift::isOpen).setSuffix("ms"));
+    private final BooleanSetting smooth = this.add(new BooleanSetting("Smooth", true, this.tickShift::isOpen).setParent());
+    private final EnumSetting<Easing> ease = this.add(new EnumSetting<Easing>("Ease", Easing.CubicInOut, () -> this.smooth.isOpen() && this.tickShift.isOpen()));
+    private final BooleanSetting reset = this.add(new BooleanSetting("Reset", true, this.tickShift::isOpen));
+    private final BooleanSetting indicator = this.add(new BooleanSetting("Indicator", true, this.tickShift::isOpen).setParent());
+    private final ColorSetting work = this.add(new ColorSetting("Completed", new Color(0, 255, 0), () -> this.indicator.isOpen() && this.tickShift.isOpen()));
+    private final ColorSetting charging = this.add(new ColorSetting("Charging", new Color(255, 0, 0), () -> this.indicator.isOpen() && this.tickShift.isOpen()));
+    private final SliderSetting yOffset = this.add(new SliderSetting("YOffset", 0.0, -200.0, 200.0, 1.0, () -> this.indicator.isOpen() && this.tickShift.isOpen()));
+    private final Timer timer = new Timer();
+    private final Timer timer2 = new Timer();
+    private final FadeUtils end = new FadeUtils(500L);
+    long lastMs = 0L;
+    boolean moving = false;
 
-	@Override
-	public void onDisable() {
-		Alien.TIMER.reset();
-	}
+    public TimerModule() {
+        super("Timer", Module.Category.Player);
+        this.setChinese("\u65f6\u95f4\u52a0\u901f");
+        INSTANCE = this;
+    }
 
-	@Override
-	public void onUpdate() {
-		Alien.TIMER.tryReset();
-	}
+    @Override
+    public void onDisable() {
+        Alien.TIMER.reset();
+    }
 
-	@Override
-	public void onEnable() {
-		Alien.TIMER.reset();
-	}
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        Alien.TIMER.tryReset();
+    }
 
-	private final Timer timer = new Timer();
-	private final Timer timer2 = new Timer();
-	DecimalFormat df = new DecimalFormat("0.0");
-	private final FadeUtils end = new FadeUtils(500);
+    @Override
+    public boolean onEnable() {
+        Alien.TIMER.reset();
+        return false;
+    }
 
-	long lastMs = 0;
-	boolean moving = false;
-	@Override
-	public void onRender2D(DrawContext drawContext, float tickDelta) {
-		if (!tickShift.getValue()) return;
-		timer.setMs(Math.min(Math.max(0, timer.getPassedTimeMs()), accumulate.getValueInt()));
-		if (MovementUtil.isMoving() && !Alien.PLAYER.insideBlock) {
+    @Override
+    public void onRender2D(class_332 drawContext, float tickDelta) {
+        if (this.tickShift.getValue()) {
+            this.timer.setMs(Math.min(Math.max(0L, this.timer.getMs()), (long)this.accumulate.getValueInt()));
+            if (MovementUtil.isMoving() && !EntityUtil.isInsideBlock()) {
+                if (!this.moving) {
+                    if (this.timer.passedMs(this.minAccumulate.getValue())) {
+                        this.timer2.reset();
+                        this.lastMs = this.timer.getMs();
+                    } else {
+                        this.lastMs = 0L;
+                    }
+                    this.moving = true;
+                }
+                this.timer.reset();
+                if (this.timer2.passed(this.lastMs)) {
+                    Alien.TIMER.reset();
+                } else if (this.smooth.getValue()) {
+                    double timer = (double)Alien.TIMER.getDefault() + (1.0 - this.end.ease(this.ease.getValue())) * (double)(this.shiftTimer.getValueFloat() - 1.0f) * ((double)this.lastMs / this.accumulate.getValue());
+                    Alien.TIMER.set((float)Math.max((double)Alien.TIMER.getDefault(), timer));
+                } else {
+                    Alien.TIMER.set(this.shiftTimer.getValueFloat());
+                }
+            } else {
+                if (this.moving) {
+                    Alien.TIMER.reset();
+                    if (this.reset.getValue()) {
+                        this.timer.reset();
+                    } else {
+                        this.timer.setMs(Math.max(this.lastMs - this.timer2.getMs(), 0L));
+                    }
+                    this.moving = false;
+                }
+                this.end.setLength(this.timer.getMs());
+                this.end.reset();
+            }
+            if (this.indicator.getValue()) {
+                double current = this.moving ? (double)Math.max(this.lastMs - this.timer2.getMs(), 0L) : (double)this.timer.getMs();
+                boolean completed = this.moving && current > 0.0 || current >= (double)this.minAccumulate.getValueInt();
+                double max = this.accumulate.getValue();
+                String text = this.df.format(current / max * 100.0) + "%";
+                drawContext.method_51433(TimerModule.mc.field_1772, text, mc.method_22683().method_4486() / 2 - TimerModule.mc.field_1772.method_1727(text) / 2, mc.method_22683().method_4502() / 2 + 9 - this.yOffset.getValueInt(), completed ? this.work.getValue().getRGB() : this.charging.getValue().getRGB(), true);
+            }
+        }
+    }
 
-			if (!moving) {
-				if (timer.passedMs(minAccumulate.getValue())) {
-					timer2.reset();
-					lastMs = timer.getPassedTimeMs();
-				} else {
-					lastMs = 0;
-				}
-				moving = true;
-			}
+    @Override
+    public String getInfo() {
+        if (!this.tickShift.getValue()) {
+            return null;
+        }
+        double current = this.moving ? (double)Math.max(this.lastMs - this.timer2.getMs(), 0L) : (double)this.timer.getMs();
+        double max = this.accumulate.getValue();
+        double value = Math.min(current / max * 100.0, 100.0);
+        return this.df.format(value) + "%";
+    }
 
-			timer.reset();
-
-			if (timer2.passed(lastMs)) {
-				Alien.TIMER.reset();
-			} else {
-				if (smooth.getValue()) {
-					double timer = Alien.TIMER.getDefault() + (1 - end.ease(ease.getValue())) * (shiftTimer.getValueFloat() - 1) * (lastMs / accumulate.getValue());
-					Alien.TIMER.set((float) Math.max(Alien.TIMER.getDefault(), timer));
-				} else {
-					Alien.TIMER.set(shiftTimer.getValueFloat());
-				}
-			}
-		} else {
-			if (moving) {
-				Alien.TIMER.reset();
-				if (reset.getValue()) {
-					timer.reset();
-				} else {
-					timer.setMs(Math.max(lastMs - timer2.getPassedTimeMs(), 0));
-				}
-				moving = false;
-			}
-			end.setLength(timer.getPassedTimeMs());
-			end.reset();
-		}
-
-		if (indicator.getValue()) {
-			double current = (moving ? (Math.max(lastMs - timer2.getPassedTimeMs(), 0)) : timer.getPassedTimeMs());
-			boolean completed = moving && current > 0 || current >= minAccumulate.getValueInt();
-			double max = accumulate.getValue();
-			String text = df.format(current / max * 100L) + "%";
-			drawContext.drawText(mc.textRenderer, text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getWidth(text) / 2, mc.getWindow().getScaledHeight() / 2 + mc.textRenderer.fontHeight - yOffset.getValueInt(), completed ? this.work.getValue().getRGB() : this.charging.getValue().getRGB(), true);
-		}
-	}
-
-	@Override
-	public String getInfo() {
-		if (!tickShift.getValue()) return null;
-		double current = (moving ? (Math.max(lastMs - timer2.getPassedTimeMs(), 0)) : timer.getPassedTimeMs());
-		double max = accumulate.getValue();
-		double value = Math.min(current / max * 100, 100);
-		return df.format(value) + "%";
-	}
-
-	@EventHandler
-	public void onReceivePacket(PacketEvent.Receive event) {
-		if (event.getPacket() instanceof PlayerPositionLookS2CPacket) {
-			lastMs = 0;
-		}
-	}
+    @EventListener
+    public void onReceivePacket(PacketEvent.Receive event) {
+        if (event.getPacket() instanceof class_2708) {
+            this.lastMs = 0L;
+        }
+    }
 }
+

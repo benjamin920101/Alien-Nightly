@@ -1,217 +1,82 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1703
+ *  net.minecraft.class_1735
+ *  net.minecraft.class_1799
+ *  net.minecraft.class_1802
+ *  net.minecraft.class_2561
+ *  net.minecraft.class_332
+ *  net.minecraft.class_3936
+ *  net.minecraft.class_437
+ *  net.minecraft.class_465
+ *  org.jetbrains.annotations.Nullable
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.Shadow
+ *  org.spongepowered.asm.mixin.Unique
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
+ */
 package dev.luminous.asm.mixins;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import dev.luminous.api.utils.render.Render2DUtil;
-import dev.luminous.asm.accessors.IScreen;
-import dev.luminous.mod.modules.impl.client.ClientSetting;
-import dev.luminous.mod.modules.impl.misc.Tips;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
-import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Util;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.MathHelper;
+import dev.luminous.Alien;
+import dev.luminous.api.utils.Wrapper;
+import dev.luminous.mod.modules.impl.misc.ShulkerViewer;
+import net.minecraft.class_1703;
+import net.minecraft.class_1735;
+import net.minecraft.class_1799;
+import net.minecraft.class_1802;
+import net.minecraft.class_2561;
+import net.minecraft.class_332;
+import net.minecraft.class_3936;
+import net.minecraft.class_437;
+import net.minecraft.class_465;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL11;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.awt.*;
-import java.util.Set;
+@Mixin(value={class_465.class})
+public abstract class MixinHandledScreen<T extends class_1703>
+extends class_437
+implements class_3936<T> {
+    @Unique
+    private static final class_1799[] ITEMS = new class_1799[27];
+    @Shadow
+    @Nullable
+    protected class_1735 field_2787;
+    @Shadow
+    protected int field_2776;
+    @Shadow
+    protected int field_2800;
 
-import static dev.luminous.api.utils.Wrapper.mc;
-@Mixin(HandledScreen.class)
-public abstract class MixinHandledScreen<T extends ScreenHandler> extends Screen implements ScreenHandlerProvider<T> {
-
-    protected MixinHandledScreen(Text title) {
+    protected MixinHandledScreen(class_2561 title) {
         super(title);
     }
 
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        ci.cancel();
-        int i = this.x;
-        int j = this.y;
-        super.renderBackground(context, mouseX, mouseY, delta);
-        RenderSystem.disableDepthTest();
-        context.getMatrices().push();
-        float size = (float) ClientSetting.inventoryFade.ease(ClientSetting.INSTANCE.animEase.getValue());
-        context.getMatrices().translate((float) (i + x / 4) * (1 - size), (float) (j + y / 4) * (1 - size), 0.0F);
-        context.getMatrices().scale(size, size, 1);
-        this.drawBackground(context, delta, mouseX, mouseY);
-        for(Drawable drawable : ((IScreen) this).getDrawables()) {
-            drawable.render(context, mouseX, mouseY, delta);
-        }
-        context.getMatrices().translate((float) i, (float) j, 0.0F);
-        this.focusedSlot = null;
-
-        for (int k = 0; k < this.handler.slots.size(); ++k) {
-            Slot slot = this.handler.slots.get(k);
-            if (slot.isEnabled()) {
-                this.drawSlot(context, slot);
-            }
-
-            if (this.isPointOverSlot(slot, mouseX, mouseY) && slot.isEnabled()) {
-                this.focusedSlot = slot;
-                int l = slot.x;
-                int m = slot.y;
-                if (this.focusedSlot.canBeHighlighted()) {
-                    drawSlotHighlight(context, l, m, 0);
-                }
-            }
-        }
-
-        this.drawForeground(context, mouseX, mouseY);
-        ItemStack itemStack = this.touchDragStack.isEmpty() ? this.handler.getCursorStack() : this.touchDragStack;
-        if (!itemStack.isEmpty()) {
-            int l = this.touchDragStack.isEmpty() ? 8 : 16;
-            String string = null;
-            if (!this.touchDragStack.isEmpty() && this.touchIsRightClickDrag) {
-                itemStack = itemStack.copyWithCount(MathHelper.ceil((float) itemStack.getCount() / 2.0F));
-            } else if (this.cursorDragging && this.cursorDragSlots.size() > 1) {
-                itemStack = itemStack.copyWithCount(this.draggedStackRemainder);
-                if (itemStack.isEmpty()) {
-                    string = Formatting.YELLOW + "0";
-                }
-            }
-
-            this.drawItem(context, itemStack, mouseX - i - 8, mouseY - j - l, string);
-        }
-
-        if (!this.touchDropReturningStack.isEmpty()) {
-            float f = (float) (Util.getMeasuringTimeMs() - this.touchDropTime) / 100.0F;
-            if (f >= 1.0F) {
-                f = 1.0F;
-                this.touchDropReturningStack = ItemStack.EMPTY;
-            }
-
-            int l = this.touchDropOriginSlot.x - this.touchDropX;
-            int m = this.touchDropOriginSlot.y - this.touchDropY;
-            int o = this.touchDropX + (int) ((float) l * f);
-            int p = this.touchDropY + (int) ((float) m * f);
-            this.drawItem(context, this.touchDropReturningStack, o, p, null);
-        }
-
-        context.getMatrices().pop();
-        RenderSystem.enableDepthTest();
-        if (focusedSlot != null && !focusedSlot.getStack().isEmpty() && client.player.playerScreenHandler.getCursorStack().isEmpty()) {
-            if (hasItems(focusedSlot.getStack()) && Tips.INSTANCE.isOn() && Tips.INSTANCE.shulkerViewer.getValue()) {
-                renderShulkerToolTip(context, mouseX, mouseY, focusedSlot.getStack());
-            }
+    @Inject(method={"method_25402"}, at={@At(value="HEAD")}, cancellable=true)
+    private void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+        class_1799 itemStack;
+        if (button == 2 && this.field_2787 != null && !this.field_2787.method_7677().method_7960() && Wrapper.mc.field_1724.field_7512.method_34255().method_7960() && ShulkerViewer.INSTANCE.isOn() && (ShulkerViewer.hasItems(itemStack = this.field_2787.method_7677()) || itemStack.method_7909() == class_1802.field_8466 && Alien.PLAYER.known)) {
+            cir.setReturnValue((Object)ShulkerViewer.openContainer(this.field_2787.method_7677(), ITEMS, false));
         }
     }
 
-    @Unique
-    public void renderShulkerToolTip(DrawContext context, int mouseX, int mouseY, ItemStack stack) {
-        try {
-            NbtCompound compoundTag = stack.getSubNbt("BlockEntityTag");
-            DefaultedList<ItemStack> itemStacks = DefaultedList.ofSize(27, ItemStack.EMPTY);
-            Inventories.readNbt(compoundTag, itemStacks);
-            draw(context, itemStacks, mouseX, mouseY);
-        } catch (Exception ignore) {
+    @Inject(method={"method_25394"}, at={@At(value="RETURN")})
+    private void onRender(class_332 context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        if (ShulkerViewer.INSTANCE.isOn() && ShulkerViewer.INSTANCE.toolTips.getValue() && this.field_2787 != null && !this.field_2787.method_7677().method_7960() && this.field_22787.field_1724.field_7498.method_34255().method_7960() && (ShulkerViewer.hasItems(this.field_2787.method_7677()) || this.field_2787.method_7677().method_7909() == class_1802.field_8466 && Alien.PLAYER.known)) {
+            ShulkerViewer.renderShulkerToolTip(context, mouseX, mouseY, this.field_2787.method_7677());
         }
     }
 
-    @Unique
-    private void draw(DrawContext context, DefaultedList<ItemStack> itemStacks, int mouseX, int mouseY) {
-        RenderSystem.disableDepthTest();
-        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-
-        mouseX += 8;
-        mouseY -= 82;
-
-        drawBackground(context, mouseX, mouseY);
-
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        DiffuseLighting.enableGuiDepthLighting();
-        int row = 0;
-        int i = 0;
-        for (ItemStack itemStack : itemStacks) {
-            context.drawItem(itemStack, mouseX + 8 + i * 18, mouseY + 7 + row * 18);
-            context.drawItemInSlot(mc.textRenderer, itemStack, mouseX + 8 + i * 18, mouseY + 7 + row * 18);
-            i++;
-            if (i >= 9) {
-                i = 0;
-                row++;
-            }
-        }
-        DiffuseLighting.disableGuiDepthLighting();
-        RenderSystem.enableDepthTest();
-    }
-    @Unique
-    private void drawBackground(DrawContext context, int x, int y) {
-       Render2DUtil.drawRect(context.getMatrices(), x, y, 176, 67, new Color(0, 0,0, 120));
-    }
-    @Unique
-    private boolean hasItems(ItemStack itemStack) {
-        NbtCompound compoundTag = itemStack.getSubNbt("BlockEntityTag");
-        return compoundTag != null && compoundTag.contains("Items", 9);
-    }
-    @Shadow public abstract void renderBackground(DrawContext context, int mouseX, int mouseY, float delta);
-
     @Shadow
-    protected abstract void drawBackground(DrawContext context, float delta, int mouseX, int mouseY);
-    @Shadow
-    private void drawItem(DrawContext context, ItemStack stack, int x, int y, String amountText) {
-    }
-    @Shadow
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-    }
-    @Shadow
-    public static void drawSlotHighlight(DrawContext context, int x, int y, int z) {
-    }
-    @Shadow
-    private boolean isPointOverSlot(Slot slot, double pointX, double pointY) {
-        return false;
-    }
-    @Shadow
-    @Nullable
-    protected Slot focusedSlot;
-    @Shadow
-    protected int x;
-    @Shadow
-    protected int y;
-    @Shadow
-    private int draggedStackRemainder;
-    @Shadow
-    protected void drawSlot(DrawContext context, Slot slot) {
-    }
-    @Final
-    @Shadow
-    protected T handler;
-    @Shadow
-    private ItemStack touchDragStack;
-    @Shadow
-    private int touchDropX;
-    @Shadow
-    private int touchDropY;
-    @Shadow
-    private long touchDropTime;
-    @Shadow
-    private ItemStack touchDropReturningStack;
-    @Final
-    @Shadow
-    protected  Set<Slot> cursorDragSlots;
-    @Shadow
-    protected boolean cursorDragging;
-    @Shadow
-    @Nullable
-    private Slot touchDropOriginSlot;
-    @Shadow
-    private boolean touchIsRightClickDrag;
+    public abstract void method_25420(class_332 var1, int var2, int var3, float var4);
 }
+

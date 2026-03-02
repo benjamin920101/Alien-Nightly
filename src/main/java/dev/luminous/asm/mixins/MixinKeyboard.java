@@ -1,84 +1,56 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_124
+ *  net.minecraft.class_309
+ *  net.minecraft.class_333
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.Redirect
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+ */
 package dev.luminous.asm.mixins;
 
 import dev.luminous.Alien;
-import dev.luminous.mod.gui.clickgui.ClickGuiScreen;
-import dev.luminous.mod.modules.Module;
-import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import dev.luminous.mod.modules.settings.impl.StringSetting;
 import dev.luminous.api.utils.Wrapper;
-import net.minecraft.client.Keyboard;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.Screen;
-import org.spongepowered.asm.mixin.Final;
+import dev.luminous.core.impl.CommandManager;
+import dev.luminous.mod.modules.impl.client.ClientSetting;
+import net.minecraft.class_124;
+import net.minecraft.class_309;
+import net.minecraft.class_333;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-
-@Mixin(Keyboard.class)
-public class MixinKeyboard implements Wrapper {
-
-    @Inject(method = "onKey", at = @At("HEAD"))
+@Mixin(value={class_309.class})
+public class MixinKeyboard
+implements Wrapper {
+    @Inject(method={"method_1466"}, at={@At(value="HEAD")})
     private void onKey(long windowPointer, int key, int scanCode, int action, int modifiers, CallbackInfo ci) {
-        if (mc.currentScreen instanceof ClickGuiScreen && action == 1 && Alien.MODULE.setBind(key)) {
-            return;
-        }
-        if (action == 1) {
-            Alien.MODULE.onKeyPressed(key);
-        }
-        if (action == 0) {
-            Alien.MODULE.onKeyReleased(key);
-        }
-    }
-
-    @Shadow @Final private MinecraftClient client;
-    @Inject(method = "onChar", at = @At("HEAD"), cancellable = true)
-    private void onChar(long window, int codePoint, int modifiers, CallbackInfo ci) {
-        if (window == this.client.getWindow().getHandle()) {
-            Element element = this.client.currentScreen;
-            if (element != null && this.client.getOverlay() == null) {
-                if (Character.charCount(codePoint) == 1) {
-                    if (!Module.nullCheck() && Alien.GUI != null) {
-                        if (Alien.GUI.isClickGuiOpen()) {
-                            Alien.MODULE.modules.forEach(module -> module.getSettings().stream()
-                                    .filter(setting -> setting instanceof StringSetting)
-                                    .map(setting -> (StringSetting) setting)
-                                    .filter(StringSetting::isListening)
-                                    .forEach(setting -> setting.charType((char)codePoint)));
-                            Alien.MODULE.modules.forEach(module -> module.getSettings().stream()
-                                    .filter(setting -> setting instanceof SliderSetting)
-                                    .map(setting -> (SliderSetting) setting)
-                                    .filter(SliderSetting::isListening)
-                                    .forEach(setting -> setting.charType((char)codePoint)));
-                        }
-                    }
-                    Screen.wrapScreenError(() -> element.charTyped((char)codePoint, modifiers), "charTyped event handler", element.getClass().getCanonicalName());
-                } else {
-                    char[] var6 = Character.toChars(codePoint);
-
-                    for (char c : var6) {
-                        if (!Module.nullCheck() && Alien.GUI != null) {
-                            if (Alien.GUI.isClickGuiOpen()) {
-                                Alien.MODULE.modules.forEach(module -> module.getSettings().stream()
-                                        .filter(setting -> setting instanceof StringSetting)
-                                        .map(setting -> (StringSetting) setting)
-                                        .filter(StringSetting::isListening)
-                                        .forEach(setting -> setting.charType(c)));
-                                Alien.MODULE.modules.forEach(module -> module.getSettings().stream()
-                                        .filter(setting -> setting instanceof SliderSetting)
-                                        .map(setting -> (SliderSetting) setting)
-                                        .filter(SliderSetting::isListening)
-                                        .forEach(setting -> setting.charType((char)codePoint)));
-                            }
-                        }
-                        Screen.wrapScreenError(() -> element.charTyped(c, modifiers), "charTyped event handler", element.getClass().getCanonicalName());
-                    }
+        block4: {
+            try {
+                if (action == 1) {
+                    Alien.MODULE.onKeyPressed(key);
+                }
+                if (action == 0) {
+                    Alien.MODULE.onKeyReleased(key);
                 }
             }
+            catch (Exception var9) {
+                var9.printStackTrace();
+                if (!ClientSetting.INSTANCE.debug.getValue()) break block4;
+                CommandManager.sendMessage(String.valueOf(class_124.field_1079) + "[ERROR] onKey " + var9.getMessage());
+            }
         }
-        ci.cancel();
+    }
+
+    @Redirect(method={"method_1466"}, at=@At(value="INVOKE", target="Lnet/minecraft/class_333;method_1791()Z"), require=0)
+    public boolean hook(class_333 instance) {
+        return false;
     }
 }
+

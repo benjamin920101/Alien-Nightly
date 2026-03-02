@@ -1,97 +1,112 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_238
+ *  net.minecraft.class_4587
+ */
 package dev.luminous.mod.modules.impl.render;
 
+import dev.luminous.api.utils.Wrapper;
 import dev.luminous.api.utils.math.Easing;
 import dev.luminous.api.utils.math.FadeUtils;
 import dev.luminous.api.utils.math.Timer;
 import dev.luminous.api.utils.render.ColorUtil;
 import dev.luminous.api.utils.render.Render3DUtil;
 import dev.luminous.mod.modules.Module;
+import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-
-import java.awt.*;
+import java.awt.Color;
 import java.util.HashMap;
+import net.minecraft.class_2338;
+import net.minecraft.class_238;
+import net.minecraft.class_4587;
 
-public class PlaceRender extends Module {
-	public static PlaceRender INSTANCE;
-	private final ColorSetting box = add(new ColorSetting("Box", new Color(255, 255, 255, 255)).injectBoolean(true));
-	private final ColorSetting fill = add(new ColorSetting("Fill", new Color(255, 255, 255, 100)).injectBoolean(true));
-	public final SliderSetting fadeTime = add(new SliderSetting("FadeTime", 500, 0, 3000));
+public class PlaceRender
+extends Module {
+    public static final HashMap<class_2338, PlacePos> renderMap = new HashMap();
+    public static PlaceRender INSTANCE;
+    public final SliderSetting fadeTime = this.add(new SliderSetting("FadeTime", 500, 0, 3000));
+    public final SliderSetting timeout = this.add(new SliderSetting("TimeOut", 500, 0, 3000));
+    private final ColorSetting box = this.add(new ColorSetting("Box", new Color(255, 255, 255, 255)).injectBoolean(true));
+    private final ColorSetting fill = this.add(new ColorSetting("Fill", new Color(255, 255, 255, 100)).injectBoolean(true));
+    private final ColorSetting tryPlaceBox = this.add(new ColorSetting("TryPlaceBox", new Color(178, 178, 178, 255)).injectBoolean(true));
+    private final ColorSetting tryPlaceFill = this.add(new ColorSetting("TryPlaceFill", new Color(255, 119, 119, 157)).injectBoolean(true));
+    private final BooleanSetting noFail = this.add(new BooleanSetting("NoFail", false));
+    private final EnumSetting<Easing> ease = this.add(new EnumSetting<Easing>("Ease", Easing.CubicInOut));
+    private final EnumSetting<Mode> mode = this.add(new EnumSetting<Mode>("Mode", Mode.All));
 
-	private final ColorSetting tryPlaceBox = add(new ColorSetting("TryPlaceBox", new Color(178, 178, 178, 255)).injectBoolean(true));
-	private final ColorSetting tryPlaceFill = add(new ColorSetting("TryPlaceFill", new Color(255, 119, 119, 157)).injectBoolean(true));
-	public final SliderSetting timeout = add(new SliderSetting("TimeOut", 500, 0, 3000));
-	private final EnumSetting<Easing> ease = add(new EnumSetting<>("Ease", Easing.CubicInOut));
-	private final EnumSetting<Mode> mode = add(new EnumSetting<>("Mode", Mode.All));
-	private enum Mode {
-		Fade,
-		Shrink,
-		All,
-	}
-	public PlaceRender() {
-		super("PlaceRender", Category.Render);
-		setChinese("放置显示");
-		enable();
-		INSTANCE = this;
-	}
+    public PlaceRender() {
+        super("PlaceRender", Module.Category.Render);
+        this.setChinese("\u653e\u7f6e\u663e\u793a");
+        this.enable();
+        INSTANCE = this;
+    }
 
-	@Override
-	public void onRender3D(MatrixStack matrixStack) {
-		renderMap.values().removeIf(v -> v.draw(matrixStack));
-	}
+    @Override
+    public void onRender3D(class_4587 matrixStack) {
+        renderMap.values().removeIf(v -> v.draw(matrixStack));
+    }
 
-	public static final HashMap<BlockPos, PlacePos> renderMap = new HashMap<>();
+    public void create(class_2338 pos) {
+        renderMap.put(pos, new PlacePos(pos));
+    }
 
-	public PlacePos create(BlockPos pos) {
-		return new PlacePos(pos);
-	}
+    private static enum Mode {
+        Fade,
+        Shrink,
+        All;
 
-	public class PlacePos {
-		public final FadeUtils fade;
-		public final BlockPos pos;
-		public final Timer timer;
-		public boolean isAir;
-		public PlacePos(BlockPos placePos) {
-			this.fade = new FadeUtils((long) fadeTime.getValue());
-			this.pos = placePos;
-			this.timer = new Timer();
-			this.isAir = true;
-		}
-		
-		public boolean draw(MatrixStack matrixStack) {
-			if (isAir) {
-				if (!mc.world.isAir(pos)) {
-					isAir = false;
-				} else {
-					if (!timer.passed(timeout.getValue())) {
-						fade.reset();
-						Box aBox = new Box(pos);
-						if (tryPlaceFill.booleanValue) {
-							Render3DUtil.drawFill(matrixStack, aBox, tryPlaceFill.getValue());
-						}
-						if (tryPlaceBox.booleanValue) {
-							Render3DUtil.drawBox(matrixStack, aBox, tryPlaceBox.getValue());
-						}
-					}
-					return false;
-				}
-			}
-			double quads = fade.ease(ease.getValue());
-			if (quads == 1) return true;
-			double alpha = (mode.getValue() == Mode.Fade || mode.getValue() == Mode.All) ? 1 - quads : 1;
-			double size = (mode.getValue() == Mode.Shrink || mode.getValue() == Mode.All) ? quads : 0;
-			Box aBox = new Box(pos).expand(-size * 0.5, -size * 0.5, -size * 0.5);
-			if (fill.booleanValue) {
-				Render3DUtil.drawFill(matrixStack, aBox, ColorUtil.injectAlpha(fill.getValue(), (int) ((double) fill.getValue().getAlpha() * alpha)));
-			}
-			if (box.booleanValue) {
-				Render3DUtil.drawBox(matrixStack, aBox, ColorUtil.injectAlpha(box.getValue(), (int) ((double) box.getValue().getAlpha() * alpha)));
-			}
-			return false;
-		}
-	}
+    }
+
+    public class PlacePos {
+        public final FadeUtils fade;
+        public final class_2338 pos;
+        public final Timer timer;
+        public boolean isAir;
+
+        public PlacePos(class_2338 placePos) {
+            this.fade = new FadeUtils((long)PlaceRender.this.fadeTime.getValue());
+            this.pos = placePos;
+            this.timer = new Timer();
+            this.isAir = true;
+        }
+
+        public boolean draw(class_4587 matrixStack) {
+            double quads;
+            if (this.isAir) {
+                if (!PlaceRender.this.noFail.getValue() && Wrapper.mc.field_1687.method_22347(this.pos)) {
+                    if (!this.timer.passedMs(PlaceRender.this.timeout.getValue())) {
+                        this.fade.reset();
+                        class_238 aBox = new class_238(this.pos);
+                        if (PlaceRender.this.tryPlaceFill.booleanValue) {
+                            Render3DUtil.drawFill(matrixStack, aBox, PlaceRender.this.tryPlaceFill.getValue());
+                        }
+                        if (PlaceRender.this.tryPlaceBox.booleanValue) {
+                            Render3DUtil.drawBox(matrixStack, aBox, PlaceRender.this.tryPlaceBox.getValue());
+                        }
+                    }
+                    return false;
+                }
+                this.isAir = false;
+            }
+            if ((quads = this.fade.ease(PlaceRender.this.ease.getValue())) == 1.0) {
+                return true;
+            }
+            double alpha = PlaceRender.this.mode.getValue() != Mode.Fade && PlaceRender.this.mode.getValue() != Mode.All ? 1.0 : 1.0 - quads;
+            double size = PlaceRender.this.mode.getValue() != Mode.Shrink && PlaceRender.this.mode.getValue() != Mode.All ? 0.0 : quads;
+            class_238 aBoxx = new class_238(this.pos).method_1009(-size * 0.5, -size * 0.5, -size * 0.5);
+            if (PlaceRender.this.fill.booleanValue) {
+                Render3DUtil.drawFill(matrixStack, aBoxx, ColorUtil.injectAlpha(PlaceRender.this.fill.getValue(), (int)((double)PlaceRender.this.fill.getValue().getAlpha() * alpha)));
+            }
+            if (PlaceRender.this.box.booleanValue) {
+                Render3DUtil.drawBox(matrixStack, aBoxx, ColorUtil.injectAlpha(PlaceRender.this.box.getValue(), (int)((double)PlaceRender.this.box.getValue().getAlpha() * alpha)));
+            }
+            return false;
+        }
+    }
 }
+

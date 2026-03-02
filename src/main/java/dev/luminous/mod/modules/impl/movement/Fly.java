@@ -1,64 +1,79 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.mod.modules.impl.movement;
 
-import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import dev.luminous.api.events.eventbus.EventHandler;
+import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.KeyboardInputEvent;
-import dev.luminous.api.events.impl.MoveEvent;
+import dev.luminous.api.events.impl.UpdateEvent;
+import dev.luminous.api.utils.math.Timer;
+import dev.luminous.api.utils.player.MovementUtil;
 import dev.luminous.mod.modules.Module;
+import dev.luminous.mod.modules.settings.impl.BooleanSetting;
+import dev.luminous.mod.modules.settings.impl.SliderSetting;
 
-import static dev.luminous.api.utils.entity.MovementUtil.*;
-
-public class Fly extends Module {
+public class Fly
+extends Module {
     public static Fly INSTANCE;
+    private final SliderSetting speedConfig = this.add(new SliderSetting("Speed", 2.5, 0.1, 10.0));
+    private final SliderSetting vspeedConfig = this.add(new SliderSetting("VerticalSpeed", 1.0, 0.1, 5.0));
+    private final BooleanSetting antiKickConfig = this.add(new BooleanSetting("AntiKick", true).setParent());
+    private final BooleanSetting up = this.add(new BooleanSetting("Up", true, this.antiKickConfig::isOpen));
+    private final BooleanSetting allowSneak = this.add(new BooleanSetting("AllowSneak", false));
+    private final Timer antiKickTimer = new Timer();
+    private final Timer antiKick2Timer = new Timer();
 
     public Fly() {
-        super("Fly", Category.Movement);
-        setChinese("飞行");
+        super("Fly", Module.Category.Movement);
+        this.setChinese("\u98de\u884c");
         INSTANCE = this;
     }
-    @EventHandler
-    public void onKeyboardInput(KeyboardInputEvent event) {
-        mc.player.input.sneaking = false;
+
+    public static Fly getInstance() {
+        return INSTANCE;
     }
 
-    public final SliderSetting speed = add(new SliderSetting("Speed", 1.0f, 0.1f, 10.0f));
-    private final SliderSetting sneakDownSpeed = add(new SliderSetting("DownSpeed", 1.0F, 0.1F, 10.0F));
-    private final SliderSetting upSpeed = add(new SliderSetting("UpSpeed", 1.0F, 0.1F, 10.0F));
-    public final SliderSetting downFactor = add(new SliderSetting("DownFactor", 0f, 0.0f, 1f, 0.000001f));
-    private MoveEvent event;
-    @EventHandler
-    public void onMove(MoveEvent event) {
-        if (nullCheck()) return;
-        this.event = event;
-        if (!(mc.options.sneakKey.isPressed() && mc.player.input.jumping)) {
-            if (mc.options.sneakKey.isPressed()) {
-                setY(-sneakDownSpeed.getValue());
-            }
-            else if (mc.player.input.jumping) {
-                setY(upSpeed.getValue());
-            } else {
-                setY(-downFactor.getValue());
-            }
-        } else {
-            setY(0);
+    @Override
+    public void onLogin() {
+        this.antiKickTimer.reset();
+        this.antiKick2Timer.reset();
+    }
+
+    @Override
+    public boolean onEnable() {
+        if (!Fly.nullCheck()) {
+            this.antiKickTimer.reset();
+            this.antiKick2Timer.reset();
         }
-        double[] dir = directionSpeedKey(speed.getValue());
-        setX(dir[0]);
-        setZ(dir[1]);
+        return false;
     }
 
-    private void setX(double f) {
-        event.setX(f);
-        setMotionX(f);
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        if (this.antiKickTimer.passed(3900L) && this.antiKickConfig.getValue() && !Fly.mc.field_1724.method_24828()) {
+            MovementUtil.setMotionY(-0.04);
+            this.antiKickTimer.reset();
+        } else if (this.antiKick2Timer.passed(4000L) && this.antiKickConfig.getValue() && !Fly.mc.field_1724.method_24828() && this.up.getValue()) {
+            MovementUtil.setMotionY(0.04);
+            this.antiKick2Timer.reset();
+        } else {
+            MovementUtil.setMotionY(0.0);
+            if (Fly.mc.field_1690.field_1903.method_1434()) {
+                MovementUtil.setMotionY(this.vspeedConfig.getValue());
+            } else if (Fly.mc.field_1690.field_1832.method_1434()) {
+                MovementUtil.setMotionY(-this.vspeedConfig.getValue());
+            }
+        }
+        double[] move = MovementUtil.directionSpeed(this.speedConfig.getValueFloat());
+        MovementUtil.setMotionX(move[0]);
+        MovementUtil.setMotionZ(move[1]);
     }
 
-    private void setY(double f) {
-        event.setY(f);
-        setMotionY(f);
-    }
-
-    private void setZ(double f) {
-        event.setZ(f);
-        setMotionZ(f);
+    @EventListener(priority=-100)
+    public void keyboard(KeyboardInputEvent event) {
+        if (!this.allowSneak.getValue()) {
+            Fly.mc.field_1724.field_3913.field_3903 = false;
+        }
     }
 }
+

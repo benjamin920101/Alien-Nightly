@@ -1,285 +1,128 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.blaze3d.systems.RenderSystem
+ *  net.minecraft.class_2338
+ *  net.minecraft.class_2350
+ *  net.minecraft.class_241
+ *  net.minecraft.class_243
+ *  net.minecraft.class_2708
+ *  net.minecraft.class_286
+ *  net.minecraft.class_287
+ *  net.minecraft.class_289
+ *  net.minecraft.class_290
+ *  net.minecraft.class_293$class_5596
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_757
+ *  net.minecraft.class_9801
+ *  org.joml.Matrix4f
+ *  org.lwjgl.opengl.GL11
+ */
 package dev.luminous.mod.modules.impl.movement;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.luminous.api.events.eventbus.EventHandler;
-import dev.luminous.api.events.eventbus.EventPriority;
-import dev.luminous.api.events.impl.*;
-import dev.luminous.api.utils.entity.MovementUtil;
-import dev.luminous.api.utils.render.ColorUtil;
 import dev.luminous.Alien;
-import dev.luminous.core.impl.CommandManager;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.KeyboardInputEvent;
+import dev.luminous.api.events.impl.MoveEvent;
+import dev.luminous.api.events.impl.PacketEvent;
+import dev.luminous.api.events.impl.RotationEvent;
+import dev.luminous.api.events.impl.TimerEvent;
+import dev.luminous.api.events.impl.UpdateEvent;
+import dev.luminous.api.utils.player.MovementUtil;
+import dev.luminous.api.utils.render.ColorUtil;
 import dev.luminous.mod.modules.Module;
+import dev.luminous.mod.modules.impl.client.AntiCheat;
 import dev.luminous.mod.modules.impl.player.Freecam;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
+import java.awt.Color;
+import net.minecraft.class_2338;
+import net.minecraft.class_2350;
+import net.minecraft.class_241;
+import net.minecraft.class_243;
+import net.minecraft.class_2708;
+import net.minecraft.class_286;
+import net.minecraft.class_287;
+import net.minecraft.class_289;
+import net.minecraft.class_290;
+import net.minecraft.class_293;
+import net.minecraft.class_4587;
+import net.minecraft.class_757;
+import net.minecraft.class_9801;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
-
-public class HoleSnap extends Module {
+public class HoleSnap
+extends Module {
     public static HoleSnap INSTANCE;
-    public final BooleanSetting any = add(new BooleanSetting("AnyHole", true));
+    public final BooleanSetting any = this.add(new BooleanSetting("AnyHole", true));
+    public final SliderSetting timer = this.add(new SliderSetting("Timer", 1.0, 0.1, 8.0, 0.1));
+    public final BooleanSetting up = this.add(new BooleanSetting("Up", true));
+    public final BooleanSetting grim = this.add(new BooleanSetting("Grim", false));
+    public final ColorSetting color = this.add(new ColorSetting("Color", new Color(255, 255, 255, 100)));
+    public final SliderSetting circleSize = this.add(new SliderSetting("CircleSize", 1.0, 0.1f, 2.5));
+    public final BooleanSetting fade = this.add(new BooleanSetting("Fade", true));
+    public final SliderSetting segments = this.add(new SliderSetting("Segments", 180, 0, 360));
     private final SliderSetting range = this.add(new SliderSetting("Range", 5, 1, 50));
     private final SliderSetting timeoutTicks = this.add(new SliderSetting("TimeOut", 40, 0, 100));
-    public final SliderSetting timer = add(new SliderSetting("Timer", 1, 0.1, 8, 0.1));
-    public final BooleanSetting up = add(new BooleanSetting("Up", true));
-    public final BooleanSetting grim = add(new BooleanSetting("Grim", false));
-    private final SliderSetting steps = add(new SliderSetting("Steps", 0.8, 0, 1, 0.01, grim::getValue));
-   private final SliderSetting priority = add(new SliderSetting("Priority", 10,0 ,100, grim::getValue));
-    public final ColorSetting color = add(new ColorSetting("Color", new Color(255, 255, 255, 100)));
-    public final SliderSetting circleSize = add(new SliderSetting("CircleSize", 1f, 0.1f, 2.5f));
-    public final BooleanSetting fade = add(new BooleanSetting("Fade", true));
-    public final SliderSetting segments = add(new SliderSetting("Segments", 180, 0, 360));
+    private final SliderSetting steps = this.add(new SliderSetting("Steps", 0.8, 0.0, 1.0, 0.01, this.grim::getValue));
+    private final SliderSetting priority = this.add(new SliderSetting("Priority", 10, 0, 100, this.grim::getValue));
     boolean resetMove = false;
-    private BlockPos holePos;
+    boolean applyTimer = false;
+    class_243 targetPos;
+    private class_2338 holePos;
     private int stuckTicks;
     private int enabledTicks;
 
     public HoleSnap() {
-        super("HoleSnap", "HoleSnap", Category.Movement);
-        setChinese("拉坑");
+        super("HoleSnap", "HoleSnap", Module.Category.Movement);
+        this.setChinese("\u62c9\u5751");
         INSTANCE = this;
     }
 
-    boolean applyTimer = false;
-    @EventHandler(priority = EventPriority.LOW + 1)
-    public void onTimer(TimerEvent event) {
-        if (applyTimer) event.set(timer.getValueFloat());
+    public static class_241 getRotationTo(class_243 posFrom, class_243 posTo) {
+        class_243 vec3d = posTo.method_1020(posFrom);
+        return HoleSnap.getRotationFromVec(vec3d);
     }
 
-    @Override
-    public void onEnable() {
-        applyTimer = false;
-        if (nullCheck()) {
-            disable();
-            return;
-        }
-        resetMove = false;
-        holePos = Alien.HOLE.getHole((float) range.getValue(), true, any.getValue(), up.getValue());
-    }
-
-    @Override
-    public void onDisable() {
-        this.holePos = null;
-        this.stuckTicks = 0;
-        this.enabledTicks = 0;
-        if (nullCheck()) {
-            return;
-        }
-        if (resetMove && !grim.getValue()) {
-            MovementUtil.setMotionX(0);
-            MovementUtil.setMotionZ(0);
-        }
-    }
-
-    @EventHandler
-    public void onReceivePacket(PacketEvent.Receive event) {
-        if (event.getPacket() instanceof PlayerPositionLookS2CPacket) {
-            this.disable();
-        }
-    }
-    Vec3d targetPos;
-
-    @EventHandler(priority = -999)
-    public void onKeyInput(KeyboardInputEvent e) {
-        if (!grim.getValue()) {
-            return;
-        } else if (MoveFix.INSTANCE.isOff() || !MoveFix.INSTANCE.grim.getValue()) {
-            CommandManager.sendChatMessage("§4HoleSnap require MovementFix.");
-            disable();
-            return;
-        }
-        if (mc.player.isRiding() || Freecam.INSTANCE.isOn())
-            return;
-
-        mc.player.input.movementSideways = 0;
-        mc.player.input.movementForward = 1;
-    }
-
-    @Override
-    public void onUpdate() {
-        holePos = Alien.HOLE.getHole((float) range.getValue(), true, any.getValue(), up.getValue());
-        if (holePos == null) {
-            disable();
-            return;
-        }
-        ++enabledTicks;
-        if (enabledTicks > timeoutTicks.getValue() - 1) {
-            disable();
-            return;
-        }
-        applyTimer = true;
-        if (!grim.getValue()) return;
-        if (!mc.player.isAlive() || mc.player.isFallFlying()) {
-            disable();
-            return;
-        }
-        if (stuckTicks > 8) {
-            disable();
-            return;
-        }
-        if (holePos == null) {
-            //CommandManager.sendChatMessageWidthId("§e[!] §fHoles?", hashCode());
-            disable();
-            return;
-        }
-        Vec3d playerPos = mc.player.getPos();
-        targetPos = new Vec3d(holePos.getX() + 0.5, mc.player.getY(), holePos.getZ() + 0.5);
-        if (Alien.HOLE.isDoubleHole(holePos)) {
-            Direction facing = Alien.HOLE.is3Block(holePos);
-            if (facing != null) {
-                targetPos = targetPos.add(new Vec3d(facing.getVector().getX() * 0.5, facing.getVector().getY() * 0.5, facing.getVector().getZ() * 0.5));
-            }
-        }
-
-        applyTimer = true;
-        resetMove = true;
-        float rotation = getRotationTo(playerPos, targetPos).x;
-        float yawRad = rotation / 180.0f * 3.1415927f;
-        double dist = playerPos.distanceTo(targetPos);
-        double cappedSpeed = Math.min(0.2873, dist);
-        double x = -(float) Math.sin(yawRad) * cappedSpeed;
-        double z = (float) Math.cos(yawRad) * cappedSpeed;
-        if (Math.abs(x) < 0.25 && Math.abs(z) < 0.25 && playerPos.y <= holePos.getY() + 0.8) {
-            disable();
-            return;
-        }
-        if (mc.player.horizontalCollision) {
-            stuckTicks++;
-        } else {
-            stuckTicks = 0;
-        }
-    }
-
-    @EventHandler()
-    public void onRotate(LookAtEvent event) {
-        if (grim.getValue() && holePos != null) {
-            targetPos = new Vec3d(holePos.getX() + 0.5, mc.player.getY(), holePos.getZ() + 0.5);
-            if (Alien.HOLE.isDoubleHole(holePos)) {
-                Direction facing = Alien.HOLE.is3Block(holePos);
-                if (facing != null) {
-                    targetPos = targetPos.add(new Vec3d(facing.getVector().getX() * 0.5, facing.getVector().getY() * 0.5, facing.getVector().getZ() * 0.5));
-                }
-            }
-
-            event.setTarget(targetPos, steps.getValueFloat(), priority.getValueFloat());
-        }
-    }
-
-    @EventHandler
-    public void onMove(MoveEvent event) {
-        if (grim.getValue()) return;
-        if (!mc.player.isAlive() || mc.player.isFallFlying()) {
-            disable();
-            return;
-        }
-        if (stuckTicks > 8) {
-            disable();
-            return;
-        }
-        if (holePos == null) {
-            //CommandManager.sendChatMessageWidthId("§e[!] §fHoles?", hashCode());
-            disable();
-            return;
-        }
-        Vec3d playerPos = mc.player.getPos();
-        targetPos = new Vec3d(holePos.getX() + 0.5, mc.player.getY(), holePos.getZ() + 0.5);
-        if (Alien.HOLE.isDoubleHole(holePos)) {
-            Direction facing = Alien.HOLE.is3Block(holePos);
-            if (facing != null) {
-                targetPos = targetPos.add(new Vec3d(facing.getVector().getX() * 0.5, facing.getVector().getY() * 0.5, facing.getVector().getZ() * 0.5));
-            }
-        }
-
-        applyTimer = true;
-        resetMove = true;
-        float rotation = getRotationTo(playerPos, targetPos).x;
-        float yawRad = rotation / 180.0f * 3.1415927f;
-        double dist = playerPos.distanceTo(targetPos);
-        double cappedSpeed = Math.min(0.2873, dist);
-        double x = -(float) Math.sin(yawRad) * cappedSpeed;
-        double z = (float) Math.cos(yawRad) * cappedSpeed;
-        event.setX(x);
-        event.setZ(z);
-        if (Math.abs(x) < 0.1 && Math.abs(z) < 0.1 && playerPos.y <= holePos.getY() + 0.5) {
-            disable();
-        }
-        if (mc.player.horizontalCollision) {
-            stuckTicks++;
-        } else {
-            stuckTicks = 0;
-        }
-    }
-
-    @Override
-    public void onRender3D(MatrixStack matrixStack) {
-        if (targetPos == null || holePos == null) {
-            return;
-        }
-        GL11.glEnable(GL11.GL_BLEND);
-        Color color = this.color.getValue();
-
-        Vec3d pos = new Vec3d(targetPos.x, holePos.getY(), targetPos.getZ());
-        if (fade.getValue()) {
-            double temp = 0.01;
-            for (double i = 0; i < circleSize.getValue(); i += temp) {
-                drawCircle(matrixStack, ColorUtil.injectAlpha(color, (int) Math.min(color.getAlpha() * 2 / (circleSize.getValue() / temp), 255)), i, pos, segments.getValueInt());
-            }
-        } else {
-            drawCircle(matrixStack, color, circleSize.getValue(), pos, segments.getValueInt());
-        }
-        RenderSystem.setShaderColor(1, 1, 1, 1);
-        GL11.glDisable(GL11.GL_BLEND);
-    }
-    public static Vec2f getRotationTo(Vec3d posFrom, Vec3d posTo) {
-        Vec3d vec3d = posTo.subtract(posFrom);
-        return getRotationFromVec(vec3d);
-    }
-
-    public static void drawCircle(MatrixStack matrixStack, Color color, double circleSize, Vec3d pos, int segments) {
-        Vec3d camPos = mc.getBlockEntityRenderDispatcher().camera.getPos();
+    public static void drawCircle(class_4587 matrixStack, Color color, double circleSize, class_243 pos, int segments) {
+        class_243 camPos = HoleSnap.mc.method_31975().field_4344.method_19326();
         RenderSystem.disableDepthTest();
-        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
-        Tessellator tessellator = RenderSystem.renderThreadTesselator();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionProgram);
-        RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
-        bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION);
-
-        for (double i = 0; i < 360; i += ((double) 360 / segments)) {
+        Matrix4f matrix = matrixStack.method_23760().method_23761();
+        RenderSystem.setShader(class_757::method_34540);
+        float a = (float)color.getAlpha() / 255.0f;
+        float r = (float)color.getRed() / 255.0f;
+        float g = (float)color.getGreen() / 255.0f;
+        float b = (float)color.getBlue() / 255.0f;
+        class_287 bufferBuilder = class_289.method_1348().method_60827(class_293.class_5596.field_27381, class_290.field_1576);
+        for (double i = 0.0; i < 360.0; i += 360.0 / (double)segments) {
             double x = Math.sin(Math.toRadians(i)) * circleSize;
             double z = Math.cos(Math.toRadians(i)) * circleSize;
-            Vec3d tempPos = new Vec3d(pos.x + x, pos.y, pos.z + z).add(-camPos.x, -camPos.y, -camPos.z);
-            bufferBuilder.vertex(matrix, (float) tempPos.x, (float) tempPos.y, (float) tempPos.z).next();
+            class_243 tempPos = new class_243(pos.field_1352 + x, pos.field_1351, pos.field_1350 + z).method_1031(-camPos.field_1352, -camPos.field_1351, -camPos.field_1350);
+            bufferBuilder.method_22918(matrix, (float)tempPos.field_1352, (float)tempPos.field_1351, (float)tempPos.field_1350).method_22915(r, g, b, a);
         }
-
-        tessellator.draw();
+        class_286.method_43433((class_9801)bufferBuilder.method_60800());
         RenderSystem.enableDepthTest();
     }
 
-    private static Vec2f getRotationFromVec(Vec3d vec) {
-        double d = vec.x;
-        double d2 = vec.z;
+    private static class_241 getRotationFromVec(class_243 vec) {
+        double d = vec.field_1352;
+        double d2 = vec.field_1350;
         double xz = Math.hypot(d, d2);
-        d2 = vec.z;
-        double d3 = vec.x;
-        double yaw = normalizeAngle(Math.toDegrees(Math.atan2(d2, d3)) - 90.0);
-        double pitch = normalizeAngle(Math.toDegrees(-Math.atan2(vec.y, xz)));
-        return new Vec2f((float) yaw, (float) pitch);
+        d2 = vec.field_1350;
+        double d3 = vec.field_1352;
+        double yaw = HoleSnap.normalizeAngle(Math.toDegrees(Math.atan2(d2, d3)) - 90.0);
+        double pitch = HoleSnap.normalizeAngle(Math.toDegrees(-Math.atan2(vec.field_1351, xz)));
+        return new class_241((float)yaw, (float)pitch);
     }
 
     private static double normalizeAngle(double angleIn) {
-        double angle = angleIn;
-        if ((angle %= 360.0) >= 180.0) {
+        double d;
+        double angle = angleIn % 360.0;
+        if (d >= 180.0) {
             angle -= 360.0;
         }
         if (angle < -180.0) {
@@ -287,4 +130,163 @@ public class HoleSnap extends Module {
         }
         return angle;
     }
+
+    @EventListener(priority=-99)
+    public void onTimer(TimerEvent event) {
+        if (this.applyTimer) {
+            event.set(this.timer.getValueFloat());
+        }
+    }
+
+    @Override
+    public boolean onEnable() {
+        this.applyTimer = false;
+        if (HoleSnap.nullCheck()) {
+            this.disable();
+        } else {
+            this.resetMove = false;
+            this.holePos = Alien.HOLE.getHole((float)this.range.getValue(), true, this.any.getValue(), this.up.getValue());
+        }
+        return false;
+    }
+
+    @Override
+    public void onDisable() {
+        this.holePos = null;
+        this.stuckTicks = 0;
+        this.enabledTicks = 0;
+        if (!HoleSnap.nullCheck() && this.resetMove && !this.grim.getValue()) {
+            MovementUtil.setMotionX(0.0);
+            MovementUtil.setMotionZ(0.0);
+        }
+    }
+
+    @EventListener
+    public void onReceivePacket(PacketEvent.Receive event) {
+        if (event.getPacket() instanceof class_2708) {
+            this.disable();
+        }
+    }
+
+    @EventListener(priority=-999)
+    public void onKeyInput(KeyboardInputEvent e) {
+        if (this.grim.getValue()) {
+            if (!AntiCheat.INSTANCE.movementSync()) {
+                this.sendMessage("\u00a74HoleSnap require MovementSync.");
+                this.disable();
+            } else if (!HoleSnap.mc.field_1724.method_3144() && !Freecam.INSTANCE.isOn()) {
+                HoleSnap.mc.field_1724.field_3913.field_3907 = 0.0f;
+                HoleSnap.mc.field_1724.field_3913.field_3905 = 1.0f;
+            }
+        }
+    }
+
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        this.holePos = Alien.HOLE.getHole((float)this.range.getValue(), true, this.any.getValue(), this.up.getValue());
+        if (this.holePos == null) {
+            this.disable();
+        } else {
+            ++this.enabledTicks;
+            if ((double)this.enabledTicks > this.timeoutTicks.getValue() - 1.0) {
+                this.disable();
+            } else {
+                this.applyTimer = true;
+                if (this.grim.getValue()) {
+                    if (!HoleSnap.mc.field_1724.method_5805() || HoleSnap.mc.field_1724.method_6128()) {
+                        this.disable();
+                    } else if (this.stuckTicks > 8) {
+                        this.disable();
+                    } else if (this.holePos == null) {
+                        this.disable();
+                    } else {
+                        class_2350 facing;
+                        class_243 playerPos = HoleSnap.mc.field_1724.method_19538();
+                        this.targetPos = new class_243((double)this.holePos.method_10263() + 0.5, HoleSnap.mc.field_1724.method_23318(), (double)this.holePos.method_10260() + 0.5);
+                        if (Alien.HOLE.isDoubleHole(this.holePos) && (facing = Alien.HOLE.is3Block(this.holePos)) != null) {
+                            this.targetPos = this.targetPos.method_1019(new class_243((double)facing.method_10163().method_10263() * 0.5, (double)facing.method_10163().method_10264() * 0.5, (double)facing.method_10163().method_10260() * 0.5));
+                        }
+                        this.applyTimer = true;
+                        this.resetMove = true;
+                        float rotation = HoleSnap.getRotationTo((class_243)playerPos, (class_243)this.targetPos).field_1343;
+                        float yawRad = rotation / 180.0f * (float)Math.PI;
+                        double dist = playerPos.method_1022(this.targetPos);
+                        double cappedSpeed = Math.min(0.2873, dist);
+                        double x = (double)(-((float)Math.sin(yawRad))) * cappedSpeed;
+                        double z = (double)((float)Math.cos(yawRad)) * cappedSpeed;
+                        if (Math.abs(x) < 0.25 && Math.abs(z) < 0.25 && playerPos.field_1351 <= (double)this.holePos.method_10264() + 0.8) {
+                            this.disable();
+                        } else {
+                            this.stuckTicks = HoleSnap.mc.field_1724.field_5976 ? ++this.stuckTicks : 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventListener
+    public void onRotate(RotationEvent event) {
+        if (this.grim.getValue() && this.holePos != null) {
+            class_2350 facing;
+            this.targetPos = new class_243((double)this.holePos.method_10263() + 0.5, HoleSnap.mc.field_1724.method_23318(), (double)this.holePos.method_10260() + 0.5);
+            if (Alien.HOLE.isDoubleHole(this.holePos) && (facing = Alien.HOLE.is3Block(this.holePos)) != null) {
+                this.targetPos = this.targetPos.method_1019(new class_243((double)facing.method_10163().method_10263() * 0.5, (double)facing.method_10163().method_10264() * 0.5, (double)facing.method_10163().method_10260() * 0.5));
+            }
+            event.setTarget(this.targetPos, this.steps.getValueFloat(), this.priority.getValueFloat());
+        }
+    }
+
+    @EventListener
+    public void onMove(MoveEvent event) {
+        if (!this.grim.getValue()) {
+            if (!HoleSnap.mc.field_1724.method_5805() || HoleSnap.mc.field_1724.method_6128()) {
+                this.disable();
+            } else if (this.stuckTicks > 8) {
+                this.disable();
+            } else if (this.holePos == null) {
+                this.disable();
+            } else {
+                class_2350 facing;
+                class_243 playerPos = HoleSnap.mc.field_1724.method_19538();
+                this.targetPos = new class_243((double)this.holePos.method_10263() + 0.5, HoleSnap.mc.field_1724.method_23318(), (double)this.holePos.method_10260() + 0.5);
+                if (Alien.HOLE.isDoubleHole(this.holePos) && (facing = Alien.HOLE.is3Block(this.holePos)) != null) {
+                    this.targetPos = this.targetPos.method_1019(new class_243((double)facing.method_10163().method_10263() * 0.5, (double)facing.method_10163().method_10264() * 0.5, (double)facing.method_10163().method_10260() * 0.5));
+                }
+                this.applyTimer = true;
+                this.resetMove = true;
+                float rotation = HoleSnap.getRotationTo((class_243)playerPos, (class_243)this.targetPos).field_1343;
+                float yawRad = rotation / 180.0f * (float)Math.PI;
+                double dist = playerPos.method_1022(this.targetPos);
+                double cappedSpeed = Math.min(0.2873, dist);
+                double x = (double)(-((float)Math.sin(yawRad))) * cappedSpeed;
+                double z = (double)((float)Math.cos(yawRad)) * cappedSpeed;
+                event.setX(x);
+                event.setZ(z);
+                if (Math.abs(x) < 0.1 && Math.abs(z) < 0.1 && playerPos.field_1351 <= (double)this.holePos.method_10264() + 0.5) {
+                    this.disable();
+                }
+                this.stuckTicks = HoleSnap.mc.field_1724.field_5976 ? ++this.stuckTicks : 0;
+            }
+        }
+    }
+
+    @Override
+    public void onRender3D(class_4587 matrixStack) {
+        if (this.targetPos != null && this.holePos != null) {
+            GL11.glEnable((int)3042);
+            Color color = this.color.getValue();
+            class_243 pos = new class_243(this.targetPos.field_1352, (double)this.holePos.method_10264(), this.targetPos.method_10215());
+            if (this.fade.getValue()) {
+                double temp = 0.01;
+                for (double i = 0.0; i < this.circleSize.getValue(); i += temp) {
+                    HoleSnap.drawCircle(matrixStack, ColorUtil.injectAlpha(color, (int)Math.min((double)(color.getAlpha() * 2) / (this.circleSize.getValue() / temp), 255.0)), i, pos, this.segments.getValueInt());
+                }
+            } else {
+                HoleSnap.drawCircle(matrixStack, color, this.circleSize.getValue(), pos, this.segments.getValueInt());
+            }
+            GL11.glDisable((int)3042);
+        }
+    }
 }
+

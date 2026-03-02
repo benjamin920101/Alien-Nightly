@@ -1,13 +1,23 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1113
+ */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
-import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.class_1113;
 
-public class PlaySoundEvent extends Event {
-    public final SoundInstance sound;
+public class PlaySoundEvent
+extends Event {
+    private static final PlaySoundEvent INSTANCE = new PlaySoundEvent();
+    public class_1113 sound;
 
-    public PlaySoundEvent(SoundInstance soundInstance) {
-        super(Stage.Pre);
-        sound = soundInstance;
+    public static PlaySoundEvent get(class_1113 sound) {
+        INSTANCE.setCancelled(false);
+        PlaySoundEvent.INSTANCE.sound = sound;
+        return INSTANCE;
     }
 }
+

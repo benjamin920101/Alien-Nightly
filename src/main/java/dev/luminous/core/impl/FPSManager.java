@@ -1,17 +1,21 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.core.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FPSManager {
-    private final List<Long> records = new ArrayList<>();
+    private final List<Long> records = new ArrayList<Long>();
 
     public void record() {
-        records.add(System.currentTimeMillis());
+        this.records.add(System.currentTimeMillis());
     }
 
     public int getFps() {
-        records.removeIf(aLong -> aLong + 1000 < System.currentTimeMillis());
-        return records.size();
+        this.records.removeIf(aLong -> aLong + 1000L < System.currentTimeMillis());
+        return this.records.size();
     }
 }
+

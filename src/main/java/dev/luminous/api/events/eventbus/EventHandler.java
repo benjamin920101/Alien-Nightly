@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package dev.luminous.api.events.eventbus;
 
 import java.lang.annotation.ElementType;
@@ -5,11 +8,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Used to mark listeners.
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Retention(value=RetentionPolicy.RUNTIME)
+@Target(value={ElementType.METHOD})
 public @interface EventHandler {
-    int priority() default EventPriority.MEDIUM;
+    public int priority() default 0;
 }
+

@@ -1,218 +1,354 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1291
+ *  net.minecraft.class_1293
+ *  net.minecraft.class_1937
+ *  net.minecraft.class_332
+ *  net.minecraft.class_408
+ *  net.minecraft.class_640
+ *  net.minecraft.class_6880
+ *  net.minecraft.class_7923
+ */
 package dev.luminous.mod.modules.impl.client;
 
 import dev.luminous.Alien;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.ClientTickEvent;
+import dev.luminous.api.events.impl.InitEvent;
+import dev.luminous.api.utils.Wrapper;
+import dev.luminous.api.utils.math.Animation;
+import dev.luminous.api.utils.math.Easing;
+import dev.luminous.api.utils.render.ColorUtil;
+import dev.luminous.api.utils.render.Render2DUtil;
 import dev.luminous.api.utils.render.TextUtil;
-import dev.luminous.mod.gui.font.FontRenderers;
+import dev.luminous.asm.accessors.ISimpleRegistry;
+import dev.luminous.core.impl.FontManager;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
+import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import dev.luminous.mod.modules.settings.impl.StringSetting;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.world.World;
-
-import java.awt.*;
+import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.function.BooleanSupplier;
+import net.minecraft.class_1291;
+import net.minecraft.class_1293;
+import net.minecraft.class_1937;
+import net.minecraft.class_332;
+import net.minecraft.class_408;
+import net.minecraft.class_640;
+import net.minecraft.class_6880;
+import net.minecraft.class_7923;
 
-public class HUD extends Module {
+public class HUD
+extends Module {
     public static HUD INSTANCE;
+    public final EnumSetting<Page> page = this.add(new EnumSetting<Page>("Page", Page.General));
+    public final BooleanSetting renderingUp = this.add(new BooleanSetting("RenderingUp", false, () -> this.page.is(Page.General)));
+    public final BooleanSetting font = this.add(new BooleanSetting("Font", true, () -> this.page.is(Page.General)));
+    public final BooleanSetting shadow = this.add(new BooleanSetting("Shadow", true, () -> this.page.is(Page.General)));
+    public final BooleanSetting lowerCase = this.add(new BooleanSetting("LowerCase", false, () -> this.page.is(Page.General)));
+    public final BooleanSetting sort = this.add(new BooleanSetting("Sort", false, () -> this.page.is(Page.General)));
+    public final SliderSetting xOffset = this.add(new SliderSetting("XOffset", 0.0, 0.0, 50.0, 0.1, () -> this.page.is(Page.General)));
+    public final SliderSetting yOffset = this.add(new SliderSetting("YOffset", 0.0, 0.0, 50.0, 0.1, () -> this.page.is(Page.General)));
+    public final SliderSetting textOffset = this.add(new SliderSetting("TextOffset", 0.0, -10.0, 10.0, 0.1, () -> this.page.is(Page.General)));
+    public final SliderSetting interval = this.add(new SliderSetting("Interval", 0.0, 0.0, 15.0, 0.1, () -> this.page.is(Page.General)));
+    public final SliderSetting enableLength = this.add(new SliderSetting("EnableLength", 200, 0, 1000, () -> this.page.is(Page.General)));
+    public final SliderSetting disableLength = this.add(new SliderSetting("DisableLength", 200, 0, 1000, () -> this.page.is(Page.General)));
+    public final SliderSetting fadeLength = this.add(new SliderSetting("FadeLength", 200, 0, 1000, () -> this.page.is(Page.General)));
+    public final EnumSetting<Easing> easing = this.add(new EnumSetting<Easing>("Easing", Easing.CircInOut, () -> this.page.is(Page.General)));
+    public final BooleanSetting arrayList = this.add(new BooleanSetting("ArrayList", true, () -> this.page.is(Page.Element)).setParent());
+    public final BooleanSetting listSort = this.add(new BooleanSetting("ListSort", true, () -> this.page.is(Page.Element) && this.arrayList.isOpen()));
+    public final BooleanSetting armor = this.add(new BooleanSetting("Armor", true, () -> this.page.is(Page.Element)).setParent());
+    public final SliderSetting armorOffset = this.add(new SliderSetting("ArmorOffset", 1.0, 0.0, 100.0, -1.0, () -> this.page.is(Page.Element) && this.armor.isOpen()));
+    public final BooleanSetting durability = this.add(new BooleanSetting("Durability", true, () -> this.page.is(Page.Element) && this.armor.isOpen()));
+    public final BooleanSetting waterMark = this.add(new BooleanSetting("WaterMark", true, () -> this.page.is(Page.Element)).setParent());
+    public final ColorSetting pulse = this.add(new ColorSetting("Pulse", new Color(79, 0, 0), () -> this.page.is(Page.Element) && this.waterMark.isOpen()).injectBoolean(true));
+    public final StringSetting waterMarkString = this.add(new StringSetting("Title", "%hackname% %version%", () -> this.page.is(Page.Element) && this.waterMark.isOpen()));
+    public final SliderSetting waterMarkOffset = this.add(new SliderSetting("Offset", 1.0, 0.0, 100.0, -1.0, () -> this.page.is(Page.Element) && this.waterMark.isOpen()));
+    public final BooleanSetting fps = this.add(new BooleanSetting("FPS", true, () -> this.page.is(Page.Element)));
+    public final BooleanSetting ping = this.add(new BooleanSetting("Ping", true, () -> this.page.is(Page.Element)));
+    public final BooleanSetting tps = this.add(new BooleanSetting("TPS", true, () -> this.page.is(Page.Element)));
+    public final BooleanSetting ip = this.add(new BooleanSetting("IP", false, () -> this.page.is(Page.Element)));
+    public final BooleanSetting time = this.add(new BooleanSetting("Time", false, () -> this.page.is(Page.Element)));
+    public final BooleanSetting speed = this.add(new BooleanSetting("Speed", true, () -> this.page.is(Page.Element)));
+    public final BooleanSetting brand = this.add(new BooleanSetting("Brand", false, () -> this.page.is(Page.Element)));
+    public final BooleanSetting potions = this.add(new BooleanSetting("Potions", true, () -> this.page.is(Page.Element)));
+    public final BooleanSetting coords = this.add(new BooleanSetting("Coords", true, () -> this.page.is(Page.Element)).setParent());
+    public final BooleanSetting colorSync = this.add(new BooleanSetting("ColorSync", true, () -> this.page.is(Page.Element) && this.coords.isOpen()));
+    public final ColorSetting color = this.add(new ColorSetting("Color", new Color(208, 0, 0), () -> this.page.is(Page.Color)));
+    private final EnumSetting<ColorMode> colorMode = this.add(new EnumSetting<ColorMode>("ColorMode", ColorMode.Pulse, () -> this.page.is(Page.Color)));
+    private final SliderSetting rainbowSpeed = this.add(new SliderSetting("RainbowSpeed", 4.0, 1.0, 10.0, 0.1, () -> this.page.is(Page.Color) && this.colorMode.getValue() == ColorMode.Rainbow));
+    private final SliderSetting saturation = this.add(new SliderSetting("Saturation", 130.0, 1.0, 255.0, () -> this.page.is(Page.Color) && this.colorMode.getValue() == ColorMode.Rainbow));
+    private final SliderSetting rainbowDelay = this.add(new SliderSetting("Delay", 350, 0, 1000, () -> this.page.is(Page.Color) && this.colorMode.getValue() == ColorMode.Rainbow));
+    private final ColorSetting endColor = this.add(new ColorSetting("SecondColor", new Color(255, 0, 0, 255), () -> this.page.is(Page.Color) && this.colorMode.getValue() == ColorMode.Pulse).injectBoolean(true));
+    private final SliderSetting pulseSpeed = this.add(new SliderSetting("PulseSpeed", 1.0, 0.0, 5.0, 0.1, () -> this.page.is(Page.Color)));
+    private final SliderSetting pulseCounter = this.add(new SliderSetting("Counter", 10, 1, 50, () -> this.page.is(Page.Color)));
+    public final BooleanSetting blur = this.add(new BooleanSetting("Blur", false, () -> this.page.is(Page.Color)).setParent());
+    public final SliderSetting radius = this.add(new SliderSetting("Radius", 10.0, 0.0, 100.0, () -> this.page.is(Page.Color) && this.blur.isOpen()));
+    private final BooleanSetting backGround = this.add(new BooleanSetting("BackGround", false, () -> this.page.is(Page.Color)).setParent());
+    public final SliderSetting width = this.add(new SliderSetting("Width", 0.0, 0.0, 15.0, () -> this.page.is(Page.Color) && this.backGround.isOpen()));
+    private final ColorSetting bgColor = this.add(new ColorSetting("BGColor", new Color(0, 0, 0, 100), () -> this.page.is(Page.Color) && this.backGround.isOpen()));
+    private final ColorSetting rect = this.add(new ColorSetting("Rect", new Color(208, 0, 0), () -> this.page.is(Page.Color)).injectBoolean(false));
+    private final ColorSetting glow = this.add(new ColorSetting("Glow", new Color(208, 0, 100), () -> this.page.is(Page.Color)).injectBoolean(false));
+    private final DecimalFormat decimal = new DecimalFormat("0.0");
+    private final ArrayList<Info> infoList = new ArrayList();
+    private final ArrayList<Info> moduleList = new ArrayList();
 
-    public final BooleanSetting armor = add(new BooleanSetting("Armor", true));
-    public final BooleanSetting up = add(new BooleanSetting("Up", false));
-    public final BooleanSetting customFont = add(new BooleanSetting("CustomFont", true));
-    public final ColorSetting color = add(new ColorSetting("Color", new Color(208, 0, 0)));
-    public final ColorSetting pulse = add(new ColorSetting("Pulse", new Color(79, 0, 0)).injectBoolean(true));
-    public final BooleanSetting waterMark = add(new BooleanSetting("WaterMark", true));
-    public final StringSetting waterMarkString = add(new StringSetting("Title", "%hackname% %version%"));
-    public final SliderSetting offset = add(new SliderSetting("Offset", 1, 0, 100, -1));
-    public final BooleanSetting sync = add(new BooleanSetting("InfoColorSync", true));
-    public final BooleanSetting lowerCase = add(new BooleanSetting("LowerCase", false));
-    public final BooleanSetting fps = add(new BooleanSetting("FPS", true));
-    public final BooleanSetting ping = add(new BooleanSetting("Ping", true));
-    public final BooleanSetting tps = add(new BooleanSetting("TPS", true));
-    public final BooleanSetting ip = add(new BooleanSetting("IP", false));
-    public final BooleanSetting time = add(new BooleanSetting("Time", false));
-    public final BooleanSetting speed = add(new BooleanSetting("Speed", true));
-    public final BooleanSetting brand = add(new BooleanSetting("Brand", false));
-    public final BooleanSetting potions = add(new BooleanSetting("Potions", true));
-    public final BooleanSetting coords = add(new BooleanSetting("Coords", true));
-    private final SliderSetting pulseSpeed = add(new SliderSetting("Speed", 1, 0, 5, 0.1));
-    private final SliderSetting pulseCounter = add(new SliderSetting("Counter", 10, 1, 50));
     public HUD() {
-        super("HUD", Category.Client);
-        setChinese("界面");
+        super("HUD", Module.Category.Client);
+        this.setChinese("\u754c\u9762");
         INSTANCE = this;
+        Alien.EVENT_BUS.subscribe(new InitHandler());
+        for (class_1291 potionEffect : class_7923.field_41174) {
+            try {
+                class_6880 effectRegistryEntry = (class_6880)((ISimpleRegistry)class_7923.field_41174).getValueToEntry().get(potionEffect);
+                this.infoList.add(new Info(() -> {
+                    class_1293 effect = HUD.mc.field_1724.method_6112(effectRegistryEntry);
+                    if (effect != null) {
+                        String s = potionEffect.method_5560().getString() + " " + (effect.method_5578() + 1);
+                        String s2 = HUD.getDuration(effect);
+                        return s + " \u00a7f" + s2;
+                    }
+                    return "";
+                }, () -> HUD.mc.field_1724.method_6059(effectRegistryEntry) && this.potions.getValue()));
+            }
+            catch (Exception exception) {}
+        }
+        this.infoList.add(new Info(() -> "ServerBrand \u00a7f" + (mc.method_1542() ? "Vanilla" : mc.method_1562().method_52790().replaceAll("\\(.*?\\)", "")), this.brand::getValue));
+        this.infoList.add(new Info(() -> "Server \u00a7f" + (mc.method_1542() ? "SinglePlayer" : HUD.mc.method_1558().field_3761), this.ip::getValue));
+        this.infoList.add(new Info(() -> "TPS \u00a7f" + Alien.SERVER.getTPS() + " [" + Alien.SERVER.getCurrentTPS() + "]", this.tps::getValue));
+        this.infoList.add(new Info(() -> {
+            double x = HUD.mc.field_1724.method_23317() - HUD.mc.field_1724.field_6014;
+            double z = HUD.mc.field_1724.method_23321() - HUD.mc.field_1724.field_5969;
+            double dist = Math.sqrt(x * x + z * z) / 1000.0;
+            double div = 1.388888888888889E-5;
+            float timer = Alien.TIMER.get();
+            double playerSpeed = dist / div * (double)timer;
+            return String.format("Speed \u00a7f%skm/h", this.decimal.format(playerSpeed));
+        }, this.speed::getValue));
+        this.infoList.add(new Info(() -> "Time \u00a7f" + new SimpleDateFormat("h:mm a", Locale.ENGLISH).format(new Date()), this.time::getValue));
+        this.infoList.add(new Info(() -> {
+            class_640 playerListEntry = mc.method_1562().method_2871(HUD.mc.field_1724.method_5667());
+            Object playerPing = playerListEntry == null ? "Unknown" : playerListEntry.method_2959() + "ms";
+            return "Ping \u00a7f" + (String)playerPing;
+        }, this.ping::getValue));
+        this.infoList.add(new Info(() -> "FPS \u00a7f" + Alien.FPS.getFps(), this.fps::getValue));
     }
 
-    private final DecimalFormat decimal = new DecimalFormat("0.0");
+    public static String getDuration(class_1293 pe) {
+        if (pe.method_48559()) {
+            return "\u221e";
+        }
+        int var1 = pe.method_5584();
+        int mins = var1 / 1200;
+        int sec = var1 % 1200 / 20;
+        return String.format("%d:%02d", mins, sec);
+    }
 
     @Override
-    public void onRender2D(DrawContext drawContext, float tickDelta) {
-        if (armor.getValue()) {
-            Alien.GUI.armorHud.draw(drawContext, tickDelta, null);
-        }
-        if (waterMark.getValue()) {
-            if (pulse.booleanValue) {
-                TextUtil.drawStringPulse(drawContext, waterMarkString.getValue().replaceAll("%version%", Alien.VERSION).replaceAll("%hackname%", Alien.NAME), offset.getValueInt(), offset.getValueInt(), color.getValue(), pulse.getValue(), pulseSpeed.getValue(), pulseCounter.getValueInt(), customFont.getValue());
+    public void onRender2D(class_332 drawContext, float tickDelta) {
+        if (this.waterMark.getValue()) {
+            if (this.pulse.booleanValue) {
+                TextUtil.drawStringPulse(drawContext, this.waterMarkString.getValue().replaceAll("%version%", "4.0").replaceAll("%hackname%", "Alien"), this.waterMarkOffset.getValueInt(), this.waterMarkOffset.getValueInt(), this.color.getValue(), this.pulse.getValue(), this.pulseSpeed.getValue(), this.pulseCounter.getValueInt(), this.font.getValue(), this.shadow.getValue());
             } else {
-                TextUtil.drawString(drawContext, waterMarkString.getValue().replaceAll("%version%", Alien.VERSION).replaceAll("%hackname%", Alien.NAME), offset.getValueInt(), offset.getValueInt(), color.getValue().getRGB(), customFont.getValue());
+                TextUtil.drawString(drawContext, this.waterMarkString.getValue().replaceAll("%version%", "4.0").replaceAll("%hackname%", "Alien"), this.waterMarkOffset.getValueInt(), this.waterMarkOffset.getValueInt(), this.color.getValue().getRGB(), this.font.getValue(), this.shadow.getValue());
             }
         }
-        int fontHeight = getHeight();
-        int height;
-        int y;
-        if (up.getValue()) {
-            y = 1;
-            height = -fontHeight;
-        } else {
-            y = mc.getWindow().getScaledHeight() - fontHeight;
-            if (mc.currentScreen instanceof ChatScreen) {
-                y -= 15;
-            }
-            height = fontHeight;
+        int fontHeight = this.getHeight();
+        if (this.coords.getValue()) {
+            String coordsString = HUD.getCoords();
+            this.drawCoord(drawContext, coordsString, mc.method_22683().method_4502() - fontHeight - (HUD.mc.field_1755 instanceof class_408 ? 15 : 0));
         }
-        int windowWidth = mc.getWindow().getScaledWidth() - 1;
-        if (potions.getValue()) {
-            List<StatusEffectInstance> effects = new ArrayList<>(mc.player.getStatusEffects());
-            for (StatusEffectInstance potionEffect : effects) {
-                StatusEffect potion = potionEffect.getEffectType();
-                String power = "";
-                switch (potionEffect.getAmplifier()) {
-                    case 0 -> power = "I";
-                    case 1 -> power = "II";
-                    case 2 -> power = "III";
-                    case 3 -> power = "IV";
-                    case 4 -> power = "V";
-                }
-                String s = potion.getName().getString() + " " + power;
-                String s2 = getDuration(potionEffect);
-                String text = s + " " + s2;
-                int x = getWidth(text);
-                TextUtil.drawString(drawContext, text, windowWidth - x, y, potionEffect.getEffectType().getColor(), customFont.getValue());
-                y -= height;
+        Info.onRender(drawContext, this.infoList, this.renderingUp.getValue());
+        if (this.arrayList.getValue()) {
+            Info.onRender(drawContext, this.moduleList, !this.renderingUp.getValue());
+        }
+    }
+
+    @EventListener(priority=-999)
+    public void onUpdate(ClientTickEvent event) {
+        if (!HUD.nullCheck() && event.isPost()) {
+            Info.onUpdate(this.infoList, this.sort.getValue());
+            if (this.arrayList.getValue()) {
+                Info.onUpdate(this.moduleList, this.listSort.getValue());
             }
         }
-        if (brand.getValue()) {
-            String brand = (mc.isInSingleplayer() ? "Vanilla" : mc.getNetworkHandler().getBrand().replaceAll("\\(.*?\\)", ""));
-            int x = getWidth("ServerBrand " + brand);
-            drawText(drawContext, "ServerBrand §f" + brand, windowWidth - x, y);
-            y -= height;
-        }
-        if (time.getValue()) {
-            String text = "Time §f" + (new SimpleDateFormat("h:mm a", Locale.ENGLISH)).format(new Date());
-            int width = getWidth(text);
-            drawText(drawContext, text, windowWidth - width, y);
-            y -= height;
-        }
-        if (ip.getValue()) {
-            int x = getWidth("Server " + (mc.isInSingleplayer() ? "SinglePlayer" : mc.getCurrentServerEntry().address));
-            drawText(drawContext, "Server §f" + (mc.isInSingleplayer() ? "SinglePlayer" : mc.getCurrentServerEntry().address), windowWidth - x, y);
-            y -= height;
-        }
-        if (tps.getValue()) {
-            int x = getWidth("TPS " + Alien.SERVER.getTPS() + " [" + Alien.SERVER.getCurrentTPS() + "]");
-            drawText(drawContext, "TPS §f" + Alien.SERVER.getTPS() + " §7[§f" + Alien.SERVER.getCurrentTPS() + "§7]", windowWidth - x, y);
-            y -= height;
-        }
-        if (speed.getValue()) {
-            double x = mc.player.getX() - mc.player.prevX;
-            // double y = mc.player.getY() - mc.player.prevY;
-            double z = mc.player.getZ() - mc.player.prevZ;
-            double dist = Math.sqrt(x * x + z * z) / 1000.0;
-            double div = 0.05 / 3600.0;
-            float timer = Alien.TIMER.get();
-            final double speed = dist / div * timer;
-            String text = String.format("Speed §f%skm/h",
-                    decimal.format(speed));
-            int width = getWidth(text);
-            drawText(drawContext, text, windowWidth - width, y);
-            y -= height;
-        }
-        if (fps.getValue()) {
-            int x = getWidth("FPS " + Alien.FPS.getFps());
-            drawText(drawContext, "FPS §f" + Alien.FPS.getFps(), windowWidth - x, y);
-            y -= height;
-        }
-        if (ping.getValue()) {
-            PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid());
-            String ping;
-            if (playerListEntry == null) {
-                ping = "Unknown";
-            } else {
-                ping = String.valueOf(playerListEntry.getLatency());
-            }
-            int x = getWidth("Ping " + ping);
-            drawText(drawContext, "Ping §f" + ping, windowWidth - x, y);
-            y -= height;
-        }
+    }
 
-        if (coords.getValue()) {
-            boolean inNether = mc.world.getRegistryKey().equals(World.NETHER);
-
-            int posX = mc.player.getBlockX();
-            int posY = mc.player.getBlockY();
-            int posZ = mc.player.getBlockZ();
-
-            float factor = !inNether ? 0.125F : 8.0F;
-
-            int anotherWorldX = (int) (mc.player.getX() * factor);
-            int anotherWorldZ = (int) (mc.player.getZ() * factor);
-
-            String coordsString = "XYZ §f" + (inNether ? (posX + ", " + posY + ", " + posZ + " §7[§f" + anotherWorldX + ", " + anotherWorldZ + "§7]§f") : (posX + ", " + posY + ", " + posZ + "§7 [§f" + anotherWorldX + ", " + anotherWorldZ + "§7]"));
-
-            drawText(drawContext, coordsString, (int) 2.0F, mc.getWindow().getScaledHeight() - fontHeight - (mc.currentScreen instanceof ChatScreen ? 15 : 0));
-        }
+    private static String getCoords() {
+        boolean inNether = HUD.mc.field_1687.method_27983().equals(class_1937.field_25180);
+        int posX = HUD.mc.field_1724.method_31477();
+        int posY = HUD.mc.field_1724.method_31478();
+        int posZ = HUD.mc.field_1724.method_31479();
+        float factor = !inNether ? 0.125f : 8.0f;
+        int anotherWorldX = (int)(HUD.mc.field_1724.method_23317() * (double)factor);
+        int anotherWorldZ = (int)(HUD.mc.field_1724.method_23321() * (double)factor);
+        return "XYZ \u00a7f" + (inNether ? posX + ", " + posY + ", " + posZ + " \u00a77[\u00a7f" + anotherWorldX + ", " + anotherWorldZ + "\u00a77]\u00a7f" : posX + ", " + posY + ", " + posZ + "\u00a77 [\u00a7f" + anotherWorldX + ", " + anotherWorldZ + "\u00a77]");
     }
 
     private int getWidth(String s) {
-        if (customFont.getValue()) {
-            return (int) FontRenderers.ui.getWidth(s);
+        if (this.lowerCase.getValue()) {
+            s = s.toLowerCase();
         }
-        return mc.textRenderer.getWidth(s);
+        return this.font.getValue() ? (int)FontManager.ui.getWidth(s) : HUD.mc.field_1772.method_1727(s);
     }
 
     private int getHeight() {
-        if (customFont.getValue()) {
-            return (int) FontRenderers.ui.getFontHeight();
-        }
-        return mc.textRenderer.fontHeight;
+        return this.font.getValue() ? (int)FontManager.ui.getFontHeight() : 9;
     }
 
-    private void drawText(DrawContext drawContext, String s, int x, int y) {
-        if (sync.getValue()) {
-            ModuleList.INSTANCE.counter--;
-            if (lowerCase.getValue()) {
+    private void drawCoord(class_332 drawContext, String s, int y) {
+        if (this.colorSync.getValue()) {
+            if (this.lowerCase.getValue()) {
                 s = s.toLowerCase();
             }
-            TextUtil.drawString(drawContext, s, x, y, ModuleList.INSTANCE.getColor(ModuleList.INSTANCE.counter), customFont.getValue());
-            return;
-        }
-        if (pulse.booleanValue) {
-            TextUtil.drawStringPulse(drawContext, s, x, y, color.getValue(), pulse.getValue(), pulseSpeed.getValue(), pulseCounter.getValueInt(), customFont.getValue());
+            TextUtil.drawString(drawContext, s, 2.0, y, this.getColor(20.0), this.font.getValue(), this.shadow.getValue());
+        } else if (this.pulse.booleanValue) {
+            TextUtil.drawStringPulse(drawContext, s, 2.0, y, this.color.getValue(), this.pulse.getValue(), this.pulseSpeed.getValue(), this.pulseCounter.getValueInt(), this.font.getValue(), this.shadow.getValue());
         } else {
-            TextUtil.drawString(drawContext, s, x, y, color.getValue().getRGB(), customFont.getValue());
+            TextUtil.drawString(drawContext, s, 2.0, y, this.color.getValue().getRGB(), this.font.getValue(), this.shadow.getValue());
         }
     }
 
-    public static String getDuration(StatusEffectInstance pe) {
-        if (pe.isInfinite()) {
-            return "*:*";
-        } else {
-            int var1 = pe.getDuration();
-            int mins = var1 / 1200;
-            int sec = (var1 % 1200) / 20;
+    public int getColor(double counter) {
+        return this.colorMode.getValue() != ColorMode.Custom ? this.rainbow(counter).getRGB() : this.color.getValue().getRGB();
+    }
 
-            return mins + ":" + sec;
+    private Color rainbow(double delay) {
+        if (this.colorMode.getValue() == ColorMode.Pulse) {
+            return this.endColor.booleanValue ? ColorUtil.pulseColor(this.color.getValue(), this.endColor.getValue(), delay, this.pulseCounter.getValueInt(), this.pulseSpeed.getValue()) : ColorUtil.pulseColor(this.color.getValue(), delay, this.pulseCounter.getValueInt(), this.pulseSpeed.getValue());
+        }
+        if (this.colorMode.getValue() == ColorMode.Rainbow) {
+            double rainbowState = Math.ceil(((double)System.currentTimeMillis() * this.rainbowSpeed.getValue() + delay * this.rainbowDelay.getValue()) / 20.0);
+            return Color.getHSBColor((float)(rainbowState % 360.0 / 360.0), this.saturation.getValueFloat() / 255.0f, 1.0f);
+        }
+        return this.color.getValue();
+    }
+
+    private int getFontHeight() {
+        return this.font.getValue() ? (int)FontManager.ui.getFontHeight() : 9;
+    }
+
+    public static enum Page {
+        General,
+        Element,
+        Color;
+
+    }
+
+    private static enum ColorMode {
+        Custom,
+        Pulse,
+        Rainbow;
+
+    }
+
+    public class InitHandler {
+        @EventListener
+        public void onInit(InitEvent event) {
+            for (Module module : Alien.MODULE.getModules()) {
+                ArrayList<Info> arrayList = HUD.this.moduleList;
+                HUD hUD = HUD.this;
+                Objects.requireNonNull(hUD);
+                arrayList.add(hUD.new Info(module::getArrayName, () -> module.isOn() && module.drawn.getValue()));
+            }
+            Alien.EVENT_BUS.unsubscribe(this);
         }
     }
 
+    public class Info {
+        public final Callable<String> info;
+        public String string;
+        public final BooleanSupplier drawn;
+        public double currentX = 0.0;
+        public boolean isOn;
+        public final Animation animation = new Animation();
+        public final Animation fadeAnimation = new Animation();
+        static double fontHeight;
+        static double currentY;
+        static int windowWidth;
+        static boolean fromUp;
+        static double counter;
+
+        public Info(Callable<String> info, BooleanSupplier drawn) {
+            this.info = info;
+            this.drawn = drawn;
+            try {
+                this.string = this.info.call();
+            }
+            catch (Exception exception) {
+                // empty catch block
+            }
+        }
+
+        public static void onRender(class_332 context, List<Info> list, boolean fromUp) {
+            counter = 20.0;
+            Info.fromUp = fromUp;
+            fontHeight = INSTANCE.getFontHeight();
+            currentY = fromUp ? 1.0 + HUD.INSTANCE.yOffset.getValue() : (double)Wrapper.mc.method_22683().method_4502() - fontHeight - 1.0 - (Wrapper.mc.field_1755 instanceof class_408 && HUD.INSTANCE.yOffset.getValue() < 12.0 ? 12.0 - HUD.INSTANCE.yOffset.getValue() + HUD.INSTANCE.interval.getValue() / 2.0 : 0.0) - HUD.INSTANCE.yOffset.getValue();
+            windowWidth = Wrapper.mc.method_22683().method_4486();
+            for (Info s : list) {
+                s.draw(context);
+            }
+        }
+
+        public static void onUpdate(List<Info> list, boolean sort) {
+            for (Info s : list) {
+                s.onUpdate();
+            }
+            if (sort) {
+                list.sort(Comparator.comparingInt(info -> info.string == null ? 0 : -INSTANCE.getWidth(info.string)));
+            }
+        }
+
+        public void onUpdate() {
+            this.isOn = this.drawn.getAsBoolean();
+            if (this.isOn) {
+                try {
+                    this.string = HUD.this.lowerCase.getValue() ? this.info.call().toLowerCase() : this.info.call();
+                }
+                catch (Exception var2) {
+                    var2.printStackTrace();
+                }
+            }
+        }
+
+        public void draw(class_332 context) {
+            if (this.currentX > 0.0 || this.isOn) {
+                this.currentX = this.animation.get(this.isOn ? (double)(HUD.this.getWidth(this.string) + 1) : 0.0, this.isOn ? (long)HUD.this.enableLength.getValueInt() : (long)HUD.this.disableLength.getValueInt(), HUD.this.easing.getValue());
+                double width = this.currentX + (double)HUD.this.xOffset.getValueFloat();
+                double fade = this.fadeAnimation.get(this.isOn ? 1.0 : 0.0, HUD.this.fadeLength.getValueInt(), HUD.this.easing.getValue());
+                if (fade > 0.04) {
+                    int c = ColorUtil.injectAlpha(HUD.this.getColor(counter += fromUp ? fade : -fade), (int)((double)HUD.this.color.getValue().getAlpha() * fade));
+                    if (HUD.this.blur.getValue()) {
+                        Alien.BLUR.applyBlur((float)(HUD.this.radius.getValue() * fade), (float)((double)windowWidth - width - (double)(HUD.this.width.getValueFloat() / 2.0f)), (float)currentY - 1.0f - HUD.this.interval.getValueFloat() / 2.0f, (float)width + HUD.this.width.getValueFloat() - HUD.this.xOffset.getValueFloat(), (float)fontHeight + HUD.this.interval.getValueFloat());
+                    }
+                    if (HUD.this.backGround.getValue()) {
+                        Render2DUtil.drawRect(context.method_51448(), (float)((double)windowWidth - width - (double)(HUD.this.width.getValueFloat() / 2.0f)), (float)currentY - 1.0f - HUD.this.interval.getValueFloat() / 2.0f, (float)width + HUD.this.width.getValueFloat() - HUD.this.xOffset.getValueFloat(), (float)fontHeight + HUD.this.interval.getValueFloat(), ColorUtil.injectAlpha(HUD.this.bgColor.sync ? c : HUD.this.bgColor.getValue().getRGB(), (int)((double)HUD.this.bgColor.getValue().getAlpha() * fade)));
+                    }
+                    if (HUD.this.glow.booleanValue) {
+                        Render2DUtil.drawGlow(context.method_51448(), (float)((double)windowWidth - width - (double)(HUD.this.width.getValueFloat() / 2.0f)), (float)currentY - 1.0f - HUD.this.interval.getValueFloat() / 2.0f, (float)width + HUD.this.width.getValueFloat() - HUD.this.xOffset.getValueFloat(), (float)fontHeight + HUD.this.interval.getValueFloat(), ColorUtil.injectAlpha(HUD.this.glow.sync ? c : HUD.this.glow.getValue().getRGB(), (int)((double)HUD.this.glow.getValue().getAlpha() * fade)));
+                    }
+                    TextUtil.drawString(context, this.string, (double)windowWidth - width, currentY + (double)HUD.this.textOffset.getValueFloat(), c, HUD.this.font.getValue(), HUD.this.shadow.getValue());
+                    if (HUD.this.rect.booleanValue) {
+                        Render2DUtil.drawRect(context.method_51448(), (float)windowWidth + HUD.this.width.getValueFloat() / 2.0f - HUD.this.xOffset.getValueFloat(), (float)currentY - 1.0f - HUD.this.interval.getValueFloat() / 2.0f, 1.0f, (float)fontHeight + HUD.this.interval.getValueFloat(), HUD.this.rect.sync ? c : ColorUtil.injectAlpha(HUD.this.rect.getValue(), (int)((double)HUD.this.rect.getValue().getAlpha() * fade)).getRGB());
+                    }
+                    currentY += fromUp ? (fontHeight + HUD.this.interval.getValue()) * fade : -(fontHeight + HUD.this.interval.getValue()) * fade;
+                }
+            }
+        }
+    }
 }
+

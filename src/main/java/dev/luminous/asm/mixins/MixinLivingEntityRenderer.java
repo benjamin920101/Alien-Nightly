@@ -1,31 +1,49 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1309
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_310
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_4597
+ *  net.minecraft.class_583
+ *  net.minecraft.class_922
+ *  org.spongepowered.asm.mixin.Mixin
+ *  org.spongepowered.asm.mixin.Unique
+ *  org.spongepowered.asm.mixin.injection.At
+ *  org.spongepowered.asm.mixin.injection.Inject
+ *  org.spongepowered.asm.mixin.injection.ModifyArgs
+ *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+ *  org.spongepowered.asm.mixin.injection.invoke.arg.Args
+ */
 package dev.luminous.asm.mixins;
 
+import dev.luminous.api.utils.Wrapper;
 import dev.luminous.api.utils.math.MathUtil;
-import dev.luminous.api.utils.render.ColorUtil;
 import dev.luminous.core.impl.RotationManager;
 import dev.luminous.mod.modules.impl.client.ClientSetting;
 import dev.luminous.mod.modules.impl.render.NoRender;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
+import java.awt.Color;
+import net.minecraft.class_1309;
+import net.minecraft.class_1657;
+import net.minecraft.class_310;
+import net.minecraft.class_4587;
+import net.minecraft.class_4597;
+import net.minecraft.class_583;
+import net.minecraft.class_922;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import java.awt.*;
-
-import static dev.luminous.api.utils.Wrapper.mc;
-@Mixin(LivingEntityRenderer.class)
-public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> {
+@Mixin(value={class_922.class})
+public abstract class MixinLivingEntityRenderer<T extends class_1309, M extends class_583<T>> {
     @Unique
-    private LivingEntity lastEntity;
+    private class_1309 lastEntity;
     @Unique
     private float originalYaw;
     @Unique
@@ -34,57 +52,67 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
     private float originalBodyYaw;
     @Unique
     private float originalPitch;
-
     @Unique
     private float originalPrevYaw;
     @Unique
     private float originalPrevHeadYaw;
     @Unique
     private float originalPrevBodyYaw;
-    @Inject(method = "render", at = @At("HEAD"))
-    public void onRenderPre(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        if (MinecraftClient.getInstance().player != null && livingEntity == MinecraftClient.getInstance().player && ClientSetting.INSTANCE.rotations.getValue()) {
-            originalYaw = livingEntity.getYaw();
-            originalHeadYaw = livingEntity.headYaw;
-            originalBodyYaw = livingEntity.bodyYaw;
-            originalPitch = livingEntity.getPitch();
-            originalPrevYaw = livingEntity.prevYaw;
-            originalPrevHeadYaw = livingEntity.prevHeadYaw;
-            originalPrevBodyYaw = livingEntity.prevBodyYaw;
 
-            livingEntity.setYaw(RotationManager.getRenderYawOffset());
-            livingEntity.headYaw = RotationManager.getRotationYawHead();
-            livingEntity.bodyYaw = RotationManager.getRenderYawOffset();
-            livingEntity.setPitch(RotationManager.getRenderPitch());
-            livingEntity.prevYaw = RotationManager.getPrevRenderYawOffset();
-            livingEntity.prevHeadYaw = RotationManager.getPrevRotationYawHead();
-            livingEntity.prevBodyYaw = RotationManager.getPrevRenderYawOffset();
-            livingEntity.prevPitch = RotationManager.getPrevPitch();
+    @Inject(method={"method_4054*"}, at={@At(value="HEAD")})
+    public void onRenderPre(T livingEntity, float f, float g, class_4587 matrixStack, class_4597 vertexConsumerProvider, int i, CallbackInfo ci) {
+        if (class_310.method_1551().field_1724 != null && livingEntity == class_310.method_1551().field_1724 && ClientSetting.INSTANCE.rotations.getValue()) {
+            this.originalYaw = livingEntity.method_36454();
+            this.originalHeadYaw = ((class_1309)livingEntity).field_6241;
+            this.originalBodyYaw = ((class_1309)livingEntity).field_6283;
+            this.originalPitch = livingEntity.method_36455();
+            this.originalPrevYaw = ((class_1309)livingEntity).field_5982;
+            this.originalPrevHeadYaw = ((class_1309)livingEntity).field_6259;
+            this.originalPrevBodyYaw = ((class_1309)livingEntity).field_6220;
+            livingEntity.method_36456(RotationManager.getRenderYawOffset());
+            ((class_1309)livingEntity).field_6241 = RotationManager.getRotationYawHead();
+            ((class_1309)livingEntity).field_6283 = RotationManager.getRenderYawOffset();
+            livingEntity.method_36457(RotationManager.getRenderPitch());
+            ((class_1309)livingEntity).field_5982 = RotationManager.getPrevRenderYawOffset();
+            ((class_1309)livingEntity).field_6259 = RotationManager.getPrevRotationYawHead();
+            ((class_1309)livingEntity).field_6220 = RotationManager.getPrevRenderYawOffset();
+            ((class_1309)livingEntity).field_6004 = RotationManager.getPrevRenderPitch();
         }
-        lastEntity = livingEntity;
+        this.lastEntity = livingEntity;
     }
 
-    @Inject(method = "render", at = @At("TAIL"))
-    public void onRenderPost(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        if (MinecraftClient.getInstance().player != null && livingEntity == MinecraftClient.getInstance().player && ClientSetting.INSTANCE.rotations.getValue()) {
-            livingEntity.setYaw(originalYaw);
-            livingEntity.headYaw = originalHeadYaw;
-            livingEntity.bodyYaw = originalBodyYaw;
-            livingEntity.setPitch(originalPitch);
-            livingEntity.prevYaw = originalPrevYaw;
-            livingEntity.prevHeadYaw = originalPrevHeadYaw;
-            livingEntity.prevBodyYaw = originalPrevBodyYaw;
-            livingEntity.prevPitch = originalPitch;
+    @Inject(method={"method_4054*"}, at={@At(value="TAIL")})
+    public void onRenderPost(T livingEntity, float f, float g, class_4587 matrixStack, class_4597 vertexConsumerProvider, int i, CallbackInfo ci) {
+        if (class_310.method_1551().field_1724 != null && livingEntity == class_310.method_1551().field_1724 && ClientSetting.INSTANCE.rotations.getValue()) {
+            livingEntity.method_36456(this.originalYaw);
+            ((class_1309)livingEntity).field_6241 = this.originalHeadYaw;
+            ((class_1309)livingEntity).field_6283 = this.originalBodyYaw;
+            livingEntity.method_36457(this.originalPitch);
+            ((class_1309)livingEntity).field_5982 = this.originalPrevYaw;
+            ((class_1309)livingEntity).field_6259 = this.originalPrevHeadYaw;
+            ((class_1309)livingEntity).field_6220 = this.originalPrevBodyYaw;
+            ((class_1309)livingEntity).field_6004 = this.originalPitch;
         }
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void onRenderModel(EntityModel entityModel, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
-        Color newColor = new Color(red, green, blue, alpha);
-        if (NoRender.INSTANCE.isOn() && NoRender.INSTANCE.antiPlayerCollision.getValue() && lastEntity != mc.player) {
-            float overrideAlpha = (float) (mc.player.squaredDistanceTo(lastEntity.getPos()) / 3f) + 0.07f;
-            newColor = ColorUtil.injectAlpha(newColor, (int) (255f * MathUtil.clamp(overrideAlpha, 0f, 1f)));
+    @ModifyArgs(method={"method_4054*"}, at=@At(value="INVOKE", target="Lnet/minecraft/class_583;method_2828(Lnet/minecraft/class_4587;Lnet/minecraft/class_4588;III)V"))
+    private void renderHook(Args args) {
+        class_1657 pl;
+        class_1309 class_13092;
+        float alpha = -1.0f;
+        if (NoRender.INSTANCE.isOn() && NoRender.INSTANCE.antiPlayerCollision.getValue() && this.lastEntity != Wrapper.mc.field_1724 && (class_13092 = this.lastEntity) instanceof class_1657 && !(pl = (class_1657)class_13092).method_5767()) {
+            alpha = MathUtil.clamp((float)(Wrapper.mc.field_1724.method_5707(this.lastEntity.method_19538()) / 3.0) + 0.2f, 0.0f, 1.0f);
         }
-        entityModel.render(matrices, vertices, light, overlay, newColor.getRed() / 255F, newColor.getGreen() / 255F, newColor.getBlue() / 255F, newColor.getAlpha() / 255F);
+        if (alpha != -1.0f) {
+            args.set(4, (Object)this.applyOpacity(0x26FFFFFF, alpha));
+        }
+    }
+
+    @Unique
+    int applyOpacity(int color_int, float opacity) {
+        opacity = Math.min(1.0f, Math.max(0.0f, opacity));
+        Color color = new Color(color_int);
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)((float)color.getAlpha() * opacity)).getRGB();
     }
 }
+

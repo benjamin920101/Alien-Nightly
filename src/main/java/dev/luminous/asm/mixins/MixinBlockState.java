@@ -1,0 +1,45 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.serialization.MapCodec
+ *  it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap
+ *  net.minecraft.class_1269
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_1937
+ *  net.minecraft.class_2248
+ *  net.minecraft.class_2680
+ *  net.minecraft.class_2769
+ *  net.minecraft.class_3965
+ *  net.minecraft.class_4970$class_4971
+ *  org.spongepowered.asm.mixin.Mixin
+ */
+package dev.luminous.asm.mixins;
+
+import com.mojang.serialization.MapCodec;
+import dev.luminous.Alien;
+import dev.luminous.api.events.impl.BlockActivateEvent;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
+import net.minecraft.class_1269;
+import net.minecraft.class_1657;
+import net.minecraft.class_1937;
+import net.minecraft.class_2248;
+import net.minecraft.class_2680;
+import net.minecraft.class_2769;
+import net.minecraft.class_3965;
+import net.minecraft.class_4970;
+import org.spongepowered.asm.mixin.Mixin;
+
+@Mixin(value={class_2680.class})
+public abstract class MixinBlockState
+extends class_4970.class_4971 {
+    public MixinBlockState(class_2248 block, Reference2ObjectArrayMap<class_2769<?>, Comparable<?>> propertyMap, MapCodec<class_2680> mapCodec) {
+        super(block, propertyMap, mapCodec);
+    }
+
+    public class_1269 method_55781(class_1937 world, class_1657 player, class_3965 hit) {
+        Alien.EVENT_BUS.post(BlockActivateEvent.get((class_2680)class_2680.class.cast((Object)this)));
+        return super.method_55781(world, player, hit);
+    }
+}
+

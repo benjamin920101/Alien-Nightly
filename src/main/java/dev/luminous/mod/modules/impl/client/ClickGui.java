@@ -1,116 +1,176 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.class_1109
+ *  net.minecraft.class_1113
+ *  net.minecraft.class_3417
+ *  net.minecraft.class_437
+ *  net.minecraft.class_6880
+ */
 package dev.luminous.mod.modules.impl.client;
 
 import dev.luminous.Alien;
-import dev.luminous.core.impl.GuiManager;
+import dev.luminous.api.events.eventbus.EventListener;
+import dev.luminous.api.events.impl.Render2DEvent;
+import dev.luminous.api.events.impl.UpdateEvent;
+import dev.luminous.api.utils.Wrapper;
+import dev.luminous.api.utils.math.Animation;
 import dev.luminous.api.utils.math.Easing;
-import dev.luminous.api.utils.math.FadeUtils;
-import dev.luminous.mod.gui.clickgui.ClickGuiScreen;
-import dev.luminous.mod.gui.clickgui.components.Component;
-import dev.luminous.mod.gui.clickgui.components.impl.ModuleComponent;
-import dev.luminous.mod.gui.clickgui.tabs.ClickGuiTab;
+import dev.luminous.mod.gui.ClickGuiScreen;
+import dev.luminous.mod.gui.items.Component;
+import dev.luminous.mod.gui.items.Item;
+import dev.luminous.mod.gui.items.buttons.Button;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
+import java.awt.Color;
+import net.minecraft.class_1109;
+import net.minecraft.class_1113;
+import net.minecraft.class_3417;
+import net.minecraft.class_437;
+import net.minecraft.class_6880;
 
-import java.awt.*;
+public class ClickGui
+extends Module {
+    private static ClickGui INSTANCE;
+    public final BooleanSetting autoSave = this.add(new BooleanSetting("AutoSave", true));
+    public final BooleanSetting font = this.add(new BooleanSetting("Font", true));
+    public final BooleanSetting shadow = this.add(new BooleanSetting("Shadow", true));
+    public final BooleanSetting disableNotification = this.add(new BooleanSetting("DisableNotification", false));
+    public final BooleanSetting sound = this.add(new BooleanSetting("Sound", true).setParent());
+    public final BooleanSetting guiSound = this.add(new BooleanSetting("GuiSound", true));
+    public final SliderSetting soundPitch = this.add(new SliderSetting("SoundPitch", 1.0, 0.0, 2.0, 0.1, this.sound::isOpen));
+    public final SliderSetting height = this.add(new SliderSetting("Height", 3, 0, 7));
+    public final SliderSetting textOffset = this.add(new SliderSetting("TextOffset", 0.0, -5.0, 5.0, 1.0));
+    public final SliderSetting titleOffset = this.add(new SliderSetting("TitleOffset", -1.0, -5.0, 5.0, 1.0));
+    public final SliderSetting alpha = this.add(new SliderSetting("Alpha", 220, 0, 255));
+    public final SliderSetting hoverAlpha = this.add(new SliderSetting("HoverAlpha", 255, 0, 255));
+    public final SliderSetting topAlpha = this.add(new SliderSetting("TopAlpha", 180, 0, 255));
+    public final BooleanSetting fade = this.add(new BooleanSetting("Fade", true).setParent());
+    public final SliderSetting length = this.add(new SliderSetting("Length", 250, 0, 1000, this.fade::isOpen));
+    public final EnumSetting<Easing> easing = this.add(new EnumSetting<Easing>("Easing", Easing.Expo, this.fade::isOpen));
+    public final BooleanSetting blur = this.add(new BooleanSetting("Blur", false).setParent());
+    public final SliderSetting radius = this.add(new SliderSetting("Radius", 10.0, 0.0, 100.0, this.blur::isOpen));
+    public final BooleanSetting elements = this.add(new BooleanSetting("Elements", false).setParent().injectTask(this::a));
+    public final BooleanSetting line = this.add(new BooleanSetting("Line", true, this.elements::isOpen));
+    public final ColorSetting gear = this.add(new ColorSetting("Gear", -1, this.elements::isOpen).injectBoolean(false));
+    public final BooleanSetting verticalGradient = this.add(new BooleanSetting("VerticalGradient", true, this.elements::isOpen));
+    public final BooleanSetting colors = this.add(new BooleanSetting("Colors", false).setParent().injectTask(this::b));
+    public final ColorSetting color = this.add(new ColorSetting("Color", new Color(255, 0, 0, 255), this.colors::isOpen));
+    public final ColorSetting hoverColor = this.add(new ColorSetting("HoverColor", new Color(230, 242, 251, 200), this.colors::isOpen));
+    public final ColorSetting defaultColor = this.add(new ColorSetting("DefaultColor", new Color(255, 255, 255, 0), this.colors::isOpen));
+    public final ColorSetting defaultTextColor = this.add(new ColorSetting("DefaultTextColor", new Color(255, 255, 255, 255), this.colors::isOpen));
+    public final ColorSetting enableTextColor = this.add(new ColorSetting("EnableTextColor", new Color(255, 255, 255, 255), this.colors::isOpen));
+    public final ColorSetting backGround = this.add(new ColorSetting("BackGround", new Color(255, 255, 255, 0), this.colors::isOpen).injectBoolean(true));
+    public final ColorSetting tint = this.add(new ColorSetting("Tint", new Color(12, 60, 95, 56)).injectBoolean(false));
+    public final ColorSetting endColor = this.add(new ColorSetting("End", new Color(255, 120, 240, 72), () -> this.tint.booleanValue));
+    public double alphaValue;
+    private final Animation animation = new Animation();
+    private boolean paletteApplied = false;
 
-public class ClickGui extends Module {
-	public static ClickGui INSTANCE;
-	private final EnumSetting<Pages> page = add(new EnumSetting<>("Page", Pages.General));
-	public final EnumSetting<Type> uiType = add(new EnumSetting<>("UIType", Type.Old, () -> page.getValue() == Pages.Element));
-	public final BooleanSetting activeBox = add(new BooleanSetting("ActiveBox", true, () -> page.getValue() == Pages.Element));
-	public final BooleanSetting center = add(new BooleanSetting("Center", false, () -> page.getValue() == Pages.Element));
-	public final ColorSetting bind = add(new ColorSetting("Bind", new Color(255, 255, 255), () -> page.getValue() == Pages.Element).injectBoolean(false));
-	public final ColorSetting gear = add(new ColorSetting("Gear", new Color(255, 255, 255), () -> page.getValue() == Pages.Element).injectBoolean(true));
+    public ClickGui() {
+        super("ClickGui", Module.Category.Client);
+        this.setChinese("\u70b9\u51fb\u754c\u9762");
+        INSTANCE = this;
+        Alien.EVENT_BUS.subscribe(new FadeOut());
+    }
 
-	public final BooleanSetting chinese = add(new BooleanSetting("Chinese", false, () -> page.getValue() == Pages.General));
-	public final BooleanSetting font = add(new BooleanSetting("Font", true, () -> page.getValue() == Pages.General));
-	public final BooleanSetting maxFill = add(new BooleanSetting("MaxFill", false, () -> page.getValue() == Pages.General));
-	public final BooleanSetting sound = add(new BooleanSetting("Sound", true, () -> page.getValue() == Pages.General));
-	public final SliderSetting height = add(new SliderSetting("Height", 15, 10, 20, 1, () -> page.getValue() == Pages.General));
-	public final EnumSetting<Mode> mode = add(new EnumSetting<>("EnableAnim", Mode.Pull, () -> page.getValue() == Pages.General));
-	public final SliderSetting animationTime = add(new SliderSetting("AnimationTime", 200, 0, 1000, 1, () -> page.getValue() == Pages.General));
-	public final EnumSetting<Easing> ease = add(new EnumSetting<>("Ease", Easing.QuadInOut, () -> page.getValue() == Pages.General));
+    public static ClickGui getInstance() {
+        return INSTANCE;
+    }
 
-	public final ColorSetting color = add(new ColorSetting("Main", 1297678336, () -> page.getValue() == Pages.Color));
-	public final ColorSetting mainEnd = add(new ColorSetting("MainEnd", -2113929216, () -> page.getValue() == Pages.Color).injectBoolean(false));
-	public final ColorSetting mainHover = add(new ColorSetting("Hover", 2086600704, () -> page.getValue() == Pages.Color));
-	public final ColorSetting bar = add(new ColorSetting("Bar", 1781465088, () -> page.getValue() == Pages.Color));
-	public final ColorSetting barEnd = add(new ColorSetting("BarEnd", -2113929216, () -> page.getValue() == Pages.Color).injectBoolean(false));
-	public final ColorSetting disableText = add(new ColorSetting("DisableText", new Color(255, 255, 255), () -> page.getValue() == Pages.Color));
-	public final ColorSetting enableText = add(new ColorSetting("EnableText", -1, () -> page.getValue() == Pages.Color));
-	public final ColorSetting enableTextS = add(new ColorSetting("EnableText2", -2424832, () -> page.getValue() == Pages.Color));
-	public final ColorSetting module = add(new ColorSetting("Module", 4144959, () -> page.getValue() == Pages.Color));
-	public final ColorSetting moduleHover = add(new ColorSetting("ModuleHover", 693703957, () -> page.getValue() == Pages.Color));
-	public final ColorSetting setting = add(new ColorSetting("Setting", 4144959, () -> page.getValue() == Pages.Color));
-	public final ColorSetting settingHover = add(new ColorSetting("SettingHover", 693703957, () -> page.getValue() == Pages.Color));
-	public final ColorSetting background = add(new ColorSetting("Background", 1881014272, () -> page.getValue() == Pages.Color));
-	public ClickGui() {
-		super("ClickGui", Category.Client);
-		setChinese("菜单");
-		INSTANCE = this;
-	}
+    public void a() {
+        this.elements.setValueWithoutTask(false);
+        this.elements.setOpen(!this.elements.isOpen());
+    }
 
-	public static final FadeUtils fade = new FadeUtils(300);
+    public void b() {
+        this.colors.setValueWithoutTask(false);
+        this.colors.setOpen(!this.colors.isOpen());
+    }
 
-	@Override
-	public void onUpdate() {
-		if (chinese.getValue()) {
-			font.setValue(false);
-		}
-		if (!(mc.currentScreen instanceof ClickGuiScreen)) {
-			disable();
-		}
-	}
+    @Override
+    public boolean onEnable() {
+        if (ClickGui.nullCheck()) {
+            this.disable();
+        } else {
+            this.updateColor();
+            if (this.guiSound.getValue() && mc.method_1483() != null) {
+                mc.method_1483().method_4873((class_1113)class_1109.method_47978((class_6880)class_3417.field_15015, (float)this.soundPitch.getValueFloat()));
+            }
+            for (Component component : ClickGuiScreen.getInstance().getComponents()) {
+                component.setHeight(18);
+                for (Item item : component.getItems()) {
+                    item.setHeight(10 + this.height.getValueInt());
+                }
+            }
+            mc.method_1507((class_437)ClickGuiScreen.getInstance());
+        }
+        return false;
+    }
 
-	int lastHeight;
-	@Override
-	public void onEnable() {
-		//size = scale.getValue();
-		if (lastHeight != height.getValueInt()) {
-			for (ClickGuiTab tab : Alien.GUI.tabs) {
-				for (Component component : tab.getChildren()) {
-					if (component instanceof ModuleComponent moduleComponent) {
-						for (Component settingComponent : moduleComponent.getSettingsList()) {
-							settingComponent.setHeight(height.getValueInt());
-							settingComponent.defaultHeight = height.getValueInt();
-						}
-					}
-					component.setHeight(height.getValueInt());
-					component.defaultHeight = height.getValueInt();
-				}
-			}
-			lastHeight = height.getValueInt();
-		}
-		fade.reset();
-		if (nullCheck()) {
-			disable();
-			return;
-		}
-		mc.setScreen(GuiManager.clickGui);
-	}
+    @Override
+    public void onDisable() {
+        if (ClickGui.mc.field_1755 instanceof ClickGuiScreen) {
+            ClickGui.mc.field_1755.method_25419();
+        }
+        if (this.guiSound.getValue() && mc.method_1483() != null) {
+            mc.method_1483().method_4873((class_1113)class_1109.method_47978((class_6880)class_3417.field_15015, (float)this.soundPitch.getValueFloat()));
+        }
+        if (this.autoSave.getValue()) {
+            Alien.save();
+        }
+    }
 
-	@Override
-	public void onDisable() {
-		if (mc.currentScreen instanceof ClickGuiScreen) {
-			mc.setScreen(null);
-		}
-	}
+    @EventListener
+    public void onUpdate(UpdateEvent event) {
+        this.updateColor();
+        if (!(ClickGui.mc.field_1755 instanceof ClickGuiScreen)) {
+            this.disable();
+        }
+    }
 
-	public enum Mode {
-		Scale, Pull, None
-	}
+    public void updateColor() {
+        Button.hoverColor = this.hoverColor.getValue().getRGB();
+        Button.defaultTextColor = this.defaultTextColor.getValue().getRGB();
+        Button.defaultColor = this.defaultColor.getValue().getRGB();
+        Button.enableTextColor = this.enableTextColor.getValue().getRGB();
+    }
 
-	private enum Pages {
-		General,
-		Color,
-		Element
-	}
+    private void applyPaletteOnce() {
+        if (!this.paletteApplied) {
+            this.color.setValue(new Color(0, 120, 212));
+            this.hoverColor.setValue(new Color(230, 242, 251, 200));
+            this.defaultColor.setValue(new Color(255, 255, 255, 236));
+            this.defaultTextColor.setValue(new Color(30, 30, 30));
+            this.enableTextColor.setValue(new Color(24, 24, 24));
+            this.backGround.setValue(new Color(255, 255, 255, 236));
+            this.tint.setValue(new Color(0, 120, 212, 36));
+            this.endColor.setValue(new Color(0, 120, 212, 18));
+            this.paletteApplied = true;
+        }
+    }
 
-	public enum Type {
-		Old,
-		New
-	}
+    public class FadeOut {
+        @EventListener(priority=-99999)
+        public void onRender2D(Render2DEvent event) {
+            if (ClickGui.this.fade.getValue()) {
+                if (ClickGui.this.alphaValue > 0.0 || ClickGui.this.isOn()) {
+                    ClickGui.this.alphaValue = ClickGui.this.animation.get(ClickGui.this.isOn() ? 1.0 : 0.0, ClickGui.this.length.getValueInt(), ClickGui.this.easing.getValue());
+                }
+                if (ClickGui.this.alphaValue > 0.0 && !(Wrapper.mc.field_1755 instanceof ClickGuiScreen)) {
+                    event.drawContext.method_51448().method_22903();
+                    event.drawContext.method_51448().method_46416(0.0f, 0.0f, 5000.0f);
+                    ClickGuiScreen.getInstance().method_25394(event.drawContext, 0, 0, event.tickDelta);
+                    event.drawContext.method_51448().method_22909();
+                }
+            } else {
+                ClickGui.this.alphaValue = 1.0;
+            }
+        }
+    }
 }
+
