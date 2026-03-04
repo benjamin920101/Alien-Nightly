@@ -2,16 +2,16 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_279
- *  net.minecraft.class_283
+ *  net.minecraft.client.gl.PostEffectProcessor
+ *  net.minecraft.client.gl.PostEffectPass
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.gen.Accessor
  */
 package dev.luminous.asm.accessors;
 
 import java.util.List;
-import net.minecraft.class_279;
-import net.minecraft.class_283;
+import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.client.gl.PostEffectPass;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

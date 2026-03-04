@@ -2,30 +2,30 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1309
- *  net.minecraft.class_1675
- *  net.minecraft.class_238
- *  net.minecraft.class_239
- *  net.minecraft.class_243
- *  net.minecraft.class_3532
- *  net.minecraft.class_3959
- *  net.minecraft.class_3959$class_242
- *  net.minecraft.class_3959$class_3960
- *  net.minecraft.class_3966
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.projectile.ProjectileUtil
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.util.hit.HitResult
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.world.RaycastContext
+ *  net.minecraft.world.RaycastContext$FluidHandling
+ *  net.minecraft.world.RaycastContext$ShapeType
+ *  net.minecraft.util.hit.EntityHitResult
  */
 package dev.luminous.api.utils.world;
 
 import dev.luminous.api.utils.Wrapper;
-import net.minecraft.class_1297;
-import net.minecraft.class_1309;
-import net.minecraft.class_1675;
-import net.minecraft.class_238;
-import net.minecraft.class_239;
-import net.minecraft.class_243;
-import net.minecraft.class_3532;
-import net.minecraft.class_3959;
-import net.minecraft.class_3966;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.RaycastContext;
+import net.minecraft.util.hit.EntityHitResult;
 
 public class InteractUtil
 implements Wrapper {

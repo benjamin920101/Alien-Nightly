@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
- *  net.minecraft.class_1703
- *  net.minecraft.class_1713
- *  net.minecraft.class_1733
- *  net.minecraft.class_1735
- *  net.minecraft.class_2338
- *  net.minecraft.class_2480
- *  net.minecraft.class_495
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.screen.ScreenHandler
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.screen.ShulkerBoxScreenHandler
+ *  net.minecraft.screen.slot.Slot
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.block.ShulkerBoxBlock
+ *  net.minecraft.client.gui.screen.ingame.ShulkerBoxScreen
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -21,14 +21,14 @@ import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.impl.player.SpeedMine;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1657;
-import net.minecraft.class_1703;
-import net.minecraft.class_1713;
-import net.minecraft.class_1733;
-import net.minecraft.class_1735;
-import net.minecraft.class_2338;
-import net.minecraft.class_2480;
-import net.minecraft.class_495;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.screen.ShulkerBoxScreenHandler;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.client.gui.screen.ingame.ShulkerBoxScreen;
 
 public class DropAntiRegear
 extends Module {

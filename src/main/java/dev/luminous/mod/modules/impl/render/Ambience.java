@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2761
+ *  net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -15,7 +15,7 @@ import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
-import net.minecraft.class_2761;
+import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 
 public class Ambience
 extends Module {

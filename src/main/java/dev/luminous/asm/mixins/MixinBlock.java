@@ -3,12 +3,12 @@
  * 
  * Could not load the following classes:
  *  com.llamalad7.mixinextras.injector.ModifyReturnValue
- *  net.minecraft.class_1922
- *  net.minecraft.class_1935
- *  net.minecraft.class_2248
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_2680
+ *  net.minecraft.world.BlockView
+ *  net.minecraft.item.ItemConvertible
+ *  net.minecraft.block.Block
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.block.BlockState
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -19,12 +19,12 @@ package dev.luminous.asm.mixins;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.luminous.mod.modules.impl.movement.NoSlow;
 import dev.luminous.mod.modules.impl.render.Xray;
-import net.minecraft.class_1922;
-import net.minecraft.class_1935;
-import net.minecraft.class_2248;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_2680;
+import net.minecraft.world.BlockView;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

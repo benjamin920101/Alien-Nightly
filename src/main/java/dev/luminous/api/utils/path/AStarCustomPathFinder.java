@@ -2,21 +2,21 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2266
- *  net.minecraft.class_2281
- *  net.minecraft.class_2336
- *  net.minecraft.class_2338
- *  net.minecraft.class_2354
- *  net.minecraft.class_2389
- *  net.minecraft.class_2482
- *  net.minecraft.class_2484
- *  net.minecraft.class_2506
- *  net.minecraft.class_2510
- *  net.minecraft.class_2533
- *  net.minecraft.class_2544
- *  net.minecraft.class_2665
- *  net.minecraft.class_2667
- *  net.minecraft.class_2671
+ *  net.minecraft.block.CactusBlock
+ *  net.minecraft.block.ChestBlock
+ *  net.minecraft.block.EnderChestBlock
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.block.FenceBlock
+ *  net.minecraft.block.PaneBlock
+ *  net.minecraft.block.SlabBlock
+ *  net.minecraft.block.SkullBlock
+ *  net.minecraft.block.StainedGlassBlock
+ *  net.minecraft.block.StairsBlock
+ *  net.minecraft.block.TrapdoorBlock
+ *  net.minecraft.block.WallBlock
+ *  net.minecraft.block.PistonBlock
+ *  net.minecraft.block.PistonExtensionBlock
+ *  net.minecraft.block.PistonHeadBlock
  */
 package dev.luminous.api.utils.path;
 
@@ -24,21 +24,21 @@ import dev.luminous.api.utils.Wrapper;
 import dev.luminous.api.utils.path.Vec3;
 import java.util.ArrayList;
 import java.util.Comparator;
-import net.minecraft.class_2266;
-import net.minecraft.class_2281;
-import net.minecraft.class_2336;
-import net.minecraft.class_2338;
-import net.minecraft.class_2354;
-import net.minecraft.class_2389;
-import net.minecraft.class_2482;
-import net.minecraft.class_2484;
-import net.minecraft.class_2506;
-import net.minecraft.class_2510;
-import net.minecraft.class_2533;
-import net.minecraft.class_2544;
-import net.minecraft.class_2665;
-import net.minecraft.class_2667;
-import net.minecraft.class_2671;
+import net.minecraft.block.CactusBlock;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.block.EnderChestBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.PaneBlock;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.block.SkullBlock;
+import net.minecraft.block.StainedGlassBlock;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.block.TrapdoorBlock;
+import net.minecraft.block.WallBlock;
+import net.minecraft.block.PistonBlock;
+import net.minecraft.block.PistonExtensionBlock;
+import net.minecraft.block.PistonHeadBlock;
 
 public class AStarCustomPathFinder
 implements Wrapper {

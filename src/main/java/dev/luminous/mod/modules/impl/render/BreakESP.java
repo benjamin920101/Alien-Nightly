@@ -2,18 +2,18 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
- *  net.minecraft.class_1739
- *  net.minecraft.class_1799
- *  net.minecraft.class_1890
- *  net.minecraft.class_1893
- *  net.minecraft.class_1922
- *  net.minecraft.class_2338
- *  net.minecraft.class_238
- *  net.minecraft.class_2561
- *  net.minecraft.class_2680
- *  net.minecraft.class_4587
- *  net.minecraft.class_6880
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.AirBlockItem
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.enchantment.Enchantments
+ *  net.minecraft.world.BlockView
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.text.Text
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.registry.entry.RegistryEntry
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -34,18 +34,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.minecraft.class_1657;
-import net.minecraft.class_1739;
-import net.minecraft.class_1799;
-import net.minecraft.class_1890;
-import net.minecraft.class_1893;
-import net.minecraft.class_1922;
-import net.minecraft.class_2338;
-import net.minecraft.class_238;
-import net.minecraft.class_2561;
-import net.minecraft.class_2680;
-import net.minecraft.class_4587;
-import net.minecraft.class_6880;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.AirBlockItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.world.BlockView;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.text.Text;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.registry.entry.RegistryEntry;
 
 public class BreakESP
 extends Module {

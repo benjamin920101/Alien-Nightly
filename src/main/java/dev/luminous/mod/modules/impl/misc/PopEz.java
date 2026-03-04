@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
+ *  net.minecraft.entity.player.PlayerEntity
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -17,7 +17,7 @@ import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import net.minecraft.class_1657;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class PopEz
 extends Module {

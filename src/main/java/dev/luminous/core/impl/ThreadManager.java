@@ -3,9 +3,9 @@
  * 
  * Could not load the following classes:
  *  com.google.common.collect.Lists
- *  net.minecraft.class_1297
- *  net.minecraft.class_2338
- *  net.minecraft.class_742
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.client.network.AbstractClientPlayerEntity
  */
 package dev.luminous.core.impl;
 
@@ -28,9 +28,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import net.minecraft.class_1297;
-import net.minecraft.class_2338;
-import net.minecraft.class_742;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 
 public class ThreadManager
 implements Wrapper {

@@ -2,19 +2,19 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1309
- *  net.minecraft.class_1657
- *  net.minecraft.class_2246
- *  net.minecraft.class_2248
- *  net.minecraft.class_2318
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_238
- *  net.minecraft.class_243
- *  net.minecraft.class_2665
- *  net.minecraft.class_2680
- *  net.minecraft.class_2769
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.FacingBlock
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.block.PistonBlock
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.state.property.Property
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -36,19 +36,19 @@ import dev.luminous.mod.modules.impl.exploit.Blink;
 import dev.luminous.mod.modules.impl.player.SpeedMine;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1297;
-import net.minecraft.class_1309;
-import net.minecraft.class_1657;
-import net.minecraft.class_2246;
-import net.minecraft.class_2248;
-import net.minecraft.class_2318;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_238;
-import net.minecraft.class_243;
-import net.minecraft.class_2665;
-import net.minecraft.class_2680;
-import net.minecraft.class_2769;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.Block;
+import net.minecraft.block.FacingBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.block.PistonBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.state.property.Property;
 
 public class AutoPush
 extends Module {

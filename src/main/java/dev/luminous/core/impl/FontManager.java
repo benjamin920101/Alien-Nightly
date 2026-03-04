@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_4587
+ *  net.minecraft.client.util.math.MatrixStack
  */
 package dev.luminous.core.impl;
 
@@ -13,7 +13,7 @@ import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import net.minecraft.class_4587;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class FontManager {
     public static FontRenderer ui;

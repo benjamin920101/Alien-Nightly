@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2246
- *  net.minecraft.class_2338
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.BlockPos
  */
 package dev.luminous.mod.modules.impl.movement;
 
@@ -13,8 +13,8 @@ import dev.luminous.api.utils.player.MovementUtil;
 import dev.luminous.api.utils.world.BlockPosX;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_2246;
-import net.minecraft.class_2338;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
 
 public class AntiVoid
 extends Module {

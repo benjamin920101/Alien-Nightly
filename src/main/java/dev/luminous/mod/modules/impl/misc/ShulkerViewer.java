@@ -3,22 +3,22 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1747
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_2371
- *  net.minecraft.class_2480
- *  net.minecraft.class_2487
- *  net.minecraft.class_2499
- *  net.minecraft.class_308
- *  net.minecraft.class_332
- *  net.minecraft.class_437
- *  net.minecraft.class_7225$class_7874
- *  net.minecraft.class_742
- *  net.minecraft.class_9279
- *  net.minecraft.class_9323
- *  net.minecraft.class_9334
+ *  net.minecraft.item.BlockItem
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.util.collection.DefaultedList
+ *  net.minecraft.block.ShulkerBoxBlock
+ *  net.minecraft.nbt.NbtCompound
+ *  net.minecraft.nbt.NbtList
+ *  net.minecraft.client.render.DiffuseLighting
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.registry.RegistryWrapper$WrapperLookup
+ *  net.minecraft.client.network.AbstractClientPlayerEntity
+ *  net.minecraft.component.type.NbtComponent
+ *  net.minecraft.component.ComponentMap
+ *  net.minecraft.component.DataComponentTypes
  *  org.lwjgl.opengl.GL11
  *  org.spongepowered.asm.mixin.Unique
  */
@@ -41,22 +41,22 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
-import net.minecraft.class_1747;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_2371;
-import net.minecraft.class_2480;
-import net.minecraft.class_2487;
-import net.minecraft.class_2499;
-import net.minecraft.class_308;
-import net.minecraft.class_332;
-import net.minecraft.class_437;
-import net.minecraft.class_7225;
-import net.minecraft.class_742;
-import net.minecraft.class_9279;
-import net.minecraft.class_9323;
-import net.minecraft.class_9334;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Unique;
 

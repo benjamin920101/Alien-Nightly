@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_2560
- *  net.minecraft.class_2596
- *  net.minecraft.class_2680
- *  net.minecraft.class_2846
- *  net.minecraft.class_2846$class_2847
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.block.CobwebBlock
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket$Action
  */
 package dev.luminous.mod.modules.impl.movement;
 
@@ -24,13 +24,13 @@ import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.class_1657;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_2560;
-import net.minecraft.class_2596;
-import net.minecraft.class_2680;
-import net.minecraft.class_2846;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.block.CobwebBlock;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.block.BlockState;
+import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 
 public class FastWeb
 extends Module {

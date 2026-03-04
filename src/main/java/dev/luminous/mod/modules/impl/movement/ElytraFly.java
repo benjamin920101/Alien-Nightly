@@ -2,25 +2,25 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1294
- *  net.minecraft.class_1297
- *  net.minecraft.class_1304
- *  net.minecraft.class_1313
- *  net.minecraft.class_1657
- *  net.minecraft.class_1671
- *  net.minecraft.class_1713
- *  net.minecraft.class_1770
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_243
- *  net.minecraft.class_2596
- *  net.minecraft.class_2708
- *  net.minecraft.class_2848
- *  net.minecraft.class_2848$class_2849
- *  net.minecraft.class_2886
- *  net.minecraft.class_3532
- *  net.minecraft.class_746
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EquipmentSlot
+ *  net.minecraft.entity.MovementType
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.entity.projectile.FireworkRocketEntity
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.item.ElytraItem
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
+ *  net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
+ *  net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket$Mode
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.network.ClientPlayerEntity
  */
 package dev.luminous.mod.modules.impl.movement;
 
@@ -47,24 +47,24 @@ import dev.luminous.mod.modules.settings.impl.BindSetting;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1268;
-import net.minecraft.class_1294;
-import net.minecraft.class_1297;
-import net.minecraft.class_1304;
-import net.minecraft.class_1313;
-import net.minecraft.class_1657;
-import net.minecraft.class_1671;
-import net.minecraft.class_1713;
-import net.minecraft.class_1770;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_243;
-import net.minecraft.class_2596;
-import net.minecraft.class_2708;
-import net.minecraft.class_2848;
-import net.minecraft.class_2886;
-import net.minecraft.class_3532;
-import net.minecraft.class_746;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.MovementType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.item.ElytraItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.network.ClientPlayerEntity;
 
 public class ElytraFly
 extends Module {

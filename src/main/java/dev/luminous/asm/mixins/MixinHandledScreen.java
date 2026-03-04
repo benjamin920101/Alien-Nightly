@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1703
- *  net.minecraft.class_1735
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_2561
- *  net.minecraft.class_332
- *  net.minecraft.class_3936
- *  net.minecraft.class_437
- *  net.minecraft.class_465
+ *  net.minecraft.screen.ScreenHandler
+ *  net.minecraft.screen.slot.Slot
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.text.Text
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.client.gui.screen.ingame.HandledScreen
  *  org.jetbrains.annotations.Nullable
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
@@ -25,15 +25,15 @@ package dev.luminous.asm.mixins;
 import dev.luminous.Alien;
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.mod.modules.impl.misc.ShulkerViewer;
-import net.minecraft.class_1703;
-import net.minecraft.class_1735;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_2561;
-import net.minecraft.class_332;
-import net.minecraft.class_3936;
-import net.minecraft.class_437;
-import net.minecraft.class_465;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.text.Text;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

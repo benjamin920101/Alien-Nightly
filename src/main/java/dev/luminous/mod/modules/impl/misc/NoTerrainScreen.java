@@ -2,16 +2,16 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_434
- *  net.minecraft.class_435
+ *  net.minecraft.client.gui.screen.DownloadingTerrainScreen
+ *  net.minecraft.client.gui.screen.ProgressScreen
  */
 package dev.luminous.mod.modules.impl.misc;
 
 import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.ClientTickEvent;
 import dev.luminous.mod.modules.Module;
-import net.minecraft.class_434;
-import net.minecraft.class_435;
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
+import net.minecraft.client.gui.screen.ProgressScreen;
 
 public class NoTerrainScreen
 extends Module {

@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_2246
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_238
- *  net.minecraft.class_241
- *  net.minecraft.class_243
- *  net.minecraft.class_3532
- *  net.minecraft.class_742
+ *  net.minecraft.util.Hand
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.util.math.Vec2f
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.network.AbstractClientPlayerEntity
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -37,15 +37,15 @@ import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.util.Objects;
-import net.minecraft.class_1268;
-import net.minecraft.class_2246;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_238;
-import net.minecraft.class_241;
-import net.minecraft.class_243;
-import net.minecraft.class_3532;
-import net.minecraft.class_742;
+import net.minecraft.util.Hand;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 
 public class Surround
 extends Module {

@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
+ *  net.minecraft.util.Hand
  */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
-import net.minecraft.class_1268;
+import net.minecraft.util.Hand;
 
 public class InteractBlockEvent
 extends Event {

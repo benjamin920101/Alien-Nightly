@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1937
- *  net.minecraft.class_2338
- *  net.minecraft.class_243
- *  net.minecraft.class_2560
- *  net.minecraft.class_2680
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.world.World
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.block.CobwebBlock
+ *  net.minecraft.block.BlockState
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -17,12 +17,12 @@ package dev.luminous.asm.mixins;
 
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.mod.modules.impl.movement.FastWeb;
-import net.minecraft.class_1297;
-import net.minecraft.class_1937;
-import net.minecraft.class_2338;
-import net.minecraft.class_243;
-import net.minecraft.class_2560;
-import net.minecraft.class_2680;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.block.CobwebBlock;
+import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

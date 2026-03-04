@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_124
- *  net.minecraft.class_1294
- *  net.minecraft.class_1297
- *  net.minecraft.class_1657
- *  net.minecraft.class_332
- *  net.minecraft.class_742
+ *  net.minecraft.util.Formatting
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.network.AbstractClientPlayerEntity
  */
 package dev.luminous.mod.modules.impl.client;
 
@@ -21,12 +21,12 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
-import net.minecraft.class_124;
-import net.minecraft.class_1294;
-import net.minecraft.class_1297;
-import net.minecraft.class_1657;
-import net.minecraft.class_332;
-import net.minecraft.class_742;
+import net.minecraft.util.Formatting;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 
 public class TextRadar
 extends Module {

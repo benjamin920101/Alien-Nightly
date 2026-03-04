@@ -2,21 +2,21 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1087
- *  net.minecraft.class_1297
- *  net.minecraft.class_1542
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_3532
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_4608
- *  net.minecraft.class_5617$class_5618
- *  net.minecraft.class_5819
- *  net.minecraft.class_811
- *  net.minecraft.class_897
- *  net.minecraft.class_916
- *  net.minecraft.class_918
+ *  net.minecraft.client.render.model.BakedModel
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.ItemEntity
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.render.VertexConsumerProvider
+ *  net.minecraft.client.render.OverlayTexture
+ *  net.minecraft.client.render.entity.EntityRendererFactory$Context
+ *  net.minecraft.util.math.random.Random
+ *  net.minecraft.client.render.model.json.ModelTransformationMode
+ *  net.minecraft.client.render.entity.EntityRenderer
+ *  net.minecraft.client.render.entity.ItemEntityRenderer
+ *  net.minecraft.client.render.item.ItemRenderer
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
@@ -28,21 +28,21 @@
 package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.impl.render.NoRender;
-import net.minecraft.class_1087;
-import net.minecraft.class_1297;
-import net.minecraft.class_1542;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_3532;
-import net.minecraft.class_4587;
-import net.minecraft.class_4597;
-import net.minecraft.class_4608;
-import net.minecraft.class_5617;
-import net.minecraft.class_5819;
-import net.minecraft.class_811;
-import net.minecraft.class_897;
-import net.minecraft.class_916;
-import net.minecraft.class_918;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.ItemEntityRenderer;
+import net.minecraft.client.render.item.ItemRenderer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

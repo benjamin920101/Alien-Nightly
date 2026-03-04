@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1294
+ *  net.minecraft.entity.effect.StatusEffects
  */
 package dev.luminous.mod.modules.impl.movement;
 
@@ -17,7 +17,7 @@ import dev.luminous.mod.modules.impl.movement.HoleSnap;
 import dev.luminous.mod.modules.impl.movement.Speed;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import java.util.Objects;
-import net.minecraft.class_1294;
+import net.minecraft.entity.effect.StatusEffects;
 
 public class Strafe
 extends Module {

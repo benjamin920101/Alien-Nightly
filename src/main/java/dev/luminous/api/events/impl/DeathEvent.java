@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
+ *  net.minecraft.entity.player.PlayerEntity
  */
 package dev.luminous.api.events.impl;
 
-import net.minecraft.class_1657;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class DeathEvent {
     private static final DeathEvent INSTANCE = new DeathEvent();

@@ -2,10 +2,10 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1657
- *  net.minecraft.class_1753
- *  net.minecraft.class_1802
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.BowItem
+ *  net.minecraft.item.Items
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -18,10 +18,10 @@ import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BindSetting;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1268;
-import net.minecraft.class_1657;
-import net.minecraft.class_1753;
-import net.minecraft.class_1802;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BowItem;
+import net.minecraft.item.Items;
 
 public class Quiver
 extends Module {

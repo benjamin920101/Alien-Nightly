@@ -2,17 +2,17 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1799
- *  net.minecraft.class_2371
- *  net.minecraft.class_9288
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.collection.DefaultedList
+ *  net.minecraft.component.type.ContainerComponent
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.gen.Accessor
  */
 package dev.luminous.asm.accessors;
 
-import net.minecraft.class_1799;
-import net.minecraft.class_2371;
-import net.minecraft.class_9288;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.component.type.ContainerComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

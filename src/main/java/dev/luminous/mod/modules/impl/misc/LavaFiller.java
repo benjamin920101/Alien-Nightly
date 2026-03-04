@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2246
- *  net.minecraft.class_2338
- *  net.minecraft.class_3616$class_3618
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.fluid.LavaFluid$Still
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -18,9 +18,9 @@ import dev.luminous.api.utils.world.BlockUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_2246;
-import net.minecraft.class_2338;
-import net.minecraft.class_3616;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.fluid.LavaFluid;
 
 public class LavaFiller
 extends Module {

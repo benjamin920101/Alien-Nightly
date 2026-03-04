@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_332
- *  net.minecraft.class_3675
- *  net.minecraft.class_4587
- *  net.minecraft.class_7202
- *  net.minecraft.class_7204
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.util.InputUtil
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.network.PendingUpdateManager
+ *  net.minecraft.client.network.SequencedPacketCreator
  */
 package dev.luminous.mod.modules;
 
@@ -28,11 +28,11 @@ import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import dev.luminous.mod.modules.settings.impl.StringSetting;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.class_332;
-import net.minecraft.class_3675;
-import net.minecraft.class_4587;
-import net.minecraft.class_7202;
-import net.minecraft.class_7204;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.network.PendingUpdateManager;
+import net.minecraft.client.network.SequencedPacketCreator;
 
 public abstract class Module
 extends Mod {

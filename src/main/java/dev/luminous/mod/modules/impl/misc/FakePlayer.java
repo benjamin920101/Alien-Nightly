@@ -3,26 +3,26 @@
  * 
  * Could not load the following classes:
  *  com.mojang.authlib.GameProfile
- *  net.minecraft.class_1268
- *  net.minecraft.class_1294
- *  net.minecraft.class_1297
- *  net.minecraft.class_1297$class_5529
- *  net.minecraft.class_1309
- *  net.minecraft.class_1657
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1935
- *  net.minecraft.class_2246
- *  net.minecraft.class_243
- *  net.minecraft.class_2596
- *  net.minecraft.class_2602
- *  net.minecraft.class_2663
- *  net.minecraft.class_2664
- *  net.minecraft.class_2824
- *  net.minecraft.class_2824$class_5907
- *  net.minecraft.class_3417
- *  net.minecraft.class_3419
- *  net.minecraft.class_745
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.Entity$RemovalReason
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.item.ItemConvertible
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.listener.ClientPlayPacketListener
+ *  net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
+ *  net.minecraft.network.packet.s2c.play.ExplosionS2CPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket$InteractType
+ *  net.minecraft.sound.SoundEvents
+ *  net.minecraft.sound.SoundCategory
+ *  net.minecraft.client.network.OtherClientPlayerEntity
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -45,24 +45,24 @@ import dev.luminous.mod.modules.settings.impl.StringSetting;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import net.minecraft.class_1268;
-import net.minecraft.class_1294;
-import net.minecraft.class_1297;
-import net.minecraft.class_1309;
-import net.minecraft.class_1657;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1935;
-import net.minecraft.class_2246;
-import net.minecraft.class_243;
-import net.minecraft.class_2596;
-import net.minecraft.class_2602;
-import net.minecraft.class_2663;
-import net.minecraft.class_2664;
-import net.minecraft.class_2824;
-import net.minecraft.class_3417;
-import net.minecraft.class_3419;
-import net.minecraft.class_745;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
+import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.client.network.OtherClientPlayerEntity;
 
 public class FakePlayer
 extends Module {

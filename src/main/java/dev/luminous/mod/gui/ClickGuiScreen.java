@@ -3,10 +3,10 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_2561
- *  net.minecraft.class_332
- *  net.minecraft.class_3675
- *  net.minecraft.class_437
+ *  net.minecraft.text.Text
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.util.InputUtil
+ *  net.minecraft.client.gui.screen.Screen
  */
 package dev.luminous.mod.gui;
 
@@ -21,10 +21,10 @@ import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.impl.client.ClickGui;
 import java.util.ArrayList;
 import java.util.Comparator;
-import net.minecraft.class_2561;
-import net.minecraft.class_332;
-import net.minecraft.class_3675;
-import net.minecraft.class_437;
+import net.minecraft.text.Text;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.gui.screen.Screen;
 
 public class ClickGuiScreen
 extends class_437 {

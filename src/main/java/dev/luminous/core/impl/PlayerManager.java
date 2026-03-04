@@ -2,18 +2,18 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1263
- *  net.minecraft.class_1657
- *  net.minecraft.class_1707
- *  net.minecraft.class_1799
- *  net.minecraft.class_2246
- *  net.minecraft.class_2336
- *  net.minecraft.class_2338
- *  net.minecraft.class_2371
- *  net.minecraft.class_238
- *  net.minecraft.class_437
- *  net.minecraft.class_476
- *  net.minecraft.class_5134
+ *  net.minecraft.inventory.Inventory
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.screen.GenericContainerScreenHandler
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.block.EnderChestBlock
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.collection.DefaultedList
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.client.gui.screen.ingame.GenericContainerScreen
+ *  net.minecraft.entity.attribute.EntityAttributes
  */
 package dev.luminous.core.impl;
 
@@ -28,18 +28,18 @@ import dev.luminous.mod.modules.Module;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import net.minecraft.class_1263;
-import net.minecraft.class_1657;
-import net.minecraft.class_1707;
-import net.minecraft.class_1799;
-import net.minecraft.class_2246;
-import net.minecraft.class_2336;
-import net.minecraft.class_2338;
-import net.minecraft.class_2371;
-import net.minecraft.class_238;
-import net.minecraft.class_437;
-import net.minecraft.class_476;
-import net.minecraft.class_5134;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.GenericContainerScreenHandler;
+import net.minecraft.item.ItemStack;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.EnderChestBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.Box;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
+import net.minecraft.entity.attribute.EntityAttributes;
 
 public class PlayerManager
 implements Wrapper {

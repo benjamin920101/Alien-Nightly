@@ -3,30 +3,30 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1293
- *  net.minecraft.class_1294
- *  net.minecraft.class_1297
- *  net.minecraft.class_1309
- *  net.minecraft.class_1675
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_2374
- *  net.minecraft.class_238
- *  net.minecraft.class_239
- *  net.minecraft.class_239$class_240
- *  net.minecraft.class_243
- *  net.minecraft.class_310
- *  net.minecraft.class_3532
- *  net.minecraft.class_3965
- *  net.minecraft.class_3966
- *  net.minecraft.class_4184
- *  net.minecraft.class_4587
- *  net.minecraft.class_5636
- *  net.minecraft.class_757
- *  net.minecraft.class_7833
- *  net.minecraft.class_9779
+ *  net.minecraft.entity.effect.StatusEffectInstance
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.projectile.ProjectileUtil
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.util.math.Position
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.util.hit.HitResult
+ *  net.minecraft.util.hit.HitResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.util.hit.EntityHitResult
+ *  net.minecraft.client.render.Camera
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.block.enums.CameraSubmersionType
+ *  net.minecraft.client.render.GameRenderer
+ *  net.minecraft.util.math.RotationAxis
+ *  net.minecraft.client.render.RenderTickCounter
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  *  org.spongepowered.asm.mixin.Final
@@ -55,29 +55,29 @@ import dev.luminous.mod.modules.impl.render.Fov;
 import dev.luminous.mod.modules.impl.render.HighLight;
 import dev.luminous.mod.modules.impl.render.NoRender;
 import dev.luminous.mod.modules.impl.render.Zoom;
-import net.minecraft.class_1293;
-import net.minecraft.class_1294;
-import net.minecraft.class_1297;
-import net.minecraft.class_1309;
-import net.minecraft.class_1675;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_2374;
-import net.minecraft.class_238;
-import net.minecraft.class_239;
-import net.minecraft.class_243;
-import net.minecraft.class_310;
-import net.minecraft.class_3532;
-import net.minecraft.class_3965;
-import net.minecraft.class_3966;
-import net.minecraft.class_4184;
-import net.minecraft.class_4587;
-import net.minecraft.class_5636;
-import net.minecraft.class_757;
-import net.minecraft.class_7833;
-import net.minecraft.class_9779;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Position;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.block.enums.CameraSubmersionType;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.util.math.RotationAxis;
+import net.minecraft.client.render.RenderTickCounter;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.spongepowered.asm.mixin.Final;

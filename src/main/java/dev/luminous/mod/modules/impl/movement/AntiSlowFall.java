@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1294
+ *  net.minecraft.entity.effect.StatusEffects
  */
 package dev.luminous.mod.modules.impl.movement;
 
@@ -13,7 +13,7 @@ import dev.luminous.api.utils.player.MovementUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1294;
+import net.minecraft.entity.effect.StatusEffects;
 
 public class AntiSlowFall
 extends Module {

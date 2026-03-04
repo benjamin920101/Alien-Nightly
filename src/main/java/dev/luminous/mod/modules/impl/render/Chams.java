@@ -3,14 +3,14 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1297
- *  net.minecraft.class_1308
- *  net.minecraft.class_1429
- *  net.minecraft.class_1511
- *  net.minecraft.class_1621
- *  net.minecraft.class_1646
- *  net.minecraft.class_1657
- *  net.minecraft.class_3989
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.mob.MobEntity
+ *  net.minecraft.entity.passive.AnimalEntity
+ *  net.minecraft.entity.decoration.EndCrystalEntity
+ *  net.minecraft.entity.mob.SlimeEntity
+ *  net.minecraft.entity.passive.VillagerEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.entity.passive.WanderingTraderEntity
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -23,14 +23,14 @@ import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
-import net.minecraft.class_1297;
-import net.minecraft.class_1308;
-import net.minecraft.class_1429;
-import net.minecraft.class_1511;
-import net.minecraft.class_1621;
-import net.minecraft.class_1646;
-import net.minecraft.class_1657;
-import net.minecraft.class_3989;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.passive.WanderingTraderEntity;
 
 public class Chams
 extends Module {

@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_640
+ *  net.minecraft.client.network.PlayerListEntry
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Random;
-import net.minecraft.class_640;
+import net.minecraft.client.network.PlayerListEntry;
 
 public class Spammer
 extends Module {

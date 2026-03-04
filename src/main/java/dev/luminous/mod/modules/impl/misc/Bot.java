@@ -2,57 +2,57 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1294
- *  net.minecraft.class_1297
- *  net.minecraft.class_1481
- *  net.minecraft.class_1501
- *  net.minecraft.class_1533
- *  net.minecraft.class_1542
- *  net.minecraft.class_1646
- *  net.minecraft.class_1657
- *  net.minecraft.class_1703
- *  net.minecraft.class_1707
- *  net.minecraft.class_1713
- *  net.minecraft.class_1714
- *  net.minecraft.class_1724
- *  net.minecraft.class_1728
- *  net.minecraft.class_1733
- *  net.minecraft.class_1735
- *  net.minecraft.class_1747
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1821
- *  net.minecraft.class_1829
- *  net.minecraft.class_1914
- *  net.minecraft.class_1922
- *  net.minecraft.class_2246
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_243
- *  net.minecraft.class_2480
- *  net.minecraft.class_2482
- *  net.minecraft.class_2596
- *  net.minecraft.class_2627
- *  net.minecraft.class_2813
- *  net.minecraft.class_2815
- *  net.minecraft.class_2824
- *  net.minecraft.class_2828
- *  net.minecraft.class_2846
- *  net.minecraft.class_2846$class_2847
- *  net.minecraft.class_2851
- *  net.minecraft.class_2863
- *  net.minecraft.class_2886
- *  net.minecraft.class_3532
- *  net.minecraft.class_3545
- *  net.minecraft.class_437
- *  net.minecraft.class_465
- *  net.minecraft.class_490
- *  net.minecraft.class_516
- *  net.minecraft.class_7204
- *  net.minecraft.class_7225$class_7874
- *  net.minecraft.class_7439
- *  net.minecraft.class_8786
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.passive.TurtleEntity
+ *  net.minecraft.entity.passive.LlamaEntity
+ *  net.minecraft.entity.decoration.ItemFrameEntity
+ *  net.minecraft.entity.ItemEntity
+ *  net.minecraft.entity.passive.VillagerEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.screen.ScreenHandler
+ *  net.minecraft.screen.GenericContainerScreenHandler
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.screen.CraftingScreenHandler
+ *  net.minecraft.screen.HorseScreenHandler
+ *  net.minecraft.screen.MerchantScreenHandler
+ *  net.minecraft.screen.ShulkerBoxScreenHandler
+ *  net.minecraft.screen.slot.Slot
+ *  net.minecraft.item.BlockItem
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.item.ShovelItem
+ *  net.minecraft.item.SwordItem
+ *  net.minecraft.village.TradeOffer
+ *  net.minecraft.world.BlockView
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.block.ShulkerBoxBlock
+ *  net.minecraft.block.SlabBlock
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.block.entity.ShulkerBoxBlockEntity
+ *  net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket
+ *  net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket$Action
+ *  net.minecraft.network.packet.c2s.play.PlayerInputC2SPacket
+ *  net.minecraft.network.packet.c2s.play.SelectMerchantTradeC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.Pair
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.client.gui.screen.ingame.HandledScreen
+ *  net.minecraft.client.gui.screen.ingame.InventoryScreen
+ *  net.minecraft.client.gui.screen.recipebook.RecipeResultCollection
+ *  net.minecraft.client.network.SequencedPacketCreator
+ *  net.minecraft.registry.RegistryWrapper$WrapperLookup
+ *  net.minecraft.network.packet.s2c.play.GameMessageS2CPacket
+ *  net.minecraft.recipe.RecipeEntry
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -86,56 +86,56 @@ import java.lang.invoke.LambdaMetafactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.class_1268;
-import net.minecraft.class_1294;
-import net.minecraft.class_1297;
-import net.minecraft.class_1481;
-import net.minecraft.class_1501;
-import net.minecraft.class_1533;
-import net.minecraft.class_1542;
-import net.minecraft.class_1646;
-import net.minecraft.class_1657;
-import net.minecraft.class_1703;
-import net.minecraft.class_1707;
-import net.minecraft.class_1713;
-import net.minecraft.class_1714;
-import net.minecraft.class_1724;
-import net.minecraft.class_1728;
-import net.minecraft.class_1733;
-import net.minecraft.class_1735;
-import net.minecraft.class_1747;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1821;
-import net.minecraft.class_1829;
-import net.minecraft.class_1914;
-import net.minecraft.class_1922;
-import net.minecraft.class_2246;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_243;
-import net.minecraft.class_2480;
-import net.minecraft.class_2482;
-import net.minecraft.class_2596;
-import net.minecraft.class_2627;
-import net.minecraft.class_2813;
-import net.minecraft.class_2815;
-import net.minecraft.class_2824;
-import net.minecraft.class_2828;
-import net.minecraft.class_2846;
-import net.minecraft.class_2851;
-import net.minecraft.class_2863;
-import net.minecraft.class_2886;
-import net.minecraft.class_3532;
-import net.minecraft.class_3545;
-import net.minecraft.class_437;
-import net.minecraft.class_465;
-import net.minecraft.class_490;
-import net.minecraft.class_516;
-import net.minecraft.class_7204;
-import net.minecraft.class_7225;
-import net.minecraft.class_7439;
-import net.minecraft.class_8786;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.TurtleEntity;
+import net.minecraft.entity.passive.LlamaEntity;
+import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.GenericContainerScreenHandler;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.screen.HorseScreenHandler;
+import net.minecraft.screen.MerchantScreenHandler;
+import net.minecraft.screen.ShulkerBoxScreenHandler;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.ShovelItem;
+import net.minecraft.item.SwordItem;
+import net.minecraft.village.TradeOffer;
+import net.minecraft.world.BlockView;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.block.entity.ShulkerBoxBlockEntity;
+import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
+import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInputC2SPacket;
+import net.minecraft.network.packet.c2s.play.SelectMerchantTradeC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Pair;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.client.gui.screen.recipebook.RecipeResultCollection;
+import net.minecraft.client.network.SequencedPacketCreator;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
+import net.minecraft.recipe.RecipeEntry;
 
 public class Bot
 extends Module {
@@ -1137,9 +1137,9 @@ lbl571:
                                         if (sandBlock != Bot.mc.field_1687.method_8320(sand).method_26204() || (side = BlockUtil.getClickSideStrict(sand)) == null) continue;
                                         PlaceRender.INSTANCE.create(sand);
                                         Alien.ROTATION.snapAt(sand.method_46558());
-                                        Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$23(net.minecraft.class_2338 net.minecraft.class_2350 int ), (I)Lnet/minecraft/class_2596;)((class_2338)sand, (class_2350)side));
-                                        Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$24(net.minecraft.class_2338 net.minecraft.class_2350 int ), (I)Lnet/minecraft/class_2596;)((class_2338)sand, (class_2350)side));
-                                        Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$25(net.minecraft.class_2338 net.minecraft.class_2350 int ), (I)Lnet/minecraft/class_2596;)((class_2338)sand, (class_2350)side));
+                                        Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$23(net.minecraft.util.math.BlockPos net.minecraft.util.math.Direction int ), (I)Lnet/minecraft/class_2596;)((class_2338)sand, (class_2350)side));
+                                        Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$24(net.minecraft.util.math.BlockPos net.minecraft.util.math.Direction int ), (I)Lnet/minecraft/class_2596;)((class_2338)sand, (class_2350)side));
+                                        Bot.sendSequencedPacket((class_7204)LambdaMetafactory.metafactory(null, null, null, (I)Lnet/minecraft/class_2596;, lambda$onUpdate$25(net.minecraft.util.math.BlockPos net.minecraft.util.math.Direction int ), (I)Lnet/minecraft/class_2596;)((class_2338)sand, (class_2350)side));
                                         Alien.ROTATION.snapBack();
                                         if (!((double)(++b) >= this.breaks.getValue())) continue;
                                         return;

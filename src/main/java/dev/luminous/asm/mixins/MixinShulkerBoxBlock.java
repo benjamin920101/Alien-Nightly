@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1792$class_9635
- *  net.minecraft.class_1799
- *  net.minecraft.class_1836
- *  net.minecraft.class_2480
- *  net.minecraft.class_2561
+ *  net.minecraft.item.Item$TooltipContext
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.tooltip.TooltipType
+ *  net.minecraft.block.ShulkerBoxBlock
+ *  net.minecraft.text.Text
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -16,11 +16,11 @@ package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.impl.misc.ShulkerViewer;
 import java.util.List;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1836;
-import net.minecraft.class_2480;
-import net.minecraft.class_2561;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

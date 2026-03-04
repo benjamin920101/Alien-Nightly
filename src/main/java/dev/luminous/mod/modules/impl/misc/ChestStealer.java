@@ -2,26 +2,26 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
- *  net.minecraft.class_1703
- *  net.minecraft.class_1707
- *  net.minecraft.class_1713
- *  net.minecraft.class_1733
- *  net.minecraft.class_1735
- *  net.minecraft.class_1747
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1922
- *  net.minecraft.class_2246
- *  net.minecraft.class_2248
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_2480
- *  net.minecraft.class_2680
- *  net.minecraft.class_3532
- *  net.minecraft.class_495
- *  net.minecraft.class_7923
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.screen.ScreenHandler
+ *  net.minecraft.screen.GenericContainerScreenHandler
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.screen.ShulkerBoxScreenHandler
+ *  net.minecraft.screen.slot.Slot
+ *  net.minecraft.item.BlockItem
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.world.BlockView
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.block.Block
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.block.ShulkerBoxBlock
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.gui.screen.ingame.ShulkerBoxScreen
+ *  net.minecraft.registry.Registries
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -47,26 +47,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.class_1657;
-import net.minecraft.class_1703;
-import net.minecraft.class_1707;
-import net.minecraft.class_1713;
-import net.minecraft.class_1733;
-import net.minecraft.class_1735;
-import net.minecraft.class_1747;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1922;
-import net.minecraft.class_2246;
-import net.minecraft.class_2248;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_2480;
-import net.minecraft.class_2680;
-import net.minecraft.class_3532;
-import net.minecraft.class_495;
-import net.minecraft.class_7923;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.GenericContainerScreenHandler;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.screen.ShulkerBoxScreenHandler;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.world.BlockView;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.screen.ingame.ShulkerBoxScreen;
+import net.minecraft.registry.Registries;
 
 public class ChestStealer
 extends Module {

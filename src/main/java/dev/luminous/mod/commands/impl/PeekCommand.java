@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1799
+ *  net.minecraft.item.ItemStack
  */
 package dev.luminous.mod.commands.impl;
 
 import dev.luminous.mod.commands.Command;
 import dev.luminous.mod.modules.impl.misc.ShulkerViewer;
 import java.util.List;
-import net.minecraft.class_1799;
+import net.minecraft.item.ItemStack;
 
 public class PeekCommand
 extends Command {

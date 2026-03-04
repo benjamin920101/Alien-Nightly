@@ -3,28 +3,28 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1087
- *  net.minecraft.class_124
- *  net.minecraft.class_1297
- *  net.minecraft.class_1657
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1887
- *  net.minecraft.class_1890
- *  net.minecraft.class_1937
- *  net.minecraft.class_243
- *  net.minecraft.class_308
- *  net.minecraft.class_327$class_6415
- *  net.minecraft.class_4184
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  net.minecraft.class_4608
- *  net.minecraft.class_640
- *  net.minecraft.class_6880
- *  net.minecraft.class_7833
- *  net.minecraft.class_811
- *  net.minecraft.class_9304
+ *  net.minecraft.client.render.model.BakedModel
+ *  net.minecraft.util.Formatting
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.world.World
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.client.render.DiffuseLighting
+ *  net.minecraft.client.font.TextRenderer$TextLayerType
+ *  net.minecraft.client.render.Camera
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.render.VertexConsumerProvider
+ *  net.minecraft.client.render.VertexConsumerProvider$Immediate
+ *  net.minecraft.client.render.OverlayTexture
+ *  net.minecraft.client.network.PlayerListEntry
+ *  net.minecraft.registry.entry.RegistryEntry
+ *  net.minecraft.util.math.RotationAxis
+ *  net.minecraft.client.render.model.json.ModelTransformationMode
+ *  net.minecraft.component.type.ItemEnchantmentsComponent
  *  org.joml.Matrix4f
  *  org.lwjgl.opengl.GL11
  */
@@ -46,27 +46,27 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
-import net.minecraft.class_1087;
-import net.minecraft.class_124;
-import net.minecraft.class_1297;
-import net.minecraft.class_1657;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1887;
-import net.minecraft.class_1890;
-import net.minecraft.class_1937;
-import net.minecraft.class_243;
-import net.minecraft.class_308;
-import net.minecraft.class_327;
-import net.minecraft.class_4184;
-import net.minecraft.class_4587;
-import net.minecraft.class_4597;
-import net.minecraft.class_4608;
-import net.minecraft.class_640;
-import net.minecraft.class_6880;
-import net.minecraft.class_7833;
-import net.minecraft.class_811;
-import net.minecraft.class_9304;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.util.Formatting;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.world.World;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.RotationAxis;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 

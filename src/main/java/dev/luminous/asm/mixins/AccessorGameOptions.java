@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1664
- *  net.minecraft.class_315
+ *  net.minecraft.entity.player.PlayerModelPart
+ *  net.minecraft.client.option.GameOptions
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Mutable
  *  org.spongepowered.asm.mixin.gen.Accessor
@@ -11,8 +11,8 @@
 package dev.luminous.asm.mixins;
 
 import java.util.Set;
-import net.minecraft.class_1664;
-import net.minecraft.class_315;
+import net.minecraft.entity.player.PlayerModelPart;
+import net.minecraft.client.option.GameOptions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;

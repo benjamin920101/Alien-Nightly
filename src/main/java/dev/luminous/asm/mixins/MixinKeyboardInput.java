@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_743
+ *  net.minecraft.client.input.KeyboardInput
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.At$Shift
@@ -13,7 +13,7 @@ package dev.luminous.asm.mixins;
 
 import dev.luminous.Alien;
 import dev.luminous.api.events.impl.KeyboardInputEvent;
-import net.minecraft.class_743;
+import net.minecraft.client.input.KeyboardInput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

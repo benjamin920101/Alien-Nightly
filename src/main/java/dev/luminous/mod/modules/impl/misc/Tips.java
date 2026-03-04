@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_124
- *  net.minecraft.class_1291
- *  net.minecraft.class_1294
- *  net.minecraft.class_1657
- *  net.minecraft.class_2708
- *  net.minecraft.class_332
- *  net.minecraft.class_3417
- *  net.minecraft.class_3419
+ *  net.minecraft.util.Formatting
+ *  net.minecraft.entity.effect.StatusEffect
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.sound.SoundEvents
+ *  net.minecraft.sound.SoundCategory
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -30,14 +30,14 @@ import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
 import java.text.DecimalFormat;
-import net.minecraft.class_124;
-import net.minecraft.class_1291;
-import net.minecraft.class_1294;
-import net.minecraft.class_1657;
-import net.minecraft.class_2708;
-import net.minecraft.class_332;
-import net.minecraft.class_3417;
-import net.minecraft.class_3419;
+import net.minecraft.util.Formatting;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundCategory;
 
 public class Tips
 extends Module {

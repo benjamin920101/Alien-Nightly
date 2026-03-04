@@ -2,22 +2,22 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1304
- *  net.minecraft.class_1657
- *  net.minecraft.class_1713
- *  net.minecraft.class_1738
- *  net.minecraft.class_1770
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1890
- *  net.minecraft.class_1893
- *  net.minecraft.class_2596
- *  net.minecraft.class_2838
- *  net.minecraft.class_2886
- *  net.minecraft.class_6880
- *  net.minecraft.class_9304
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.EquipmentSlot
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.item.ArmorItem
+ *  net.minecraft.item.ElytraItem
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.enchantment.Enchantments
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.PickFromInventoryC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket
+ *  net.minecraft.registry.entry.RegistryEntry
+ *  net.minecraft.component.type.ItemEnchantmentsComponent
  */
 package dev.luminous.mod.modules.impl.player;
 
@@ -34,22 +34,22 @@ import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.class_1268;
-import net.minecraft.class_1304;
-import net.minecraft.class_1657;
-import net.minecraft.class_1713;
-import net.minecraft.class_1738;
-import net.minecraft.class_1770;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1890;
-import net.minecraft.class_1893;
-import net.minecraft.class_2596;
-import net.minecraft.class_2838;
-import net.minecraft.class_2886;
-import net.minecraft.class_6880;
-import net.minecraft.class_9304;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ElytraItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.PickFromInventoryC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 
 public class AutoArmor
 extends Module {

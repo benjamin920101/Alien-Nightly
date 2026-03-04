@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1291
- *  net.minecraft.class_1293
- *  net.minecraft.class_1937
- *  net.minecraft.class_332
- *  net.minecraft.class_408
- *  net.minecraft.class_640
- *  net.minecraft.class_6880
- *  net.minecraft.class_7923
+ *  net.minecraft.entity.effect.StatusEffect
+ *  net.minecraft.entity.effect.StatusEffectInstance
+ *  net.minecraft.world.World
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.gui.screen.ChatScreen
+ *  net.minecraft.client.network.PlayerListEntry
+ *  net.minecraft.registry.entry.RegistryEntry
+ *  net.minecraft.registry.Registries
  */
 package dev.luminous.mod.modules.impl.client;
 
@@ -42,14 +42,14 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.BooleanSupplier;
-import net.minecraft.class_1291;
-import net.minecraft.class_1293;
-import net.minecraft.class_1937;
-import net.minecraft.class_332;
-import net.minecraft.class_408;
-import net.minecraft.class_640;
-import net.minecraft.class_6880;
-import net.minecraft.class_7923;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.world.World;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.Registries;
 
 public class HUD
 extends Module {

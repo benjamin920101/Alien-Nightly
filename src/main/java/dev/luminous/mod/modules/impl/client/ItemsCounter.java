@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1935
- *  net.minecraft.class_2665
- *  net.minecraft.class_332
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.item.ItemConvertible
+ *  net.minecraft.block.PistonBlock
+ *  net.minecraft.client.gui.DrawContext
  */
 package dev.luminous.mod.modules.impl.client;
 
@@ -15,12 +15,12 @@ import dev.luminous.api.utils.player.InventoryUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1935;
-import net.minecraft.class_2665;
-import net.minecraft.class_332;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.block.PistonBlock;
+import net.minecraft.client.gui.DrawContext;
 
 public class ItemsCounter
 extends Module {

@@ -3,14 +3,14 @@
  * 
  * Could not load the following classes:
  *  com.mojang.authlib.GameProfile
- *  net.minecraft.class_1313
- *  net.minecraft.class_243
- *  net.minecraft.class_310
- *  net.minecraft.class_3532
- *  net.minecraft.class_638
- *  net.minecraft.class_742
- *  net.minecraft.class_744
- *  net.minecraft.class_746
+ *  net.minecraft.entity.MovementType
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.world.ClientWorld
+ *  net.minecraft.client.network.AbstractClientPlayerEntity
+ *  net.minecraft.client.input.Input
+ *  net.minecraft.client.network.ClientPlayerEntity
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
@@ -39,14 +39,14 @@ import dev.luminous.mod.modules.impl.client.ClientSetting;
 import dev.luminous.mod.modules.impl.exploit.PacketControl;
 import dev.luminous.mod.modules.impl.movement.NoSlow;
 import dev.luminous.mod.modules.impl.movement.Velocity;
-import net.minecraft.class_1313;
-import net.minecraft.class_243;
-import net.minecraft.class_310;
-import net.minecraft.class_3532;
-import net.minecraft.class_638;
-import net.minecraft.class_742;
-import net.minecraft.class_744;
-import net.minecraft.class_746;
+import net.minecraft.entity.MovementType;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.input.Input;
+import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

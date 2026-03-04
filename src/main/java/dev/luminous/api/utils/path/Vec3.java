@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_243
+ *  net.minecraft.util.math.Vec3d
  */
 package dev.luminous.api.utils.path;
 
-import net.minecraft.class_243;
+import net.minecraft.util.math.Vec3d;
 
 public record Vec3(double x, double y, double z) {
     public Vec3 addVector(double x, double y, double z) {

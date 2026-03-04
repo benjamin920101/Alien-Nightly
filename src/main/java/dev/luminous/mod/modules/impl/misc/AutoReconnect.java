@@ -4,12 +4,12 @@
  * Could not load the following classes:
  *  it.unimi.dsi.fastutil.Pair
  *  it.unimi.dsi.fastutil.objects.ObjectObjectImmutablePair
- *  net.minecraft.class_1268
- *  net.minecraft.class_1802
- *  net.minecraft.class_2886
- *  net.minecraft.class_639
- *  net.minecraft.class_642
- *  net.minecraft.class_7439
+ *  net.minecraft.util.Hand
+ *  net.minecraft.item.Items
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket
+ *  net.minecraft.client.network.ServerAddress
+ *  net.minecraft.client.network.ServerInfo
+ *  net.minecraft.network.packet.s2c.play.GameMessageS2CPacket
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -28,12 +28,12 @@ import dev.luminous.mod.modules.settings.impl.StringSetting;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectObjectImmutablePair;
 import java.util.HashMap;
-import net.minecraft.class_1268;
-import net.minecraft.class_1802;
-import net.minecraft.class_2886;
-import net.minecraft.class_639;
-import net.minecraft.class_642;
-import net.minecraft.class_7439;
+import net.minecraft.util.Hand;
+import net.minecraft.item.Items;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.client.network.ServerAddress;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 
 public class AutoReconnect
 extends Module {

@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1799
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_742
- *  net.minecraft.class_759
+ *  net.minecraft.util.Hand
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.render.VertexConsumerProvider
+ *  net.minecraft.client.network.AbstractClientPlayerEntity
+ *  net.minecraft.client.render.item.HeldItemRenderer
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -17,12 +17,12 @@ package dev.luminous.asm.mixins;
 
 import dev.luminous.Alien;
 import dev.luminous.api.events.impl.HeldItemRendererEvent;
-import net.minecraft.class_1268;
-import net.minecraft.class_1799;
-import net.minecraft.class_4587;
-import net.minecraft.class_4597;
-import net.minecraft.class_742;
-import net.minecraft.class_759;
+import net.minecraft.util.Hand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.render.item.HeldItemRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

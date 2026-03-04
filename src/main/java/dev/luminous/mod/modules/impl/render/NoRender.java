@@ -2,19 +2,19 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1542
- *  net.minecraft.class_1667
- *  net.minecraft.class_1681
- *  net.minecraft.class_1683
- *  net.minecraft.class_1686
- *  net.minecraft.class_3937
- *  net.minecraft.class_5904
- *  net.minecraft.class_677$class_678
- *  net.minecraft.class_677$class_681
- *  net.minecraft.class_691
- *  net.minecraft.class_700
- *  net.minecraft.class_711
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.ItemEntity
+ *  net.minecraft.entity.projectile.ArrowEntity
+ *  net.minecraft.entity.projectile.thrown.EggEntity
+ *  net.minecraft.entity.projectile.thrown.ExperienceBottleEntity
+ *  net.minecraft.entity.projectile.thrown.PotionEntity
+ *  net.minecraft.client.particle.CampfireSmokeParticle
+ *  net.minecraft.network.packet.s2c.play.TitleS2CPacket
+ *  net.minecraft.client.particle.FireworksSparkParticle$Flash
+ *  net.minecraft.client.particle.FireworksSparkParticle$FireworkParticle
+ *  net.minecraft.client.particle.ExplosionLargeParticle
+ *  net.minecraft.client.particle.ElderGuardianAppearanceParticle
+ *  net.minecraft.client.particle.SpellParticle
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -26,18 +26,18 @@ import dev.luminous.api.events.impl.RenderEntityEvent;
 import dev.luminous.api.events.impl.TickEntityEvent;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
-import net.minecraft.class_1297;
-import net.minecraft.class_1542;
-import net.minecraft.class_1667;
-import net.minecraft.class_1681;
-import net.minecraft.class_1683;
-import net.minecraft.class_1686;
-import net.minecraft.class_3937;
-import net.minecraft.class_5904;
-import net.minecraft.class_677;
-import net.minecraft.class_691;
-import net.minecraft.class_700;
-import net.minecraft.class_711;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.thrown.EggEntity;
+import net.minecraft.entity.projectile.thrown.ExperienceBottleEntity;
+import net.minecraft.entity.projectile.thrown.PotionEntity;
+import net.minecraft.client.particle.CampfireSmokeParticle;
+import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
+import net.minecraft.client.particle.FireworksSparkParticle;
+import net.minecraft.client.particle.ExplosionLargeParticle;
+import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
+import net.minecraft.client.particle.SpellParticle;
 
 public class NoRender
 extends Module {

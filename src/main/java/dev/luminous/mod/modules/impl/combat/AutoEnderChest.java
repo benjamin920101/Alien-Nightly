@@ -2,29 +2,29 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1291
- *  net.minecraft.class_1293
- *  net.minecraft.class_1294
- *  net.minecraft.class_1657
- *  net.minecraft.class_1703
- *  net.minecraft.class_1707
- *  net.minecraft.class_1713
- *  net.minecraft.class_1735
- *  net.minecraft.class_1747
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1844
- *  net.minecraft.class_1922
- *  net.minecraft.class_2244
- *  net.minecraft.class_2246
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_2665
- *  net.minecraft.class_2680
- *  net.minecraft.class_3532
- *  net.minecraft.class_476
- *  net.minecraft.class_9334
+ *  net.minecraft.entity.effect.StatusEffect
+ *  net.minecraft.entity.effect.StatusEffectInstance
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.screen.ScreenHandler
+ *  net.minecraft.screen.GenericContainerScreenHandler
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.screen.slot.Slot
+ *  net.minecraft.item.BlockItem
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.component.type.PotionContentsComponent
+ *  net.minecraft.world.BlockView
+ *  net.minecraft.block.BedBlock
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.block.PistonBlock
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.gui.screen.ingame.GenericContainerScreen
+ *  net.minecraft.component.DataComponentTypes
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -41,29 +41,29 @@ import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.class_1291;
-import net.minecraft.class_1293;
-import net.minecraft.class_1294;
-import net.minecraft.class_1657;
-import net.minecraft.class_1703;
-import net.minecraft.class_1707;
-import net.minecraft.class_1713;
-import net.minecraft.class_1735;
-import net.minecraft.class_1747;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1844;
-import net.minecraft.class_1922;
-import net.minecraft.class_2244;
-import net.minecraft.class_2246;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_2665;
-import net.minecraft.class_2680;
-import net.minecraft.class_3532;
-import net.minecraft.class_476;
-import net.minecraft.class_9334;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.GenericContainerScreenHandler;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.world.BlockView;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.block.PistonBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
+import net.minecraft.component.DataComponentTypes;
 
 public class AutoEnderChest
 extends Module {

@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_243
+ *  net.minecraft.util.math.Vec3d
  */
 package dev.luminous.mod.commands.impl;
 
@@ -10,7 +10,7 @@ import dev.luminous.api.utils.path.TPUtils;
 import dev.luminous.mod.commands.Command;
 import java.text.DecimalFormat;
 import java.util.List;
-import net.minecraft.class_243;
+import net.minecraft.util.math.Vec3d;
 
 public class TeleportCommand
 extends Command {

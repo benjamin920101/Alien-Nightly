@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1934
+ *  net.minecraft.world.GameMode
  */
 package dev.luminous.mod.commands.impl;
 
 import dev.luminous.mod.commands.Command;
 import java.util.List;
-import net.minecraft.class_1934;
+import net.minecraft.world.GameMode;
 
 public class GamemodeCommand
 extends Command {

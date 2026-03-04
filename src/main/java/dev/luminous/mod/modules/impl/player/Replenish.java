@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
- *  net.minecraft.class_1713
- *  net.minecraft.class_1799
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.item.ItemStack
  */
 package dev.luminous.mod.modules.impl.player;
 
@@ -15,9 +15,9 @@ import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.impl.player.Sorter;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1657;
-import net.minecraft.class_1713;
-import net.minecraft.class_1799;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.item.ItemStack;
 
 public class Replenish
 extends Module {

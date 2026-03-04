@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1294
- *  net.minecraft.class_1511
- *  net.minecraft.class_1829
- *  net.minecraft.class_2596
- *  net.minecraft.class_2824
- *  net.minecraft.class_2824$class_5907
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.decoration.EndCrystalEntity
+ *  net.minecraft.item.SwordItem
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket$InteractType
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -21,11 +21,11 @@ import dev.luminous.mod.modules.impl.combat.Criticals;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1294;
-import net.minecraft.class_1511;
-import net.minecraft.class_1829;
-import net.minecraft.class_2596;
-import net.minecraft.class_2824;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.item.SwordItem;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 
 public class AntiWeak
 extends Module {

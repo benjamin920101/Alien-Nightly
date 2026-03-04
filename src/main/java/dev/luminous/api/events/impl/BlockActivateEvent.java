@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2680
+ *  net.minecraft.block.BlockState
  */
 package dev.luminous.api.events.impl;
 
-import net.minecraft.class_2680;
+import net.minecraft.block.BlockState;
 
 public class BlockActivateEvent {
     private static final BlockActivateEvent INSTANCE = new BlockActivateEvent();

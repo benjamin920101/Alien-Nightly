@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2338
- *  net.minecraft.class_2480
- *  net.minecraft.class_2586
- *  net.minecraft.class_2627
- *  net.minecraft.class_3532
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.block.ShulkerBoxBlock
+ *  net.minecraft.block.entity.BlockEntity
+ *  net.minecraft.block.entity.ShulkerBoxBlockEntity
+ *  net.minecraft.util.math.MathHelper
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -21,11 +21,11 @@ import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.class_2338;
-import net.minecraft.class_2480;
-import net.minecraft.class_2586;
-import net.minecraft.class_2627;
-import net.minecraft.class_3532;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.ShulkerBoxBlockEntity;
+import net.minecraft.util.math.MathHelper;
 
 public class AntiRegear
 extends Module {

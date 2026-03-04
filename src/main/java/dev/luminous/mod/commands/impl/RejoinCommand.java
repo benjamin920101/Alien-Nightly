@@ -2,29 +2,29 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2561
- *  net.minecraft.class_2661
- *  net.minecraft.class_310
- *  net.minecraft.class_412
- *  net.minecraft.class_437
- *  net.minecraft.class_442
- *  net.minecraft.class_639
- *  net.minecraft.class_642
- *  net.minecraft.class_8705
+ *  net.minecraft.text.Text
+ *  net.minecraft.network.packet.s2c.common.DisconnectS2CPacket
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.client.gui.screen.multiplayer.ConnectScreen
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.client.gui.screen.TitleScreen
+ *  net.minecraft.client.network.ServerAddress
+ *  net.minecraft.client.network.ServerInfo
+ *  net.minecraft.network.listener.ClientCommonPacketListener
  */
 package dev.luminous.mod.commands.impl;
 
 import dev.luminous.mod.commands.Command;
 import java.util.List;
-import net.minecraft.class_2561;
-import net.minecraft.class_2661;
-import net.minecraft.class_310;
-import net.minecraft.class_412;
-import net.minecraft.class_437;
-import net.minecraft.class_442;
-import net.minecraft.class_639;
-import net.minecraft.class_642;
-import net.minecraft.class_8705;
+import net.minecraft.text.Text;
+import net.minecraft.network.packet.s2c.common.DisconnectS2CPacket;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.network.ServerAddress;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.network.listener.ClientCommonPacketListener;
 
 public class RejoinCommand
 extends Command {

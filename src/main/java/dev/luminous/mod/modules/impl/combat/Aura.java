@@ -2,22 +2,22 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1297
- *  net.minecraft.class_1308
- *  net.minecraft.class_1309
- *  net.minecraft.class_1429
- *  net.minecraft.class_1621
- *  net.minecraft.class_1646
- *  net.minecraft.class_1657
- *  net.minecraft.class_243
- *  net.minecraft.class_2596
- *  net.minecraft.class_2824
- *  net.minecraft.class_2824$class_5907
- *  net.minecraft.class_2879
- *  net.minecraft.class_3989
- *  net.minecraft.class_4587
- *  net.minecraft.class_5134
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.mob.MobEntity
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.passive.AnimalEntity
+ *  net.minecraft.entity.mob.SlimeEntity
+ *  net.minecraft.entity.passive.VillagerEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket$InteractType
+ *  net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
+ *  net.minecraft.entity.passive.WanderingTraderEntity
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.entity.attribute.EntityAttributes
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -49,21 +49,21 @@ import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
-import net.minecraft.class_1268;
-import net.minecraft.class_1297;
-import net.minecraft.class_1308;
-import net.minecraft.class_1309;
-import net.minecraft.class_1429;
-import net.minecraft.class_1621;
-import net.minecraft.class_1646;
-import net.minecraft.class_1657;
-import net.minecraft.class_243;
-import net.minecraft.class_2596;
-import net.minecraft.class_2824;
-import net.minecraft.class_2879;
-import net.minecraft.class_3989;
-import net.minecraft.class_4587;
-import net.minecraft.class_5134;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
+import net.minecraft.entity.passive.WanderingTraderEntity;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.attribute.EntityAttributes;
 
 public class Aura
 extends Module {

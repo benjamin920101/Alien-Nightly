@@ -2,20 +2,20 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1291
- *  net.minecraft.class_1293
- *  net.minecraft.class_1294
- *  net.minecraft.class_1309
- *  net.minecraft.class_2874
- *  net.minecraft.class_310
- *  net.minecraft.class_3532
- *  net.minecraft.class_638
- *  net.minecraft.class_6880
- *  net.minecraft.class_746
- *  net.minecraft.class_757
- *  net.minecraft.class_765
+ *  net.minecraft.client.texture.NativeImage
+ *  net.minecraft.client.texture.NativeImageBackedTexture
+ *  net.minecraft.entity.effect.StatusEffect
+ *  net.minecraft.entity.effect.StatusEffectInstance
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.world.dimension.DimensionType
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.world.ClientWorld
+ *  net.minecraft.registry.entry.RegistryEntry
+ *  net.minecraft.client.network.ClientPlayerEntity
+ *  net.minecraft.client.render.GameRenderer
+ *  net.minecraft.client.render.LightmapTextureManager
  *  org.joml.Vector3f
  *  org.joml.Vector3fc
  *  org.spongepowered.asm.mixin.Final
@@ -32,20 +32,20 @@ package dev.luminous.asm.mixins;
 import dev.luminous.mod.modules.impl.render.Ambience;
 import dev.luminous.mod.modules.impl.render.NoRender;
 import java.awt.Color;
-import net.minecraft.class_1011;
-import net.minecraft.class_1043;
-import net.minecraft.class_1291;
-import net.minecraft.class_1293;
-import net.minecraft.class_1294;
-import net.minecraft.class_1309;
-import net.minecraft.class_2874;
-import net.minecraft.class_310;
-import net.minecraft.class_3532;
-import net.minecraft.class_638;
-import net.minecraft.class_6880;
-import net.minecraft.class_746;
-import net.minecraft.class_757;
-import net.minecraft.class_765;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.NativeImageBackedTexture;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.LightmapTextureManager;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.spongepowered.asm.mixin.Final;

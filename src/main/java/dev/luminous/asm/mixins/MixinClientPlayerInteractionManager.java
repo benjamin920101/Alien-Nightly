@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1269
- *  net.minecraft.class_1657
- *  net.minecraft.class_1799
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_3965
- *  net.minecraft.class_636
- *  net.minecraft.class_746
+ *  net.minecraft.util.Hand
+ *  net.minecraft.util.ActionResult
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.client.network.ClientPlayerInteractionManager
+ *  net.minecraft.client.network.ClientPlayerEntity
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
  *  org.spongepowered.asm.mixin.injection.At
@@ -28,15 +28,15 @@ import dev.luminous.api.events.impl.ClickBlockEvent;
 import dev.luminous.api.events.impl.InteractBlockEvent;
 import dev.luminous.api.events.impl.InteractItemEvent;
 import dev.luminous.mod.modules.impl.player.InteractTweaks;
-import net.minecraft.class_1268;
-import net.minecraft.class_1269;
-import net.minecraft.class_1657;
-import net.minecraft.class_1799;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_3965;
-import net.minecraft.class_636;
-import net.minecraft.class_746;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ActionResult;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

@@ -3,16 +3,16 @@
  * 
  * Could not load the following classes:
  *  com.llamalad7.mixinextras.sugar.Local
- *  net.minecraft.class_2561
- *  net.minecraft.class_303
- *  net.minecraft.class_303$class_7590
- *  net.minecraft.class_310
- *  net.minecraft.class_327
- *  net.minecraft.class_332
- *  net.minecraft.class_338
- *  net.minecraft.class_5481
- *  net.minecraft.class_7469
- *  net.minecraft.class_7591
+ *  net.minecraft.text.Text
+ *  net.minecraft.client.gui.hud.ChatHudLine
+ *  net.minecraft.client.gui.hud.ChatHudLine$Visible
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.client.font.TextRenderer
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.gui.hud.ChatHud
+ *  net.minecraft.text.OrderedText
+ *  net.minecraft.network.message.MessageSignatureData
+ *  net.minecraft.client.gui.hud.MessageIndicator
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
@@ -35,15 +35,15 @@ import dev.luminous.asm.accessors.IChatHud;
 import dev.luminous.mod.modules.impl.client.ClientSetting;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import net.minecraft.class_2561;
-import net.minecraft.class_303;
-import net.minecraft.class_310;
-import net.minecraft.class_327;
-import net.minecraft.class_332;
-import net.minecraft.class_338;
-import net.minecraft.class_5481;
-import net.minecraft.class_7469;
-import net.minecraft.class_7591;
+import net.minecraft.text.Text;
+import net.minecraft.client.gui.hud.ChatHudLine;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.ChatHud;
+import net.minecraft.text.OrderedText;
+import net.minecraft.network.message.MessageSignatureData;
+import net.minecraft.client.gui.hud.MessageIndicator;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

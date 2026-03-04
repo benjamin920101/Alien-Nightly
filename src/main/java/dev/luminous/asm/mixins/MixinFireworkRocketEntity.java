@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1309
- *  net.minecraft.class_1671
- *  net.minecraft.class_2394
- *  net.minecraft.class_2398
- *  net.minecraft.class_243
- *  net.minecraft.class_3417
- *  net.minecraft.class_3419
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.projectile.FireworkRocketEntity
+ *  net.minecraft.particle.ParticleEffect
+ *  net.minecraft.particle.ParticleTypes
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.sound.SoundEvents
+ *  net.minecraft.sound.SoundCategory
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
  *  org.spongepowered.asm.mixin.injection.At
@@ -23,13 +23,13 @@ import dev.luminous.Alien;
 import dev.luminous.api.events.impl.FireworkShooterRotationEvent;
 import dev.luminous.api.events.impl.RemoveFireworkEvent;
 import dev.luminous.api.utils.Wrapper;
-import net.minecraft.class_1309;
-import net.minecraft.class_1671;
-import net.minecraft.class_2394;
-import net.minecraft.class_2398;
-import net.minecraft.class_243;
-import net.minecraft.class_3417;
-import net.minecraft.class_3419;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundCategory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

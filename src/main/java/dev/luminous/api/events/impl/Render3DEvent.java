@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_238
- *  net.minecraft.class_4587
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.client.util.math.MatrixStack
  */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.utils.render.Render3DUtil;
 import java.awt.Color;
-import net.minecraft.class_238;
-import net.minecraft.class_4587;
+import net.minecraft.util.math.Box;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class Render3DEvent {
     private static final Render3DEvent INSTANCE = new Render3DEvent();

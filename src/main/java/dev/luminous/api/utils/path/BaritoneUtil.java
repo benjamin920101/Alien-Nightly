@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2248
- *  net.minecraft.class_2338
+ *  net.minecraft.block.Block
+ *  net.minecraft.util.math.BlockPos
  */
 package dev.luminous.api.utils.path;
 
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.mod.modules.impl.client.BaritoneModule;
-import net.minecraft.class_2248;
-import net.minecraft.class_2338;
+import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
 
 public class BaritoneUtil
 implements Wrapper {

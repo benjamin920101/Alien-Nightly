@@ -3,8 +3,8 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_2960
- *  net.minecraft.class_332
+ *  net.minecraft.util.Identifier
+ *  net.minecraft.client.gui.DrawContext
  */
 package dev.luminous.mod.gui.windows;
 
@@ -17,8 +17,8 @@ import dev.luminous.core.impl.FontManager;
 import dev.luminous.mod.gui.windows.WindowsScreen;
 import dev.luminous.mod.modules.impl.client.ColorsModule;
 import java.awt.Color;
-import net.minecraft.class_2960;
-import net.minecraft.class_332;
+import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.DrawContext;
 
 public class WindowBase {
     private final String name;

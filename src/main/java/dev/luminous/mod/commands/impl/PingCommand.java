@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2596
- *  net.minecraft.class_7439
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.s2c.play.GameMessageS2CPacket
  */
 package dev.luminous.mod.commands.impl;
 
@@ -12,8 +12,8 @@ import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.PacketEvent;
 import dev.luminous.mod.commands.Command;
 import java.util.List;
-import net.minecraft.class_2596;
-import net.minecraft.class_7439;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 
 public class PingCommand
 extends Command {

@@ -3,23 +3,23 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1309
- *  net.minecraft.class_1657
- *  net.minecraft.class_243
- *  net.minecraft.class_287
- *  net.minecraft.class_289
- *  net.minecraft.class_290
- *  net.minecraft.class_293$class_5596
- *  net.minecraft.class_3532
- *  net.minecraft.class_4587
- *  net.minecraft.class_5602
- *  net.minecraft.class_5617$class_5618
- *  net.minecraft.class_591
- *  net.minecraft.class_630
- *  net.minecraft.class_630$class_593
- *  net.minecraft.class_630$class_628
- *  net.minecraft.class_757
- *  net.minecraft.class_7833
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.client.render.BufferBuilder
+ *  net.minecraft.client.render.Tessellator
+ *  net.minecraft.client.render.VertexFormats
+ *  net.minecraft.client.render.VertexFormat$DrawMode
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.render.entity.model.EntityModelLayers
+ *  net.minecraft.client.render.entity.EntityRendererFactory$Context
+ *  net.minecraft.client.render.entity.model.PlayerEntityModel
+ *  net.minecraft.client.model.ModelPart
+ *  net.minecraft.client.model.ModelPart$Quad
+ *  net.minecraft.client.model.ModelPart$Cuboid
+ *  net.minecraft.client.render.GameRenderer
+ *  net.minecraft.util.math.RotationAxis
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  *  org.joml.Vector3f
@@ -34,21 +34,21 @@ import dev.luminous.api.utils.render.Render3DUtil;
 import dev.luminous.asm.accessors.ILivingEntity;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import java.awt.Color;
-import net.minecraft.class_1309;
-import net.minecraft.class_1657;
-import net.minecraft.class_243;
-import net.minecraft.class_287;
-import net.minecraft.class_289;
-import net.minecraft.class_290;
-import net.minecraft.class_293;
-import net.minecraft.class_3532;
-import net.minecraft.class_4587;
-import net.minecraft.class_5602;
-import net.minecraft.class_5617;
-import net.minecraft.class_591;
-import net.minecraft.class_630;
-import net.minecraft.class_757;
-import net.minecraft.class_7833;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Vector3f;

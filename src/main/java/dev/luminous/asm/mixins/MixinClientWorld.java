@@ -2,19 +2,19 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1297$class_5529
- *  net.minecraft.class_1937
- *  net.minecraft.class_243
- *  net.minecraft.class_2874
- *  net.minecraft.class_3695
- *  net.minecraft.class_5269
- *  net.minecraft.class_5294
- *  net.minecraft.class_5294$class_5297
- *  net.minecraft.class_5321
- *  net.minecraft.class_5455
- *  net.minecraft.class_638
- *  net.minecraft.class_6880
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.Entity$RemovalReason
+ *  net.minecraft.world.World
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.dimension.DimensionType
+ *  net.minecraft.util.profiler.Profiler
+ *  net.minecraft.world.MutableWorldProperties
+ *  net.minecraft.client.render.DimensionEffects
+ *  net.minecraft.client.render.DimensionEffects$Overworld
+ *  net.minecraft.registry.RegistryKey
+ *  net.minecraft.registry.DynamicRegistryManager
+ *  net.minecraft.client.world.ClientWorld
+ *  net.minecraft.registry.entry.RegistryEntry
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Unique
  *  org.spongepowered.asm.mixin.injection.At
@@ -33,17 +33,17 @@ import dev.luminous.mod.modules.impl.render.Ambience;
 import dev.luminous.mod.modules.impl.render.NoRender;
 import java.awt.Color;
 import java.util.function.Supplier;
-import net.minecraft.class_1297;
-import net.minecraft.class_1937;
-import net.minecraft.class_243;
-import net.minecraft.class_2874;
-import net.minecraft.class_3695;
-import net.minecraft.class_5269;
-import net.minecraft.class_5294;
-import net.minecraft.class_5321;
-import net.minecraft.class_5455;
-import net.minecraft.class_638;
-import net.minecraft.class_6880;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.profiler.Profiler;
+import net.minecraft.world.MutableWorldProperties;
+import net.minecraft.client.render.DimensionEffects;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

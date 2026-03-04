@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_124
- *  net.minecraft.class_332
- *  net.minecraft.class_3675
+ *  net.minecraft.util.Formatting
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.util.InputUtil
  */
 package dev.luminous.mod.gui.items.buttons;
 
@@ -15,9 +15,9 @@ import dev.luminous.mod.gui.items.buttons.Button;
 import dev.luminous.mod.modules.impl.client.ClickGui;
 import dev.luminous.mod.modules.settings.impl.BindSetting;
 import java.awt.Color;
-import net.minecraft.class_124;
-import net.minecraft.class_332;
-import net.minecraft.class_3675;
+import net.minecraft.util.Formatting;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.InputUtil;
 
 public class BindButton
 extends Button {

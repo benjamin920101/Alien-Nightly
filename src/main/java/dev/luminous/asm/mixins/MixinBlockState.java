@@ -4,14 +4,14 @@
  * Could not load the following classes:
  *  com.mojang.serialization.MapCodec
  *  it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap
- *  net.minecraft.class_1269
- *  net.minecraft.class_1657
- *  net.minecraft.class_1937
- *  net.minecraft.class_2248
- *  net.minecraft.class_2680
- *  net.minecraft.class_2769
- *  net.minecraft.class_3965
- *  net.minecraft.class_4970$class_4971
+ *  net.minecraft.util.ActionResult
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.world.World
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.state.property.Property
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.block.AbstractBlock$AbstractBlockState
  *  org.spongepowered.asm.mixin.Mixin
  */
 package dev.luminous.asm.mixins;
@@ -20,14 +20,14 @@ import com.mojang.serialization.MapCodec;
 import dev.luminous.Alien;
 import dev.luminous.api.events.impl.BlockActivateEvent;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
-import net.minecraft.class_1269;
-import net.minecraft.class_1657;
-import net.minecraft.class_1937;
-import net.minecraft.class_2248;
-import net.minecraft.class_2680;
-import net.minecraft.class_2769;
-import net.minecraft.class_3965;
-import net.minecraft.class_4970;
+import net.minecraft.util.ActionResult;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.state.property.Property;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.block.AbstractBlock;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value={class_2680.class})

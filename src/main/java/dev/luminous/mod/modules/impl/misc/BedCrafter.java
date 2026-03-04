@@ -2,18 +2,18 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
- *  net.minecraft.class_1713
- *  net.minecraft.class_1714
- *  net.minecraft.class_1748
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_2246
- *  net.minecraft.class_2338
- *  net.minecraft.class_3532
- *  net.minecraft.class_516
- *  net.minecraft.class_7225$class_7874
- *  net.minecraft.class_8786
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.screen.CraftingScreenHandler
+ *  net.minecraft.item.BedItem
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.gui.screen.recipebook.RecipeResultCollection
+ *  net.minecraft.registry.RegistryWrapper$WrapperLookup
+ *  net.minecraft.recipe.RecipeEntry
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -24,18 +24,18 @@ import dev.luminous.api.utils.world.BlockUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1657;
-import net.minecraft.class_1713;
-import net.minecraft.class_1714;
-import net.minecraft.class_1748;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_2246;
-import net.minecraft.class_2338;
-import net.minecraft.class_3532;
-import net.minecraft.class_516;
-import net.minecraft.class_7225;
-import net.minecraft.class_8786;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.item.BedItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.screen.recipebook.RecipeResultCollection;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.recipe.RecipeEntry;
 
 public class BedCrafter
 extends Module {

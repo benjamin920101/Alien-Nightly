@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1109
- *  net.minecraft.class_1113
- *  net.minecraft.class_3417
- *  net.minecraft.class_437
- *  net.minecraft.class_6880
+ *  net.minecraft.client.sound.PositionedSoundInstance
+ *  net.minecraft.client.sound.SoundInstance
+ *  net.minecraft.sound.SoundEvents
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.registry.entry.RegistryEntry
  */
 package dev.luminous.mod.modules.impl.client;
 
@@ -27,11 +27,11 @@ import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
-import net.minecraft.class_1109;
-import net.minecraft.class_1113;
-import net.minecraft.class_3417;
-import net.minecraft.class_437;
-import net.minecraft.class_6880;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.registry.entry.RegistryEntry;
 
 public class ClickGui
 extends Module {

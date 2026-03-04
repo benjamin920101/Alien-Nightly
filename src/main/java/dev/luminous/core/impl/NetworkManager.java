@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2596
- *  net.minecraft.class_7202
- *  net.minecraft.class_7204
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.client.network.PendingUpdateManager
+ *  net.minecraft.client.network.SequencedPacketCreator
  */
 package dev.luminous.core.impl;
 
@@ -13,9 +13,9 @@ import dev.luminous.asm.accessors.AccessorClientWorld;
 import dev.luminous.core.Manager;
 import java.util.HashSet;
 import java.util.Set;
-import net.minecraft.class_2596;
-import net.minecraft.class_7202;
-import net.minecraft.class_7204;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.client.network.PendingUpdateManager;
+import net.minecraft.client.network.SequencedPacketCreator;
 
 public class NetworkManager
 extends Manager {

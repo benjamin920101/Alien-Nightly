@@ -2,10 +2,10 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1299
- *  net.minecraft.class_1429
- *  net.minecraft.class_1496
- *  net.minecraft.class_1937
+ *  net.minecraft.entity.EntityType
+ *  net.minecraft.entity.passive.AnimalEntity
+ *  net.minecraft.entity.passive.AbstractHorseEntity
+ *  net.minecraft.world.World
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -14,10 +14,10 @@
 package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.impl.movement.EntityControl;
-import net.minecraft.class_1299;
-import net.minecraft.class_1429;
-import net.minecraft.class_1496;
-import net.minecraft.class_1937;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.AbstractHorseEntity;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

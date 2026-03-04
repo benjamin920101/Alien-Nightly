@@ -2,16 +2,16 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1293
- *  net.minecraft.class_1294
+ *  net.minecraft.entity.effect.StatusEffectInstance
+ *  net.minecraft.entity.effect.StatusEffects
  */
 package dev.luminous.api.utils.player;
 
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.asm.accessors.IVec3d;
 import dev.luminous.mod.modules.impl.movement.HoleSnap;
-import net.minecraft.class_1293;
-import net.minecraft.class_1294;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 
 public class MovementUtil
 implements Wrapper {

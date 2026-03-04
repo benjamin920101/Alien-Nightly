@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1299
- *  net.minecraft.class_1538
- *  net.minecraft.class_1657
- *  net.minecraft.class_1937
- *  net.minecraft.class_3417
- *  net.minecraft.class_3419
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityType
+ *  net.minecraft.entity.LightningEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.world.World
+ *  net.minecraft.sound.SoundEvents
+ *  net.minecraft.sound.SoundCategory
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -18,13 +18,13 @@ import dev.luminous.api.utils.math.MathUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1297;
-import net.minecraft.class_1299;
-import net.minecraft.class_1538;
-import net.minecraft.class_1657;
-import net.minecraft.class_1937;
-import net.minecraft.class_3417;
-import net.minecraft.class_3419;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundCategory;
 
 public class KillEffect
 extends Module {

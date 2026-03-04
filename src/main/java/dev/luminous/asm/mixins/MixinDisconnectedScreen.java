@@ -3,18 +3,18 @@
  * 
  * Could not load the following classes:
  *  it.unimi.dsi.fastutil.Pair
- *  net.minecraft.class_2561
- *  net.minecraft.class_310
- *  net.minecraft.class_412
- *  net.minecraft.class_4185
- *  net.minecraft.class_4185$class_7840
- *  net.minecraft.class_419
- *  net.minecraft.class_437
- *  net.minecraft.class_442
- *  net.minecraft.class_639
- *  net.minecraft.class_642
- *  net.minecraft.class_8021
- *  net.minecraft.class_8667
+ *  net.minecraft.text.Text
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.client.gui.screen.multiplayer.ConnectScreen
+ *  net.minecraft.client.gui.widget.ButtonWidget
+ *  net.minecraft.client.gui.widget.ButtonWidget$Builder
+ *  net.minecraft.client.gui.screen.DisconnectedScreen
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.client.gui.screen.TitleScreen
+ *  net.minecraft.client.network.ServerAddress
+ *  net.minecraft.client.network.ServerInfo
+ *  net.minecraft.client.gui.widget.Widget
+ *  net.minecraft.client.gui.widget.DirectionalLayoutWidget
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
@@ -29,17 +29,17 @@ package dev.luminous.asm.mixins;
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.mod.modules.impl.misc.AutoReconnect;
 import it.unimi.dsi.fastutil.Pair;
-import net.minecraft.class_2561;
-import net.minecraft.class_310;
-import net.minecraft.class_412;
-import net.minecraft.class_4185;
-import net.minecraft.class_419;
-import net.minecraft.class_437;
-import net.minecraft.class_442;
-import net.minecraft.class_639;
-import net.minecraft.class_642;
-import net.minecraft.class_8021;
-import net.minecraft.class_8667;
+import net.minecraft.text.Text;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.screen.DisconnectedScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.network.ServerAddress;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.gui.widget.DirectionalLayoutWidget;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

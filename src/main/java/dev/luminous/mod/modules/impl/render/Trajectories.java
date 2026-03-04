@@ -3,36 +3,36 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1268
- *  net.minecraft.class_1297
- *  net.minecraft.class_1667
- *  net.minecraft.class_1683
- *  net.minecraft.class_1684
- *  net.minecraft.class_1753
- *  net.minecraft.class_1764
- *  net.minecraft.class_1771
- *  net.minecraft.class_1776
- *  net.minecraft.class_1779
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_1803
- *  net.minecraft.class_1823
- *  net.minecraft.class_1828
- *  net.minecraft.class_1835
- *  net.minecraft.class_1890
- *  net.minecraft.class_1893
- *  net.minecraft.class_2246
- *  net.minecraft.class_2338
- *  net.minecraft.class_238
- *  net.minecraft.class_239$class_240
- *  net.minecraft.class_243
- *  net.minecraft.class_3532
- *  net.minecraft.class_3959
- *  net.minecraft.class_3959$class_242
- *  net.minecraft.class_3959$class_3960
- *  net.minecraft.class_3965
- *  net.minecraft.class_4587
- *  net.minecraft.class_6880
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.projectile.ArrowEntity
+ *  net.minecraft.entity.projectile.thrown.ExperienceBottleEntity
+ *  net.minecraft.entity.projectile.thrown.EnderPearlEntity
+ *  net.minecraft.item.BowItem
+ *  net.minecraft.item.CrossbowItem
+ *  net.minecraft.item.EggItem
+ *  net.minecraft.item.EnderPearlItem
+ *  net.minecraft.item.ExperienceBottleItem
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.LingeringPotionItem
+ *  net.minecraft.item.SnowballItem
+ *  net.minecraft.item.SplashPotionItem
+ *  net.minecraft.item.TridentItem
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.enchantment.Enchantments
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.util.hit.HitResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.world.RaycastContext
+ *  net.minecraft.world.RaycastContext$FluidHandling
+ *  net.minecraft.world.RaycastContext$ShapeType
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.registry.entry.RegistryEntry
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -45,34 +45,34 @@ import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.impl.player.KeyPearl;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import java.awt.Color;
-import net.minecraft.class_1268;
-import net.minecraft.class_1297;
-import net.minecraft.class_1667;
-import net.minecraft.class_1683;
-import net.minecraft.class_1684;
-import net.minecraft.class_1753;
-import net.minecraft.class_1764;
-import net.minecraft.class_1771;
-import net.minecraft.class_1776;
-import net.minecraft.class_1779;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1803;
-import net.minecraft.class_1823;
-import net.minecraft.class_1828;
-import net.minecraft.class_1835;
-import net.minecraft.class_1890;
-import net.minecraft.class_1893;
-import net.minecraft.class_2246;
-import net.minecraft.class_2338;
-import net.minecraft.class_238;
-import net.minecraft.class_239;
-import net.minecraft.class_243;
-import net.minecraft.class_3532;
-import net.minecraft.class_3959;
-import net.minecraft.class_3965;
-import net.minecraft.class_4587;
-import net.minecraft.class_6880;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.thrown.ExperienceBottleEntity;
+import net.minecraft.entity.projectile.thrown.EnderPearlEntity;
+import net.minecraft.item.BowItem;
+import net.minecraft.item.CrossbowItem;
+import net.minecraft.item.EggItem;
+import net.minecraft.item.EnderPearlItem;
+import net.minecraft.item.ExperienceBottleItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.LingeringPotionItem;
+import net.minecraft.item.SnowballItem;
+import net.minecraft.item.SplashPotionItem;
+import net.minecraft.item.TridentItem;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.RaycastContext;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.registry.entry.RegistryEntry;
 
 public class Trajectories
 extends Module {

@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2708
- *  net.minecraft.class_332
+ *  net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
+ *  net.minecraft.client.gui.DrawContext
  */
 package dev.luminous.mod.modules.impl.player;
 
@@ -24,8 +24,8 @@ import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
 import java.text.DecimalFormat;
-import net.minecraft.class_2708;
-import net.minecraft.class_332;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.client.gui.DrawContext;
 
 public class TimerModule
 extends Module {

@@ -2,10 +2,10 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
- *  net.minecraft.class_2596
- *  net.minecraft.class_2828$class_2829
- *  net.minecraft.class_5134
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket$PositionAndOnGround
+ *  net.minecraft.entity.attribute.EntityAttributes
  */
 package dev.luminous.mod.modules.impl.movement;
 
@@ -22,10 +22,10 @@ import dev.luminous.mod.modules.impl.combat.Surround;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1657;
-import net.minecraft.class_2596;
-import net.minecraft.class_2828;
-import net.minecraft.class_5134;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.entity.attribute.EntityAttributes;
 
 public class Step
 extends Module {

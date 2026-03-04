@@ -2,10 +2,10 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_2596
- *  net.minecraft.class_2848
- *  net.minecraft.class_2848$class_2849
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
+ *  net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket$Mode
  */
 package dev.luminous.core.impl;
 
@@ -14,9 +14,9 @@ import dev.luminous.api.events.eventbus.EventBus;
 import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.PacketSneakingEvent;
 import dev.luminous.core.Manager;
-import net.minecraft.class_1297;
-import net.minecraft.class_2596;
-import net.minecraft.class_2848;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 
 public class MovementManager
 extends Manager {

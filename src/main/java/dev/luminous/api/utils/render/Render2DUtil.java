@@ -3,15 +3,15 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_286
- *  net.minecraft.class_287
- *  net.minecraft.class_289
- *  net.minecraft.class_290
- *  net.minecraft.class_293$class_5596
- *  net.minecraft.class_332
- *  net.minecraft.class_4587
- *  net.minecraft.class_757
- *  net.minecraft.class_9801
+ *  net.minecraft.client.render.BufferRenderer
+ *  net.minecraft.client.render.BufferBuilder
+ *  net.minecraft.client.render.Tessellator
+ *  net.minecraft.client.render.VertexFormats
+ *  net.minecraft.client.render.VertexFormat$DrawMode
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.render.GameRenderer
+ *  net.minecraft.client.render.BuiltBuffer
  *  org.joml.Matrix4f
  */
 package dev.luminous.api.utils.render;
@@ -20,15 +20,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.api.utils.render.ColorUtil;
 import java.awt.Color;
-import net.minecraft.class_286;
-import net.minecraft.class_287;
-import net.minecraft.class_289;
-import net.minecraft.class_290;
-import net.minecraft.class_293;
-import net.minecraft.class_332;
-import net.minecraft.class_4587;
-import net.minecraft.class_757;
-import net.minecraft.class_9801;
+import net.minecraft.client.render.BufferRenderer;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.BuiltBuffer;
 import org.joml.Matrix4f;
 
 public class Render2DUtil

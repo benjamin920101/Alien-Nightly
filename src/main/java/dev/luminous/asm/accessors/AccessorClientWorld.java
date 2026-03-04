@@ -2,19 +2,19 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_3414
- *  net.minecraft.class_3419
- *  net.minecraft.class_638
- *  net.minecraft.class_7202
+ *  net.minecraft.sound.SoundEvent
+ *  net.minecraft.sound.SoundCategory
+ *  net.minecraft.client.world.ClientWorld
+ *  net.minecraft.client.network.PendingUpdateManager
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.gen.Invoker
  */
 package dev.luminous.asm.accessors;
 
-import net.minecraft.class_3414;
-import net.minecraft.class_3419;
-import net.minecraft.class_638;
-import net.minecraft.class_7202;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.network.PendingUpdateManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 

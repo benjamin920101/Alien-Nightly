@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- *  net.minecraft.class_4068
- *  net.minecraft.class_4185
- *  net.minecraft.class_437
- *  net.minecraft.class_442
- *  net.minecraft.class_4587
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.gui.Drawable
+ *  net.minecraft.client.gui.widget.ButtonWidget
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.client.gui.screen.TitleScreen
+ *  net.minecraft.client.util.math.MatrixStack
  *  org.ladysnake.satin.api.managed.ManagedShaderEffect
  *  org.lwjgl.glfw.GLFW
  *  org.spongepowered.asm.mixin.Mixin
@@ -24,13 +24,13 @@ import dev.luminous.asm.accessors.IScreen;
 import dev.luminous.core.impl.FontManager;
 import dev.luminous.core.impl.ShaderManager;
 import java.awt.Color;
-import net.minecraft.class_310;
-import net.minecraft.class_332;
-import net.minecraft.class_4068;
-import net.minecraft.class_4185;
-import net.minecraft.class_437;
-import net.minecraft.class_442;
-import net.minecraft.class_4587;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.util.math.MatrixStack;
 import org.ladysnake.satin.api.managed.ManagedShaderEffect;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;

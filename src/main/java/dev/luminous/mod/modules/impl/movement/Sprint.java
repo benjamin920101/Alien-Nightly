@@ -2,10 +2,10 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1294
- *  net.minecraft.class_1657
- *  net.minecraft.class_2708
- *  net.minecraft.class_3532
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
+ *  net.minecraft.util.math.MathHelper
  */
 package dev.luminous.mod.modules.impl.movement;
 
@@ -24,10 +24,10 @@ import dev.luminous.mod.modules.impl.movement.HoleSnap;
 import dev.luminous.mod.modules.impl.player.Freecam;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
-import net.minecraft.class_1294;
-import net.minecraft.class_1657;
-import net.minecraft.class_2708;
-import net.minecraft.class_3532;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.util.math.MathHelper;
 
 public class Sprint
 extends Module {

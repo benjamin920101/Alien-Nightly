@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_124
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- *  net.minecraft.class_3675
- *  net.minecraft.class_3728
+ *  net.minecraft.util.Formatting
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.util.InputUtil
+ *  net.minecraft.client.util.SelectionManager
  */
 package dev.luminous.mod.gui.items.buttons;
 
@@ -18,11 +18,11 @@ import dev.luminous.mod.gui.items.buttons.Button;
 import dev.luminous.mod.modules.impl.client.ClickGui;
 import dev.luminous.mod.modules.settings.impl.StringSetting;
 import java.awt.Color;
-import net.minecraft.class_124;
-import net.minecraft.class_310;
-import net.minecraft.class_332;
-import net.minecraft.class_3675;
-import net.minecraft.class_3728;
+import net.minecraft.util.Formatting;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.util.SelectionManager;
 
 public class StringButton
 extends Button {

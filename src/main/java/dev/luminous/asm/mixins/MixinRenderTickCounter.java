@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_9779$class_9781
+ *  net.minecraft.client.render.RenderTickCounter$Dynamic
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
@@ -14,7 +14,7 @@ package dev.luminous.asm.mixins;
 
 import dev.luminous.Alien;
 import dev.luminous.api.events.impl.TimerEvent;
-import net.minecraft.class_9779;
+import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

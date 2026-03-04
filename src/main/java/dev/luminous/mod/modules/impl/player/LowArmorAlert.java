@@ -2,18 +2,18 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1738
- *  net.minecraft.class_1799
- *  net.minecraft.class_332
+ *  net.minecraft.item.ArmorItem
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.client.gui.DrawContext
  */
 package dev.luminous.mod.modules.impl.player;
 
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.util.Objects;
-import net.minecraft.class_1738;
-import net.minecraft.class_1799;
-import net.minecraft.class_332;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.DrawContext;
 
 public class LowArmorAlert
 extends Module {

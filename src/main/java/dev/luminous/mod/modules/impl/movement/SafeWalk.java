@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_238
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.Box
  */
 package dev.luminous.mod.modules.impl.movement;
 
@@ -14,8 +14,8 @@ import dev.luminous.api.utils.player.EntityUtil;
 import dev.luminous.api.utils.world.BlockUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
-import net.minecraft.class_1297;
-import net.minecraft.class_238;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Box;
 
 public class SafeWalk
 extends Module {

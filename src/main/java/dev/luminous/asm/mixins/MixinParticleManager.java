@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_702
- *  net.minecraft.class_703
+ *  net.minecraft.client.particle.ParticleManager
+ *  net.minecraft.client.particle.Particle
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -13,8 +13,8 @@ package dev.luminous.asm.mixins;
 
 import dev.luminous.Alien;
 import dev.luminous.api.events.impl.ParticleEvent;
-import net.minecraft.class_702;
-import net.minecraft.class_703;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.particle.Particle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

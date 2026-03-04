@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2505
- *  net.minecraft.class_2540
+ *  net.minecraft.nbt.NbtSizeTracker
+ *  net.minecraft.network.PacketByteBuf
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.ModifyArg
@@ -11,8 +11,8 @@
 package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.impl.exploit.AntiPacket;
-import net.minecraft.class_2505;
-import net.minecraft.class_2540;
+import net.minecraft.nbt.NbtSizeTracker;
+import net.minecraft.network.PacketByteBuf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;

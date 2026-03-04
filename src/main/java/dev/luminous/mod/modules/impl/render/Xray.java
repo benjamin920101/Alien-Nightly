@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1922
- *  net.minecraft.class_2248
- *  net.minecraft.class_2338
- *  net.minecraft.class_2338$class_2339
- *  net.minecraft.class_2350
- *  net.minecraft.class_2382
- *  net.minecraft.class_259
- *  net.minecraft.class_2680
- *  net.minecraft.class_437
+ *  net.minecraft.world.BlockView
+ *  net.minecraft.block.Block
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.BlockPos$Mutable
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.util.math.Vec3i
+ *  net.minecraft.util.shape.VoxelShapes
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.client.gui.screen.Screen
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -23,14 +23,14 @@ import dev.luminous.mod.gui.windows.WindowsScreen;
 import dev.luminous.mod.gui.windows.impl.ItemSelectWindow;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
-import net.minecraft.class_1922;
-import net.minecraft.class_2248;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_2382;
-import net.minecraft.class_259;
-import net.minecraft.class_2680;
-import net.minecraft.class_437;
+import net.minecraft.world.BlockView;
+import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.gui.screen.Screen;
 
 public class Xray
 extends Module {

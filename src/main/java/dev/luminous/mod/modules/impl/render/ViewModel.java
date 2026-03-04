@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_4587
- *  net.minecraft.class_7833
+ *  net.minecraft.util.Hand
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.util.math.RotationAxis
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -14,9 +14,9 @@ import dev.luminous.asm.accessors.IHeldItemRenderer;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1268;
-import net.minecraft.class_4587;
-import net.minecraft.class_7833;
+import net.minecraft.util.Hand;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.RotationAxis;
 
 public class ViewModel
 extends Module {

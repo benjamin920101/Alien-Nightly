@@ -2,17 +2,17 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1113
- *  net.minecraft.class_1536
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1890
- *  net.minecraft.class_1893
- *  net.minecraft.class_2189
- *  net.minecraft.class_2338
- *  net.minecraft.class_239
- *  net.minecraft.class_3965
- *  net.minecraft.class_6880
+ *  net.minecraft.client.sound.SoundInstance
+ *  net.minecraft.entity.projectile.FishingBobberEntity
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.enchantment.Enchantments
+ *  net.minecraft.block.AirBlock
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.hit.HitResult
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.registry.entry.RegistryEntry
  */
 package dev.luminous.mod.modules.impl.player;
 
@@ -24,17 +24,17 @@ import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.event.KeyEvent;
-import net.minecraft.class_1113;
-import net.minecraft.class_1536;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1890;
-import net.minecraft.class_1893;
-import net.minecraft.class_2189;
-import net.minecraft.class_2338;
-import net.minecraft.class_239;
-import net.minecraft.class_3965;
-import net.minecraft.class_6880;
+import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.entity.projectile.FishingBobberEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.block.AirBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.registry.entry.RegistryEntry;
 
 public class AutoTool
 extends Module {

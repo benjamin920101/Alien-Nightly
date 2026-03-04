@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_4587
- *  net.minecraft.class_5498
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.option.Perspective
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -13,8 +13,8 @@ import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_4587;
-import net.minecraft.class_5498;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.option.Perspective;
 
 public class CameraClip
 extends Module {

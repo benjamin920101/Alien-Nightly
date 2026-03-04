@@ -2,26 +2,26 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2596
- *  net.minecraft.class_2793
- *  net.minecraft.class_2799
- *  net.minecraft.class_2813
- *  net.minecraft.class_2815
- *  net.minecraft.class_2824
- *  net.minecraft.class_2828$class_2829
- *  net.minecraft.class_2828$class_2830
- *  net.minecraft.class_2828$class_2831
- *  net.minecraft.class_2828$class_5911
- *  net.minecraft.class_2833
- *  net.minecraft.class_2838
- *  net.minecraft.class_2846
- *  net.minecraft.class_2848
- *  net.minecraft.class_2868
- *  net.minecraft.class_2879
- *  net.minecraft.class_2885
- *  net.minecraft.class_2886
- *  net.minecraft.class_3965
- *  net.minecraft.class_6374
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.TeleportConfirmC2SPacket
+ *  net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket
+ *  net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket
+ *  net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket$PositionAndOnGround
+ *  net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket$Full
+ *  net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket$LookAndOnGround
+ *  net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket$OnGroundOnly
+ *  net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PickFromInventoryC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
+ *  net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
+ *  net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
+ *  net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.network.packet.c2s.common.CommonPongC2SPacket
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -32,23 +32,23 @@ import dev.luminous.core.impl.CommandManager;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.impl.combat.Criticals;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
-import net.minecraft.class_2596;
-import net.minecraft.class_2793;
-import net.minecraft.class_2799;
-import net.minecraft.class_2813;
-import net.minecraft.class_2815;
-import net.minecraft.class_2824;
-import net.minecraft.class_2828;
-import net.minecraft.class_2833;
-import net.minecraft.class_2838;
-import net.minecraft.class_2846;
-import net.minecraft.class_2848;
-import net.minecraft.class_2868;
-import net.minecraft.class_2879;
-import net.minecraft.class_2885;
-import net.minecraft.class_2886;
-import net.minecraft.class_3965;
-import net.minecraft.class_6374;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.TeleportConfirmC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
+import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.PickFromInventoryC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
+import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.network.packet.c2s.common.CommonPongC2SPacket;
 
 public class PacketLogger
 extends Module {

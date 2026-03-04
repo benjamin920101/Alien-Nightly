@@ -3,25 +3,25 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1297
- *  net.minecraft.class_1511
- *  net.minecraft.class_1921
- *  net.minecraft.class_2338
- *  net.minecraft.class_2960
- *  net.minecraft.class_3532
- *  net.minecraft.class_4587
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4608
- *  net.minecraft.class_5617$class_5618
- *  net.minecraft.class_5944
- *  net.minecraft.class_630
- *  net.minecraft.class_757
- *  net.minecraft.class_7833
- *  net.minecraft.class_892
- *  net.minecraft.class_895
- *  net.minecraft.class_897
- *  net.minecraft.class_918
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.decoration.EndCrystalEntity
+ *  net.minecraft.client.render.RenderLayer
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.Identifier
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.render.VertexConsumer
+ *  net.minecraft.client.render.VertexConsumerProvider
+ *  net.minecraft.client.render.OverlayTexture
+ *  net.minecraft.client.render.entity.EntityRendererFactory$Context
+ *  net.minecraft.client.gl.ShaderProgram
+ *  net.minecraft.client.model.ModelPart
+ *  net.minecraft.client.render.GameRenderer
+ *  net.minecraft.util.math.RotationAxis
+ *  net.minecraft.client.render.entity.EndCrystalEntityRenderer
+ *  net.minecraft.client.render.entity.EnderDragonEntityRenderer
+ *  net.minecraft.client.render.entity.EntityRenderer
+ *  net.minecraft.client.render.item.ItemRenderer
  *  org.joml.Quaternionf
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
@@ -37,25 +37,25 @@ package dev.luminous.asm.mixins;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.luminous.api.utils.render.ModelPlayer;
 import dev.luminous.mod.modules.impl.render.Chams;
-import net.minecraft.class_1297;
-import net.minecraft.class_1511;
-import net.minecraft.class_1921;
-import net.minecraft.class_2338;
-import net.minecraft.class_2960;
-import net.minecraft.class_3532;
-import net.minecraft.class_4587;
-import net.minecraft.class_4588;
-import net.minecraft.class_4597;
-import net.minecraft.class_4608;
-import net.minecraft.class_5617;
-import net.minecraft.class_5944;
-import net.minecraft.class_630;
-import net.minecraft.class_757;
-import net.minecraft.class_7833;
-import net.minecraft.class_892;
-import net.minecraft.class_895;
-import net.minecraft.class_897;
-import net.minecraft.class_918;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.util.math.RotationAxis;
+import net.minecraft.client.render.entity.EndCrystalEntityRenderer;
+import net.minecraft.client.render.entity.EnderDragonEntityRenderer;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.item.ItemRenderer;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

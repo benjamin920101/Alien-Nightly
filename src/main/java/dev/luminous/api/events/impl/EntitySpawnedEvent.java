@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
+ *  net.minecraft.entity.Entity
  */
 package dev.luminous.api.events.impl;
 
-import net.minecraft.class_1297;
+import net.minecraft.entity.Entity;
 
 public class EntitySpawnedEvent {
     private static final EntitySpawnedEvent INSTANCE = new EntitySpawnedEvent();

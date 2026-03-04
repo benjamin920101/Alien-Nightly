@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1802
- *  net.minecraft.class_2886
+ *  net.minecraft.util.Hand
+ *  net.minecraft.item.Items
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket
  */
 package dev.luminous.mod.modules.impl.player;
 
@@ -23,9 +23,9 @@ import dev.luminous.mod.modules.settings.enums.Timing;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1268;
-import net.minecraft.class_1802;
-import net.minecraft.class_2886;
+import net.minecraft.util.Hand;
+import net.minecraft.item.Items;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
 
 public class KeyPearl
 extends Module {

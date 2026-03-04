@@ -2,20 +2,20 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1291
- *  net.minecraft.class_1294
- *  net.minecraft.class_1297
- *  net.minecraft.class_1297$class_5529
- *  net.minecraft.class_1299
- *  net.minecraft.class_1309
- *  net.minecraft.class_1320
- *  net.minecraft.class_1322
- *  net.minecraft.class_1324
- *  net.minecraft.class_1937
- *  net.minecraft.class_310
- *  net.minecraft.class_5131
- *  net.minecraft.class_5134
- *  net.minecraft.class_6880
+ *  net.minecraft.entity.effect.StatusEffect
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.Entity$RemovalReason
+ *  net.minecraft.entity.EntityType
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.attribute.EntityAttribute
+ *  net.minecraft.entity.attribute.EntityAttributeModifier
+ *  net.minecraft.entity.attribute.EntityAttributeInstance
+ *  net.minecraft.world.World
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.entity.attribute.AttributeContainer
+ *  net.minecraft.entity.attribute.EntityAttributes
+ *  net.minecraft.registry.entry.RegistryEntry
  *  org.jetbrains.annotations.Nullable
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
@@ -37,19 +37,19 @@ import dev.luminous.mod.modules.impl.movement.NoSlow;
 import dev.luminous.mod.modules.impl.movement.Velocity;
 import dev.luminous.mod.modules.impl.player.AntiEffects;
 import dev.luminous.mod.modules.impl.render.ViewModel;
-import net.minecraft.class_1291;
-import net.minecraft.class_1294;
-import net.minecraft.class_1297;
-import net.minecraft.class_1299;
-import net.minecraft.class_1309;
-import net.minecraft.class_1320;
-import net.minecraft.class_1322;
-import net.minecraft.class_1324;
-import net.minecraft.class_1937;
-import net.minecraft.class_310;
-import net.minecraft.class_5131;
-import net.minecraft.class_5134;
-import net.minecraft.class_6880;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.world.World;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.attribute.AttributeContainer;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

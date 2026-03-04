@@ -10,9 +10,9 @@
  *  baritone.api.pathing.goals.GoalXZ
  *  baritone.api.process.IBaritoneProcess
  *  baritone.api.process.ICustomGoalProcess
- *  net.minecraft.class_2248
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
+ *  net.minecraft.block.Block
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
  */
 package dev.luminous.mod.modules.impl.client;
 
@@ -30,9 +30,9 @@ import dev.luminous.api.events.impl.UpdateEvent;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_2248;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
+import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 public class BaritoneModule
 extends Module {

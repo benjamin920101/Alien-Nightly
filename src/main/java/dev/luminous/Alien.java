@@ -3,7 +3,7 @@
  * 
  * Could not load the following classes:
  *  net.fabricmc.api.ModInitializer
- *  net.minecraft.class_310
+ *  net.minecraft.client.MinecraftClient
  */
 package dev.luminous;
 
@@ -36,7 +36,7 @@ import dev.luminous.mod.modules.impl.client.ClientSetting;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.class_310;
+import net.minecraft.client.MinecraftClient;
 
 public class Alien
 implements ModInitializer {

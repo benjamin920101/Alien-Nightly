@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1657
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.PlayerEntity
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -16,8 +16,8 @@ import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import dev.luminous.mod.modules.settings.impl.StringSetting;
 import java.util.List;
 import java.util.Random;
-import net.minecraft.class_1297;
-import net.minecraft.class_1657;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class AutoEZ
 extends Module {

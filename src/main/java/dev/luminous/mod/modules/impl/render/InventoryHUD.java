@@ -2,10 +2,10 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1799
- *  net.minecraft.class_308
- *  net.minecraft.class_332
- *  net.minecraft.class_4587
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.client.render.DiffuseLighting
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.util.math.MatrixStack
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -18,10 +18,10 @@ import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
-import net.minecraft.class_1799;
-import net.minecraft.class_308;
-import net.minecraft.class_332;
-import net.minecraft.class_4587;
+import net.minecraft.item.ItemStack;
+import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class InventoryHUD
 extends Module {

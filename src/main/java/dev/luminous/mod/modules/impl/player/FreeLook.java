@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_4587
+ *  net.minecraft.client.util.math.MatrixStack
  */
 package dev.luminous.mod.modules.impl.player;
 
@@ -10,7 +10,7 @@ import dev.luminous.api.events.eventbus.EventListener;
 import dev.luminous.api.events.impl.LookDirectionEvent;
 import dev.luminous.api.utils.math.MathUtil;
 import dev.luminous.mod.modules.Module;
-import net.minecraft.class_4587;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class FreeLook
 extends Module {

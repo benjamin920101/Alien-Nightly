@@ -2,17 +2,17 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1309
- *  net.minecraft.class_2338
- *  net.minecraft.class_243
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
  */
 package dev.luminous.api.utils.math;
 
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.api.utils.math.DamageUtils;
-import net.minecraft.class_1309;
-import net.minecraft.class_2338;
-import net.minecraft.class_243;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public class ExplosionUtil
 implements Wrapper {

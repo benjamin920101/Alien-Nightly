@@ -3,14 +3,14 @@
  * 
  * Could not load the following classes:
  *  io.netty.buffer.Unpooled
- *  net.minecraft.class_1297
- *  net.minecraft.class_1511
- *  net.minecraft.class_2246
- *  net.minecraft.class_2540
- *  net.minecraft.class_2596
- *  net.minecraft.class_2824
- *  net.minecraft.class_2828$class_2829
- *  net.minecraft.class_2828$class_2830
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.decoration.EndCrystalEntity
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.network.PacketByteBuf
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket$PositionAndOnGround
+ *  net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket$Full
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -22,13 +22,13 @@ import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import io.netty.buffer.Unpooled;
-import net.minecraft.class_1297;
-import net.minecraft.class_1511;
-import net.minecraft.class_2246;
-import net.minecraft.class_2540;
-import net.minecraft.class_2596;
-import net.minecraft.class_2824;
-import net.minecraft.class_2828;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class CriticalsPlus
 extends Module {

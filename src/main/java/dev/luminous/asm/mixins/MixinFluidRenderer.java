@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1920
- *  net.minecraft.class_2338
- *  net.minecraft.class_2680
- *  net.minecraft.class_3610
- *  net.minecraft.class_4588
- *  net.minecraft.class_775
+ *  net.minecraft.world.BlockRenderView
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.fluid.FluidState
+ *  net.minecraft.client.render.VertexConsumer
+ *  net.minecraft.client.render.block.FluidRenderer
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -16,12 +16,12 @@
 package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.impl.render.Xray;
-import net.minecraft.class_1920;
-import net.minecraft.class_2338;
-import net.minecraft.class_2680;
-import net.minecraft.class_3610;
-import net.minecraft.class_4588;
-import net.minecraft.class_775;
+import net.minecraft.world.BlockRenderView;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.block.FluidRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

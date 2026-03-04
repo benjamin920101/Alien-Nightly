@@ -3,7 +3,7 @@
  * 
  * Could not load the following classes:
  *  com.google.common.collect.Lists
- *  net.minecraft.class_2761
+ *  net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
  */
 package dev.luminous.core.impl;
 
@@ -21,7 +21,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
-import net.minecraft.class_2761;
+import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 
 public class TickManager
 extends Manager {

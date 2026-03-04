@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1293
- *  net.minecraft.class_1294
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_332
- *  net.minecraft.class_4587
+ *  net.minecraft.entity.effect.StatusEffectInstance
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.util.math.MatrixStack
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -23,12 +23,12 @@ import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.Objects;
-import net.minecraft.class_1293;
-import net.minecraft.class_1294;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_332;
-import net.minecraft.class_4587;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class PotCount
 extends Module {

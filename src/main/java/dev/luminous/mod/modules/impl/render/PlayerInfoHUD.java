@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1657
- *  net.minecraft.class_1799
- *  net.minecraft.class_2960
- *  net.minecraft.class_308
- *  net.minecraft.class_332
- *  net.minecraft.class_4587
- *  net.minecraft.class_640
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.Identifier
+ *  net.minecraft.client.render.DiffuseLighting
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.network.PlayerListEntry
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -29,14 +29,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import net.minecraft.class_1297;
-import net.minecraft.class_1657;
-import net.minecraft.class_1799;
-import net.minecraft.class_2960;
-import net.minecraft.class_308;
-import net.minecraft.class_332;
-import net.minecraft.class_4587;
-import net.minecraft.class_640;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
+import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.network.PlayerListEntry;
 
 public class PlayerInfoHUD
 extends Module {

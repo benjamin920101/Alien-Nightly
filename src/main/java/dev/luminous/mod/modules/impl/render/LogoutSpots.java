@@ -3,16 +3,16 @@
  * 
  * Could not load the following classes:
  *  com.google.common.collect.Maps
- *  net.minecraft.class_1657
- *  net.minecraft.class_1934
- *  net.minecraft.class_238
- *  net.minecraft.class_243
- *  net.minecraft.class_2703
- *  net.minecraft.class_2703$class_2705
- *  net.minecraft.class_2703$class_5893
- *  net.minecraft.class_4587
- *  net.minecraft.class_742
- *  net.minecraft.class_7828
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.world.GameMode
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.network.packet.s2c.play.PlayerListS2CPacket
+ *  net.minecraft.network.packet.s2c.play.PlayerListS2CPacket$Entry
+ *  net.minecraft.network.packet.s2c.play.PlayerListS2CPacket$Action
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.network.AbstractClientPlayerEntity
+ *  net.minecraft.network.packet.s2c.play.PlayerRemoveS2CPacket
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -34,14 +34,14 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import net.minecraft.class_1657;
-import net.minecraft.class_1934;
-import net.minecraft.class_238;
-import net.minecraft.class_243;
-import net.minecraft.class_2703;
-import net.minecraft.class_4587;
-import net.minecraft.class_742;
-import net.minecraft.class_7828;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.GameMode;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.network.packet.s2c.play.PlayerRemoveS2CPacket;
 
 public class LogoutSpots
 extends Module {

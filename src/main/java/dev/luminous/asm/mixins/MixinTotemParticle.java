@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_4002
- *  net.minecraft.class_638
- *  net.minecraft.class_734
+ *  net.minecraft.client.particle.SpriteProvider
+ *  net.minecraft.client.world.ClientWorld
+ *  net.minecraft.client.particle.TotemParticle
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -16,9 +16,9 @@ import dev.luminous.Alien;
 import dev.luminous.api.events.impl.TotemParticleEvent;
 import dev.luminous.asm.mixins.MixinParticle;
 import java.awt.Color;
-import net.minecraft.class_4002;
-import net.minecraft.class_638;
-import net.minecraft.class_734;
+import net.minecraft.client.particle.SpriteProvider;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.particle.TotemParticle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

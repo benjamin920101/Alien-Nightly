@@ -2,24 +2,24 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1291
- *  net.minecraft.class_1293
- *  net.minecraft.class_1294
- *  net.minecraft.class_1657
- *  net.minecraft.class_1713
- *  net.minecraft.class_1738
- *  net.minecraft.class_1747
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1844
- *  net.minecraft.class_2244
- *  net.minecraft.class_2246
- *  net.minecraft.class_2399
- *  net.minecraft.class_2480
- *  net.minecraft.class_2665
- *  net.minecraft.class_437
- *  net.minecraft.class_9334
+ *  net.minecraft.entity.effect.StatusEffect
+ *  net.minecraft.entity.effect.StatusEffectInstance
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.item.ArmorItem
+ *  net.minecraft.item.BlockItem
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.component.type.PotionContentsComponent
+ *  net.minecraft.block.BedBlock
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.block.LadderBlock
+ *  net.minecraft.block.ShulkerBoxBlock
+ *  net.minecraft.block.PistonBlock
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.component.DataComponentTypes
  *  org.apache.commons.io.IOUtils
  */
 package dev.luminous.mod.modules.impl.player;
@@ -45,24 +45,24 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.minecraft.class_1291;
-import net.minecraft.class_1293;
-import net.minecraft.class_1294;
-import net.minecraft.class_1657;
-import net.minecraft.class_1713;
-import net.minecraft.class_1738;
-import net.minecraft.class_1747;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1844;
-import net.minecraft.class_2244;
-import net.minecraft.class_2246;
-import net.minecraft.class_2399;
-import net.minecraft.class_2480;
-import net.minecraft.class_2665;
-import net.minecraft.class_437;
-import net.minecraft.class_9334;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.LadderBlock;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.block.PistonBlock;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.component.DataComponentTypes;
 import org.apache.commons.io.IOUtils;
 
 public class Sorter

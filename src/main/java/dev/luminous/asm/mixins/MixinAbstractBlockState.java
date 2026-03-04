@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_4970$class_4971
+ *  net.minecraft.block.AbstractBlock$AbstractBlockState
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -12,7 +12,7 @@ package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.impl.render.Ambience;
-import net.minecraft.class_4970;
+import net.minecraft.block.AbstractBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

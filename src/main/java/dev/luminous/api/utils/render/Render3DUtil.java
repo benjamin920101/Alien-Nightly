@@ -3,28 +3,28 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1297
- *  net.minecraft.class_238
- *  net.minecraft.class_243
- *  net.minecraft.class_2561
- *  net.minecraft.class_286
- *  net.minecraft.class_287
- *  net.minecraft.class_289
- *  net.minecraft.class_290
- *  net.minecraft.class_293$class_5596
- *  net.minecraft.class_327$class_6415
- *  net.minecraft.class_3532
- *  net.minecraft.class_4184
- *  net.minecraft.class_4587
- *  net.minecraft.class_4587$class_4665
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  net.minecraft.class_5348
- *  net.minecraft.class_757
- *  net.minecraft.class_7833
- *  net.minecraft.class_9799
- *  net.minecraft.class_9801
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.text.Text
+ *  net.minecraft.client.render.BufferRenderer
+ *  net.minecraft.client.render.BufferBuilder
+ *  net.minecraft.client.render.Tessellator
+ *  net.minecraft.client.render.VertexFormats
+ *  net.minecraft.client.render.VertexFormat$DrawMode
+ *  net.minecraft.client.font.TextRenderer$TextLayerType
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.render.Camera
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.util.math.MatrixStack$Entry
+ *  net.minecraft.client.render.VertexConsumer
+ *  net.minecraft.client.render.VertexConsumerProvider
+ *  net.minecraft.client.render.VertexConsumerProvider$Immediate
+ *  net.minecraft.text.StringVisitable
+ *  net.minecraft.client.render.GameRenderer
+ *  net.minecraft.util.math.RotationAxis
+ *  net.minecraft.client.util.BufferAllocator
+ *  net.minecraft.client.render.BuiltBuffer
  *  org.jetbrains.annotations.NotNull
  *  org.joml.Matrix4f
  *  org.joml.Vector3f
@@ -37,26 +37,26 @@ import dev.luminous.api.utils.Wrapper;
 import dev.luminous.api.utils.render.ColorUtil;
 import java.awt.Color;
 import java.util.ArrayList;
-import net.minecraft.class_1297;
-import net.minecraft.class_238;
-import net.minecraft.class_243;
-import net.minecraft.class_2561;
-import net.minecraft.class_286;
-import net.minecraft.class_287;
-import net.minecraft.class_289;
-import net.minecraft.class_290;
-import net.minecraft.class_293;
-import net.minecraft.class_327;
-import net.minecraft.class_3532;
-import net.minecraft.class_4184;
-import net.minecraft.class_4587;
-import net.minecraft.class_4588;
-import net.minecraft.class_4597;
-import net.minecraft.class_5348;
-import net.minecraft.class_757;
-import net.minecraft.class_7833;
-import net.minecraft.class_9799;
-import net.minecraft.class_9801;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.text.Text;
+import net.minecraft.client.render.BufferRenderer;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.text.StringVisitable;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.util.math.RotationAxis;
+import net.minecraft.client.util.BufferAllocator;
+import net.minecraft.client.render.BuiltBuffer;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;

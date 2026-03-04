@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2246
+ *  net.minecraft.block.Blocks
  */
 package dev.luminous.mod.commands.impl;
 
@@ -13,7 +13,7 @@ import dev.luminous.mod.gui.windows.WindowsScreen;
 import dev.luminous.mod.gui.windows.impl.ItemSelectWindow;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.class_2246;
+import net.minecraft.block.Blocks;
 
 public class XrayCommand
 extends Command {

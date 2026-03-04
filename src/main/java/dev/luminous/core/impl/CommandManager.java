@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2561
+ *  net.minecraft.text.Text
  */
 package dev.luminous.core.impl;
 
@@ -37,7 +37,7 @@ import dev.luminous.mod.commands.impl.XrayCommand;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.impl.client.ClientSetting;
 import java.util.HashMap;
-import net.minecraft.class_2561;
+import net.minecraft.text.Text;
 
 public class CommandManager
 implements Wrapper {

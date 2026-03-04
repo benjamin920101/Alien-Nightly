@@ -4,10 +4,10 @@
  * Could not load the following classes:
  *  io.netty.channel.ChannelHandlerContext
  *  io.netty.handler.timeout.TimeoutException
- *  net.minecraft.class_2535
- *  net.minecraft.class_2547
- *  net.minecraft.class_2548
- *  net.minecraft.class_2596
+ *  net.minecraft.network.ClientConnection
+ *  net.minecraft.network.listener.PacketListener
+ *  net.minecraft.network.handler.PacketEncoderException
+ *  net.minecraft.network.packet.Packet
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -21,10 +21,10 @@ import dev.luminous.core.impl.CommandManager;
 import dev.luminous.mod.modules.impl.client.ClientSetting;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.TimeoutException;
-import net.minecraft.class_2535;
-import net.minecraft.class_2547;
-import net.minecraft.class_2548;
-import net.minecraft.class_2596;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.network.listener.PacketListener;
+import net.minecraft.network.handler.PacketEncoderException;
+import net.minecraft.network.packet.Packet;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

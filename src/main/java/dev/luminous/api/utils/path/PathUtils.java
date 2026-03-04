@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1309
- *  net.minecraft.class_2246
- *  net.minecraft.class_2248
- *  net.minecraft.class_2261
- *  net.minecraft.class_2338
- *  net.minecraft.class_243
- *  net.minecraft.class_2551
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.PlantBlock
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.block.WallSignBlock
  */
 package dev.luminous.api.utils.path;
 
@@ -17,13 +17,13 @@ import dev.luminous.api.utils.path.AStarCustomPathFinder;
 import dev.luminous.api.utils.path.Vec3;
 import dev.luminous.api.utils.world.BlockPosX;
 import java.util.ArrayList;
-import net.minecraft.class_1309;
-import net.minecraft.class_2246;
-import net.minecraft.class_2248;
-import net.minecraft.class_2261;
-import net.minecraft.class_2338;
-import net.minecraft.class_243;
-import net.minecraft.class_2551;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.Block;
+import net.minecraft.block.PlantBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.block.WallSignBlock;
 
 public class PathUtils
 implements Wrapper {

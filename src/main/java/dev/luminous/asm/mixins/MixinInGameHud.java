@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1309
- *  net.minecraft.class_1657
- *  net.minecraft.class_1799
- *  net.minecraft.class_310
- *  net.minecraft.class_329
- *  net.minecraft.class_332
- *  net.minecraft.class_3486
- *  net.minecraft.class_9779
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.client.gui.hud.InGameHud
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.registry.tag.FluidTags
+ *  net.minecraft.client.render.RenderTickCounter
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
@@ -32,14 +32,14 @@ import dev.luminous.mod.modules.impl.client.HUD;
 import dev.luminous.mod.modules.impl.render.Crosshair;
 import dev.luminous.mod.modules.impl.render.NoRender;
 import java.awt.Color;
-import net.minecraft.class_1309;
-import net.minecraft.class_1657;
-import net.minecraft.class_1799;
-import net.minecraft.class_310;
-import net.minecraft.class_329;
-import net.minecraft.class_332;
-import net.minecraft.class_3486;
-import net.minecraft.class_9779;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

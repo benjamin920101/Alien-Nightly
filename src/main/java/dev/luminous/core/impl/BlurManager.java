@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2960
+ *  net.minecraft.util.Identifier
  *  org.ladysnake.satin.api.managed.ManagedShaderEffect
  *  org.ladysnake.satin.api.managed.ShaderEffectManager
  */
 package dev.luminous.core.impl;
 
 import dev.luminous.api.utils.Wrapper;
-import net.minecraft.class_2960;
+import net.minecraft.util.Identifier;
 import org.ladysnake.satin.api.managed.ManagedShaderEffect;
 import org.ladysnake.satin.api.managed.ShaderEffectManager;
 

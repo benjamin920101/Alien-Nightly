@@ -3,14 +3,14 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1291
- *  net.minecraft.class_1297
- *  net.minecraft.class_1309
- *  net.minecraft.class_4184
- *  net.minecraft.class_638
- *  net.minecraft.class_6880
- *  net.minecraft.class_758
- *  net.minecraft.class_758$class_4596
+ *  net.minecraft.entity.effect.StatusEffect
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.client.render.Camera
+ *  net.minecraft.client.world.ClientWorld
+ *  net.minecraft.registry.entry.RegistryEntry
+ *  net.minecraft.client.render.BackgroundRenderer
+ *  net.minecraft.client.render.BackgroundRenderer$FogType
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -25,13 +25,13 @@ import dev.luminous.mod.modules.impl.render.Ambience;
 import dev.luminous.mod.modules.impl.render.NoRender;
 import dev.luminous.mod.modules.impl.render.Xray;
 import java.awt.Color;
-import net.minecraft.class_1291;
-import net.minecraft.class_1297;
-import net.minecraft.class_1309;
-import net.minecraft.class_4184;
-import net.minecraft.class_638;
-import net.minecraft.class_6880;
-import net.minecraft.class_758;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.client.render.BackgroundRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

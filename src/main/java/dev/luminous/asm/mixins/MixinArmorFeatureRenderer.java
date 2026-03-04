@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1309
- *  net.minecraft.class_1741
- *  net.minecraft.class_2960
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_572
- *  net.minecraft.class_6880
- *  net.minecraft.class_8053
- *  net.minecraft.class_970
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.item.ArmorMaterial
+ *  net.minecraft.util.Identifier
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.render.VertexConsumerProvider
+ *  net.minecraft.client.render.entity.model.BipedEntityModel
+ *  net.minecraft.registry.entry.RegistryEntry
+ *  net.minecraft.item.trim.ArmorTrim
+ *  net.minecraft.client.render.entity.feature.ArmorFeatureRenderer
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -19,15 +19,15 @@
 package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.impl.render.NoRender;
-import net.minecraft.class_1309;
-import net.minecraft.class_1741;
-import net.minecraft.class_2960;
-import net.minecraft.class_4587;
-import net.minecraft.class_4597;
-import net.minecraft.class_572;
-import net.minecraft.class_6880;
-import net.minecraft.class_8053;
-import net.minecraft.class_970;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.util.Identifier;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.item.trim.ArmorTrim;
+import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

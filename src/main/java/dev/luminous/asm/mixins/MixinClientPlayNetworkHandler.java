@@ -2,28 +2,28 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1255
- *  net.minecraft.class_1297
- *  net.minecraft.class_243
- *  net.minecraft.class_2535
- *  net.minecraft.class_2547
- *  net.minecraft.class_2596
- *  net.minecraft.class_2600
- *  net.minecraft.class_2602
- *  net.minecraft.class_2645
- *  net.minecraft.class_2649
- *  net.minecraft.class_2678
- *  net.minecraft.class_2708
- *  net.minecraft.class_2709
- *  net.minecraft.class_2793
- *  net.minecraft.class_2828$class_2830
- *  net.minecraft.class_310
- *  net.minecraft.class_634
- *  net.minecraft.class_638
- *  net.minecraft.class_746
- *  net.minecraft.class_8588
- *  net.minecraft.class_8673
- *  net.minecraft.class_8675
+ *  net.minecraft.util.thread.ThreadExecutor
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.network.ClientConnection
+ *  net.minecraft.network.listener.PacketListener
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.NetworkThreadUtils
+ *  net.minecraft.network.listener.ClientPlayPacketListener
+ *  net.minecraft.network.packet.s2c.play.CloseScreenS2CPacket
+ *  net.minecraft.network.packet.s2c.play.InventoryS2CPacket
+ *  net.minecraft.network.packet.s2c.play.GameJoinS2CPacket
+ *  net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
+ *  net.minecraft.network.packet.s2c.play.PositionFlag
+ *  net.minecraft.network.packet.c2s.play.TeleportConfirmC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket$Full
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.client.network.ClientPlayNetworkHandler
+ *  net.minecraft.client.world.ClientWorld
+ *  net.minecraft.client.network.ClientPlayerEntity
+ *  net.minecraft.network.packet.s2c.play.EnterReconfigurationS2CPacket
+ *  net.minecraft.client.network.ClientCommonNetworkHandler
+ *  net.minecraft.client.network.ClientConnectionState
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
  *  org.spongepowered.asm.mixin.Unique
@@ -43,28 +43,28 @@ import dev.luminous.api.events.impl.S2CCloseScreenEvent;
 import dev.luminous.api.events.impl.SendMessageEvent;
 import dev.luminous.api.events.impl.ServerChangePositionEvent;
 import dev.luminous.mod.modules.impl.exploit.AntiPacket;
-import net.minecraft.class_1255;
-import net.minecraft.class_1297;
-import net.minecraft.class_243;
-import net.minecraft.class_2535;
-import net.minecraft.class_2547;
-import net.minecraft.class_2596;
-import net.minecraft.class_2600;
-import net.minecraft.class_2602;
-import net.minecraft.class_2645;
-import net.minecraft.class_2649;
-import net.minecraft.class_2678;
-import net.minecraft.class_2708;
-import net.minecraft.class_2709;
-import net.minecraft.class_2793;
-import net.minecraft.class_2828;
-import net.minecraft.class_310;
-import net.minecraft.class_634;
-import net.minecraft.class_638;
-import net.minecraft.class_746;
-import net.minecraft.class_8588;
-import net.minecraft.class_8673;
-import net.minecraft.class_8675;
+import net.minecraft.util.thread.ThreadExecutor;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.network.listener.PacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.NetworkThreadUtils;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.CloseScreenS2CPacket;
+import net.minecraft.network.packet.s2c.play.InventoryS2CPacket;
+import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
+import net.minecraft.network.packet.c2s.play.TeleportConfirmC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.network.packet.s2c.play.EnterReconfigurationS2CPacket;
+import net.minecraft.client.network.ClientCommonNetworkHandler;
+import net.minecraft.client.network.ClientConnectionState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;

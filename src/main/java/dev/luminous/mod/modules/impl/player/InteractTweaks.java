@@ -2,16 +2,16 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1802
- *  net.minecraft.class_1810
- *  net.minecraft.class_1829
- *  net.minecraft.class_2199
- *  net.minecraft.class_2248
- *  net.minecraft.class_2281
- *  net.minecraft.class_2336
- *  net.minecraft.class_2596
- *  net.minecraft.class_2885
- *  net.minecraft.class_418
+ *  net.minecraft.item.Items
+ *  net.minecraft.item.PickaxeItem
+ *  net.minecraft.item.SwordItem
+ *  net.minecraft.block.AnvilBlock
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.ChestBlock
+ *  net.minecraft.block.EnderChestBlock
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket
+ *  net.minecraft.client.gui.screen.DeathScreen
  */
 package dev.luminous.mod.modules.impl.player;
 
@@ -22,16 +22,16 @@ import dev.luminous.api.utils.player.InventoryUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1802;
-import net.minecraft.class_1810;
-import net.minecraft.class_1829;
-import net.minecraft.class_2199;
-import net.minecraft.class_2248;
-import net.minecraft.class_2281;
-import net.minecraft.class_2336;
-import net.minecraft.class_2596;
-import net.minecraft.class_2885;
-import net.minecraft.class_418;
+import net.minecraft.item.Items;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.SwordItem;
+import net.minecraft.block.AnvilBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.block.EnderChestBlock;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
+import net.minecraft.client.gui.screen.DeathScreen;
 
 public class InteractTweaks
 extends Module {

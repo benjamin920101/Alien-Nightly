@@ -2,51 +2,51 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1297
- *  net.minecraft.class_1303
- *  net.minecraft.class_1511
- *  net.minecraft.class_1531
- *  net.minecraft.class_1542
- *  net.minecraft.class_1667
- *  net.minecraft.class_1683
- *  net.minecraft.class_1802
- *  net.minecraft.class_1922
- *  net.minecraft.class_1923
- *  net.minecraft.class_1937
- *  net.minecraft.class_1941
- *  net.minecraft.class_2199
- *  net.minecraft.class_2231
- *  net.minecraft.class_2237
- *  net.minecraft.class_2244
- *  net.minecraft.class_2246
- *  net.minecraft.class_2248
- *  net.minecraft.class_2269
- *  net.minecraft.class_2304
- *  net.minecraft.class_2323
- *  net.minecraft.class_2338
- *  net.minecraft.class_2349
- *  net.minecraft.class_2350
- *  net.minecraft.class_238
- *  net.minecraft.class_2406
- *  net.minecraft.class_2428
- *  net.minecraft.class_243
- *  net.minecraft.class_2533
- *  net.minecraft.class_2586
- *  net.minecraft.class_2596
- *  net.minecraft.class_265
- *  net.minecraft.class_2680
- *  net.minecraft.class_2818
- *  net.minecraft.class_2846
- *  net.minecraft.class_2846$class_2847
- *  net.minecraft.class_2885
- *  net.minecraft.class_3711
- *  net.minecraft.class_3713
- *  net.minecraft.class_3718
- *  net.minecraft.class_3965
- *  net.minecraft.class_5329
- *  net.minecraft.class_638
- *  net.minecraft.class_746
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.ExperienceOrbEntity
+ *  net.minecraft.entity.decoration.EndCrystalEntity
+ *  net.minecraft.entity.decoration.ArmorStandEntity
+ *  net.minecraft.entity.ItemEntity
+ *  net.minecraft.entity.projectile.ArrowEntity
+ *  net.minecraft.entity.projectile.thrown.ExperienceBottleEntity
+ *  net.minecraft.item.Items
+ *  net.minecraft.world.BlockView
+ *  net.minecraft.util.math.ChunkPos
+ *  net.minecraft.world.World
+ *  net.minecraft.world.CollisionView
+ *  net.minecraft.block.AnvilBlock
+ *  net.minecraft.block.AbstractPressurePlateBlock
+ *  net.minecraft.block.BlockWithEntity
+ *  net.minecraft.block.BedBlock
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.ButtonBlock
+ *  net.minecraft.block.CraftingTableBlock
+ *  net.minecraft.block.DoorBlock
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.block.FenceGateBlock
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.block.LoomBlock
+ *  net.minecraft.block.NoteBlock
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.block.TrapdoorBlock
+ *  net.minecraft.block.entity.BlockEntity
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.util.shape.VoxelShape
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.world.chunk.WorldChunk
+ *  net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket$Action
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket
+ *  net.minecraft.block.CartographyTableBlock
+ *  net.minecraft.block.GrindstoneBlock
+ *  net.minecraft.block.StonecutterBlock
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.world.BlockCollisionSpliterator
+ *  net.minecraft.client.world.ClientWorld
+ *  net.minecraft.client.network.ClientPlayerEntity
  *  org.jetbrains.annotations.Nullable
  */
 package dev.luminous.api.utils.world;
@@ -68,50 +68,50 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import net.minecraft.class_1268;
-import net.minecraft.class_1297;
-import net.minecraft.class_1303;
-import net.minecraft.class_1511;
-import net.minecraft.class_1531;
-import net.minecraft.class_1542;
-import net.minecraft.class_1667;
-import net.minecraft.class_1683;
-import net.minecraft.class_1802;
-import net.minecraft.class_1922;
-import net.minecraft.class_1923;
-import net.minecraft.class_1937;
-import net.minecraft.class_1941;
-import net.minecraft.class_2199;
-import net.minecraft.class_2231;
-import net.minecraft.class_2237;
-import net.minecraft.class_2244;
-import net.minecraft.class_2246;
-import net.minecraft.class_2248;
-import net.minecraft.class_2269;
-import net.minecraft.class_2304;
-import net.minecraft.class_2323;
-import net.minecraft.class_2338;
-import net.minecraft.class_2349;
-import net.minecraft.class_2350;
-import net.minecraft.class_238;
-import net.minecraft.class_2406;
-import net.minecraft.class_2428;
-import net.minecraft.class_243;
-import net.minecraft.class_2533;
-import net.minecraft.class_2586;
-import net.minecraft.class_2596;
-import net.minecraft.class_265;
-import net.minecraft.class_2680;
-import net.minecraft.class_2818;
-import net.minecraft.class_2846;
-import net.minecraft.class_2885;
-import net.minecraft.class_3711;
-import net.minecraft.class_3713;
-import net.minecraft.class_3718;
-import net.minecraft.class_3965;
-import net.minecraft.class_5329;
-import net.minecraft.class_638;
-import net.minecraft.class_746;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.thrown.ExperienceBottleEntity;
+import net.minecraft.item.Items;
+import net.minecraft.world.BlockView;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
+import net.minecraft.world.CollisionView;
+import net.minecraft.block.AnvilBlock;
+import net.minecraft.block.AbstractPressurePlateBlock;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.Block;
+import net.minecraft.block.ButtonBlock;
+import net.minecraft.block.CraftingTableBlock;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.FenceGateBlock;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Box;
+import net.minecraft.block.LoomBlock;
+import net.minecraft.block.NoteBlock;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.block.TrapdoorBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.block.BlockState;
+import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
+import net.minecraft.block.CartographyTableBlock;
+import net.minecraft.block.GrindstoneBlock;
+import net.minecraft.block.StonecutterBlock;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.world.BlockCollisionSpliterator;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.network.ClientPlayerEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockUtil

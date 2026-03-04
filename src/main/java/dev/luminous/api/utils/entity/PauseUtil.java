@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1657
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.player.PlayerEntity
  */
 package dev.luminous.api.utils.entity;
 
 import dev.luminous.api.utils.Wrapper;
-import net.minecraft.class_1268;
-import net.minecraft.class_1657;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class PauseUtil
 implements Wrapper {

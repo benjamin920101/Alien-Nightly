@@ -5,16 +5,16 @@
  *  com.google.common.collect.Lists
  *  it.unimi.dsi.fastutil.ints.Int2ObjectMap
  *  it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
- *  net.minecraft.class_1657
- *  net.minecraft.class_1661
- *  net.minecraft.class_1703
- *  net.minecraft.class_1713
- *  net.minecraft.class_1735
- *  net.minecraft.class_1799
- *  net.minecraft.class_2371
- *  net.minecraft.class_2596
- *  net.minecraft.class_2813
- *  net.minecraft.class_2868
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.entity.player.PlayerInventory
+ *  net.minecraft.screen.ScreenHandler
+ *  net.minecraft.screen.slot.SlotActionType
+ *  net.minecraft.screen.slot.Slot
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.collection.DefaultedList
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket
+ *  net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
  */
 package dev.luminous.core.impl;
 
@@ -29,16 +29,16 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import net.minecraft.class_1657;
-import net.minecraft.class_1661;
-import net.minecraft.class_1703;
-import net.minecraft.class_1713;
-import net.minecraft.class_1735;
-import net.minecraft.class_1799;
-import net.minecraft.class_2371;
-import net.minecraft.class_2596;
-import net.minecraft.class_2813;
-import net.minecraft.class_2868;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
+import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
 
 public class InventoryManager
 implements Wrapper {

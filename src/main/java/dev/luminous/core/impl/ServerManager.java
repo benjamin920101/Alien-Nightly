@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2596
- *  net.minecraft.class_2761
- *  net.minecraft.class_2824
- *  net.minecraft.class_2824$class_5907
- *  net.minecraft.class_2868
- *  net.minecraft.class_2879
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket$InteractType
+ *  net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
+ *  net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
  */
 package dev.luminous.core.impl;
 
@@ -25,11 +25,11 @@ import dev.luminous.mod.modules.impl.misc.AutoLog;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayDeque;
-import net.minecraft.class_2596;
-import net.minecraft.class_2761;
-import net.minecraft.class_2824;
-import net.minecraft.class_2868;
-import net.minecraft.class_2879;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
+import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
 
 public class ServerManager
 implements Wrapper {

@@ -2,31 +2,31 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1297
- *  net.minecraft.class_1309
- *  net.minecraft.class_1657
- *  net.minecraft.class_1743
- *  net.minecraft.class_1799
- *  net.minecraft.class_1829
- *  net.minecraft.class_1835
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_239$class_240
- *  net.minecraft.class_243
- *  net.minecraft.class_2596
- *  net.minecraft.class_2815
- *  net.minecraft.class_2879
- *  net.minecraft.class_3959
- *  net.minecraft.class_3959$class_242
- *  net.minecraft.class_3959$class_3960
- *  net.minecraft.class_3965
- *  net.minecraft.class_408
- *  net.minecraft.class_429
- *  net.minecraft.class_433
- *  net.minecraft.class_4667
- *  net.minecraft.class_490
- *  net.minecraft.class_9362
+ *  net.minecraft.util.Hand
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.AxeItem
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.SwordItem
+ *  net.minecraft.item.TridentItem
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.util.hit.HitResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket
+ *  net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
+ *  net.minecraft.world.RaycastContext
+ *  net.minecraft.world.RaycastContext$FluidHandling
+ *  net.minecraft.world.RaycastContext$ShapeType
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.client.gui.screen.ChatScreen
+ *  net.minecraft.client.gui.screen.option.OptionsScreen
+ *  net.minecraft.client.gui.screen.GameMenuScreen
+ *  net.minecraft.client.gui.screen.option.GameOptionsScreen
+ *  net.minecraft.client.gui.screen.ingame.InventoryScreen
+ *  net.minecraft.item.MaceItem
  */
 package dev.luminous.api.utils.player;
 
@@ -37,29 +37,29 @@ import dev.luminous.mod.gui.ClickGuiScreen;
 import dev.luminous.mod.gui.PeekScreen;
 import dev.luminous.mod.modules.impl.client.AntiCheat;
 import dev.luminous.mod.modules.settings.enums.SwingSide;
-import net.minecraft.class_1268;
-import net.minecraft.class_1297;
-import net.minecraft.class_1309;
-import net.minecraft.class_1657;
-import net.minecraft.class_1743;
-import net.minecraft.class_1799;
-import net.minecraft.class_1829;
-import net.minecraft.class_1835;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_239;
-import net.minecraft.class_243;
-import net.minecraft.class_2596;
-import net.minecraft.class_2815;
-import net.minecraft.class_2879;
-import net.minecraft.class_3959;
-import net.minecraft.class_3965;
-import net.minecraft.class_408;
-import net.minecraft.class_429;
-import net.minecraft.class_433;
-import net.minecraft.class_4667;
-import net.minecraft.class_490;
-import net.minecraft.class_9362;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.TridentItem;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
+import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
+import net.minecraft.world.RaycastContext;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
+import net.minecraft.client.gui.screen.GameMenuScreen;
+import net.minecraft.client.gui.screen.option.GameOptionsScreen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.item.MaceItem;
 
 public class EntityUtil
 implements Wrapper {

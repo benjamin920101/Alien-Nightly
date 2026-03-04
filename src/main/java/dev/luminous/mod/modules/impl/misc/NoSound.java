@@ -2,8 +2,8 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_3414
- *  net.minecraft.class_3417
+ *  net.minecraft.sound.SoundEvent
+ *  net.minecraft.sound.SoundEvents
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -12,8 +12,8 @@ import dev.luminous.api.events.impl.PlaySoundEvent;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import java.util.ArrayList;
-import net.minecraft.class_3414;
-import net.minecraft.class_3417;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 
 public class NoSound
 extends Module {

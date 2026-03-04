@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1087
- *  net.minecraft.class_1799
- *  net.minecraft.class_4587
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_811
- *  net.minecraft.class_918
+ *  net.minecraft.client.render.model.BakedModel
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.render.VertexConsumer
+ *  net.minecraft.client.render.VertexConsumerProvider
+ *  net.minecraft.client.render.model.json.ModelTransformationMode
+ *  net.minecraft.client.render.item.ItemRenderer
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Unique
  *  org.spongepowered.asm.mixin.injection.At
@@ -20,13 +20,13 @@ package dev.luminous.asm.mixins;
 
 import dev.luminous.api.utils.render.SimpleItemModel;
 import dev.luminous.mod.modules.impl.render.NoRender;
-import net.minecraft.class_1087;
-import net.minecraft.class_1799;
-import net.minecraft.class_4587;
-import net.minecraft.class_4588;
-import net.minecraft.class_4597;
-import net.minecraft.class_811;
-import net.minecraft.class_918;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.item.ItemStack;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.client.render.item.ItemRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

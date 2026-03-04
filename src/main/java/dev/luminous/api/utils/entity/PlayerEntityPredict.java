@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
+ *  net.minecraft.entity.player.PlayerEntity
  */
 package dev.luminous.api.utils.entity;
 
 import dev.luminous.api.utils.entity.CopyPlayerEntity;
-import net.minecraft.class_1657;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class PlayerEntityPredict {
     public final class_1657 player;

@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_2561
- *  net.minecraft.class_2596
- *  net.minecraft.class_2661
- *  net.minecraft.class_2868
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.text.Text
+ *  net.minecraft.network.packet.Packet
+ *  net.minecraft.network.packet.s2c.common.DisconnectS2CPacket
+ *  net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
  */
 package dev.luminous.mod.modules.impl.misc;
 
@@ -20,12 +20,12 @@ import dev.luminous.core.impl.CommandManager;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_2561;
-import net.minecraft.class_2596;
-import net.minecraft.class_2661;
-import net.minecraft.class_2868;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.text.Text;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.common.DisconnectS2CPacket;
+import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
 
 public class AutoLog
 extends Module {

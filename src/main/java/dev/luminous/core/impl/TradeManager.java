@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1802
+ *  net.minecraft.item.Items
  *  org.apache.commons.io.IOUtils
  */
 package dev.luminous.core.impl;
@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import net.minecraft.class_1802;
+import net.minecraft.item.Items;
 import org.apache.commons.io.IOUtils;
 
 public class TradeManager

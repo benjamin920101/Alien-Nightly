@@ -7,47 +7,47 @@
  *  it.unimi.dsi.fastutil.objects.Object2IntMap$Entry
  *  it.unimi.dsi.fastutil.objects.Object2IntMaps
  *  it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
- *  net.minecraft.class_1280
- *  net.minecraft.class_1282
- *  net.minecraft.class_1293
- *  net.minecraft.class_1294
- *  net.minecraft.class_1297
- *  net.minecraft.class_1304
- *  net.minecraft.class_1309
- *  net.minecraft.class_1322
- *  net.minecraft.class_1324
- *  net.minecraft.class_1657
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1887
- *  net.minecraft.class_1890
- *  net.minecraft.class_1893
- *  net.minecraft.class_1922
- *  net.minecraft.class_1934
- *  net.minecraft.class_2246
- *  net.minecraft.class_2338
- *  net.minecraft.class_2374
- *  net.minecraft.class_238
- *  net.minecraft.class_239$class_240
- *  net.minecraft.class_243
- *  net.minecraft.class_2680
- *  net.minecraft.class_2902$class_2903
- *  net.minecraft.class_3483
- *  net.minecraft.class_3532
- *  net.minecraft.class_3959
- *  net.minecraft.class_3959$class_242
- *  net.minecraft.class_3959$class_3960
- *  net.minecraft.class_3965
- *  net.minecraft.class_5134
- *  net.minecraft.class_5321
- *  net.minecraft.class_640
- *  net.minecraft.class_6880
- *  net.minecraft.class_8103
- *  net.minecraft.class_9285
- *  net.minecraft.class_9304
- *  net.minecraft.class_9334
- *  net.minecraft.class_9362
+ *  net.minecraft.entity.DamageUtil
+ *  net.minecraft.entity.damage.DamageSource
+ *  net.minecraft.entity.effect.StatusEffectInstance
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EquipmentSlot
+ *  net.minecraft.entity.LivingEntity
+ *  net.minecraft.entity.attribute.EntityAttributeModifier
+ *  net.minecraft.entity.attribute.EntityAttributeInstance
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.enchantment.Enchantments
+ *  net.minecraft.world.BlockView
+ *  net.minecraft.world.GameMode
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Position
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.util.hit.HitResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.world.Heightmap$Type
+ *  net.minecraft.registry.tag.EntityTypeTags
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.world.RaycastContext
+ *  net.minecraft.world.RaycastContext$FluidHandling
+ *  net.minecraft.world.RaycastContext$ShapeType
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.entity.attribute.EntityAttributes
+ *  net.minecraft.registry.RegistryKey
+ *  net.minecraft.client.network.PlayerListEntry
+ *  net.minecraft.registry.entry.RegistryEntry
+ *  net.minecraft.registry.tag.DamageTypeTags
+ *  net.minecraft.component.type.AttributeModifiersComponent
+ *  net.minecraft.component.type.ItemEnchantmentsComponent
+ *  net.minecraft.component.DataComponentTypes
+ *  net.minecraft.item.MaceItem
  *  org.apache.commons.lang3.mutable.MutableInt
  *  org.joml.Math
  */
@@ -64,45 +64,45 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.util.function.BiFunction;
-import net.minecraft.class_1280;
-import net.minecraft.class_1282;
-import net.minecraft.class_1293;
-import net.minecraft.class_1294;
-import net.minecraft.class_1297;
-import net.minecraft.class_1304;
-import net.minecraft.class_1309;
-import net.minecraft.class_1322;
-import net.minecraft.class_1324;
-import net.minecraft.class_1657;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1887;
-import net.minecraft.class_1890;
-import net.minecraft.class_1893;
-import net.minecraft.class_1922;
-import net.minecraft.class_1934;
-import net.minecraft.class_2246;
-import net.minecraft.class_2338;
-import net.minecraft.class_2374;
-import net.minecraft.class_238;
-import net.minecraft.class_239;
-import net.minecraft.class_243;
-import net.minecraft.class_2680;
-import net.minecraft.class_2902;
-import net.minecraft.class_3483;
-import net.minecraft.class_3532;
-import net.minecraft.class_3959;
-import net.minecraft.class_3965;
-import net.minecraft.class_5134;
-import net.minecraft.class_5321;
-import net.minecraft.class_640;
-import net.minecraft.class_6880;
-import net.minecraft.class_8103;
-import net.minecraft.class_9285;
-import net.minecraft.class_9304;
-import net.minecraft.class_9334;
-import net.minecraft.class_9362;
+import net.minecraft.entity.DamageUtil;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.GameMode;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Position;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.block.BlockState;
+import net.minecraft.world.Heightmap;
+import net.minecraft.registry.tag.EntityTypeTags;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.RaycastContext;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.MaceItem;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 public class DamageUtils {

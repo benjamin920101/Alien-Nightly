@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1268
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_1890
- *  net.minecraft.class_1893
- *  net.minecraft.class_2886
- *  net.minecraft.class_9304
+ *  net.minecraft.util.Hand
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.enchantment.Enchantments
+ *  net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket
+ *  net.minecraft.component.type.ItemEnchantmentsComponent
  */
 package dev.luminous.mod.modules.impl.combat;
 
@@ -24,13 +24,13 @@ import dev.luminous.mod.modules.settings.enums.SwingSide;
 import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
-import net.minecraft.class_1268;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_1890;
-import net.minecraft.class_1893;
-import net.minecraft.class_2886;
-import net.minecraft.class_9304;
+import net.minecraft.util.Hand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 
 public class AutoXP
 extends Module {

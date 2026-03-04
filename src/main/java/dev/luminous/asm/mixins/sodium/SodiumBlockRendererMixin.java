@@ -3,9 +3,9 @@
  * 
  * Could not load the following classes:
  *  net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockRenderer
- *  net.minecraft.class_1087
- *  net.minecraft.class_2338
- *  net.minecraft.class_2680
+ *  net.minecraft.client.render.model.BakedModel
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.block.BlockState
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.At$Shift
@@ -16,9 +16,9 @@ package dev.luminous.asm.mixins.sodium;
 
 import dev.luminous.mod.modules.impl.render.Xray;
 import net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockRenderer;
-import net.minecraft.class_1087;
-import net.minecraft.class_2338;
-import net.minecraft.class_2680;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

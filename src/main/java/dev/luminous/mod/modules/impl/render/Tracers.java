@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1542
- *  net.minecraft.class_1657
- *  net.minecraft.class_243
- *  net.minecraft.class_2586
- *  net.minecraft.class_2595
- *  net.minecraft.class_2611
- *  net.minecraft.class_2627
- *  net.minecraft.class_4587
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.ItemEntity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.block.entity.BlockEntity
+ *  net.minecraft.block.entity.ChestBlockEntity
+ *  net.minecraft.block.entity.EnderChestBlockEntity
+ *  net.minecraft.block.entity.ShulkerBoxBlockEntity
+ *  net.minecraft.client.util.math.MatrixStack
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -20,15 +20,15 @@ import dev.luminous.api.utils.world.BlockUtil;
 import dev.luminous.mod.modules.Module;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import java.awt.Color;
-import net.minecraft.class_1297;
-import net.minecraft.class_1542;
-import net.minecraft.class_1657;
-import net.minecraft.class_243;
-import net.minecraft.class_2586;
-import net.minecraft.class_2595;
-import net.minecraft.class_2611;
-import net.minecraft.class_2627;
-import net.minecraft.class_4587;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.block.entity.EnderChestBlockEntity;
+import net.minecraft.block.entity.ShulkerBoxBlockEntity;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class Tracers
 extends Module {

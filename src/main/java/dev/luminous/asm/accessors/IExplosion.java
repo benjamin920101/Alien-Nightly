@@ -2,20 +2,20 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1282
- *  net.minecraft.class_1297
- *  net.minecraft.class_1927
- *  net.minecraft.class_1937
+ *  net.minecraft.entity.damage.DamageSource
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.world.explosion.Explosion
+ *  net.minecraft.world.World
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Mutable
  *  org.spongepowered.asm.mixin.gen.Accessor
  */
 package dev.luminous.asm.accessors;
 
-import net.minecraft.class_1282;
-import net.minecraft.class_1297;
-import net.minecraft.class_1927;
-import net.minecraft.class_1937;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;

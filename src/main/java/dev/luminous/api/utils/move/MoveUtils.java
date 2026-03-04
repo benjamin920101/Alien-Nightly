@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_310
- *  net.minecraft.class_3532
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.util.math.MathHelper
  */
 package dev.luminous.api.utils.move;
 
-import net.minecraft.class_310;
-import net.minecraft.class_3532;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.math.MathHelper;
 
 public class MoveUtils {
     private static final class_310 mc = class_310.method_1551();

@@ -3,23 +3,23 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1263
- *  net.minecraft.class_1277
- *  net.minecraft.class_1733
- *  net.minecraft.class_1747
- *  net.minecraft.class_1767
- *  net.minecraft.class_1792
- *  net.minecraft.class_1799
- *  net.minecraft.class_1802
- *  net.minecraft.class_2480
- *  net.minecraft.class_2960
- *  net.minecraft.class_332
- *  net.minecraft.class_3872
- *  net.minecraft.class_3872$class_3931
- *  net.minecraft.class_437
- *  net.minecraft.class_495
- *  net.minecraft.class_757
- *  net.minecraft.class_9334
+ *  net.minecraft.inventory.Inventory
+ *  net.minecraft.inventory.SimpleInventory
+ *  net.minecraft.screen.ShulkerBoxScreenHandler
+ *  net.minecraft.item.BlockItem
+ *  net.minecraft.util.DyeColor
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.Items
+ *  net.minecraft.block.ShulkerBoxBlock
+ *  net.minecraft.util.Identifier
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.gui.screen.ingame.BookScreen
+ *  net.minecraft.client.gui.screen.ingame.BookScreen$Contents
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.client.gui.screen.ingame.ShulkerBoxScreen
+ *  net.minecraft.client.render.GameRenderer
+ *  net.minecraft.component.DataComponentTypes
  */
 package dev.luminous.mod.gui;
 
@@ -27,22 +27,22 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.luminous.api.utils.Wrapper;
 import dev.luminous.mod.modules.impl.misc.ShulkerViewer;
 import java.awt.Color;
-import net.minecraft.class_1263;
-import net.minecraft.class_1277;
-import net.minecraft.class_1733;
-import net.minecraft.class_1747;
-import net.minecraft.class_1767;
-import net.minecraft.class_1792;
-import net.minecraft.class_1799;
-import net.minecraft.class_1802;
-import net.minecraft.class_2480;
-import net.minecraft.class_2960;
-import net.minecraft.class_332;
-import net.minecraft.class_3872;
-import net.minecraft.class_437;
-import net.minecraft.class_495;
-import net.minecraft.class_757;
-import net.minecraft.class_9334;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.screen.ShulkerBoxScreenHandler;
+import net.minecraft.item.BlockItem;
+import net.minecraft.util.DyeColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ingame.BookScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.ShulkerBoxScreen;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.component.DataComponentTypes;
 
 public class PeekScreen
 extends class_495 {

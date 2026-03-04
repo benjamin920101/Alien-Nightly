@@ -2,17 +2,17 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
- *  net.minecraft.class_239
- *  net.minecraft.class_3966
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.util.hit.HitResult
+ *  net.minecraft.util.hit.EntityHitResult
  */
 package dev.luminous.mod.modules.impl.misc;
 
 import dev.luminous.Alien;
 import dev.luminous.mod.modules.Module;
-import net.minecraft.class_1657;
-import net.minecraft.class_239;
-import net.minecraft.class_3966;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.EntityHitResult;
 
 public class Friend
 extends Module {

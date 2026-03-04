@@ -4,11 +4,11 @@
  * Could not load the following classes:
  *  com.mojang.brigadier.suggestion.Suggestions
  *  com.mojang.brigadier.suggestion.SuggestionsBuilder
- *  net.minecraft.class_2561
- *  net.minecraft.class_332
- *  net.minecraft.class_342
- *  net.minecraft.class_4717
- *  net.minecraft.class_5481
+ *  net.minecraft.text.Text
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.gui.widget.TextFieldWidget
+ *  net.minecraft.client.gui.screen.ChatInputSuggestor
+ *  net.minecraft.text.OrderedText
  *  org.apache.commons.lang3.StringUtils
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
@@ -31,11 +31,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.minecraft.class_2561;
-import net.minecraft.class_332;
-import net.minecraft.class_342;
-import net.minecraft.class_4717;
-import net.minecraft.class_5481;
+import net.minecraft.text.Text;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.screen.ChatInputSuggestor;
+import net.minecraft.text.OrderedText;
 import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

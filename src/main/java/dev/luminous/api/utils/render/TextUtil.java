@@ -2,10 +2,10 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_243
- *  net.minecraft.class_332
- *  net.minecraft.class_4184
- *  net.minecraft.class_4587
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.render.Camera
+ *  net.minecraft.client.util.math.MatrixStack
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  *  org.joml.Vector3f
@@ -18,10 +18,10 @@ import dev.luminous.api.utils.Wrapper;
 import dev.luminous.api.utils.render.ColorUtil;
 import dev.luminous.core.impl.FontManager;
 import java.awt.Color;
-import net.minecraft.class_243;
-import net.minecraft.class_332;
-import net.minecraft.class_4184;
-import net.minecraft.class_4587;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Vector3f;

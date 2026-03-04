@@ -4,20 +4,20 @@
  * Could not load the following classes:
  *  com.google.common.collect.Lists
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1074
- *  net.minecraft.class_1792
- *  net.minecraft.class_2248
- *  net.minecraft.class_286
- *  net.minecraft.class_287
- *  net.minecraft.class_289
- *  net.minecraft.class_290
- *  net.minecraft.class_293$class_5596
- *  net.minecraft.class_332
- *  net.minecraft.class_3544
- *  net.minecraft.class_3675
- *  net.minecraft.class_757
- *  net.minecraft.class_7923
- *  net.minecraft.class_9801
+ *  net.minecraft.client.resource.language.I18n
+ *  net.minecraft.item.Item
+ *  net.minecraft.block.Block
+ *  net.minecraft.client.render.BufferRenderer
+ *  net.minecraft.client.render.BufferBuilder
+ *  net.minecraft.client.render.Tessellator
+ *  net.minecraft.client.render.VertexFormats
+ *  net.minecraft.client.render.VertexFormat$DrawMode
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.util.StringHelper
+ *  net.minecraft.client.util.InputUtil
+ *  net.minecraft.client.render.GameRenderer
+ *  net.minecraft.registry.Registries
+ *  net.minecraft.client.render.BuiltBuffer
  */
 package dev.luminous.mod.gui.windows.impl;
 
@@ -35,20 +35,20 @@ import dev.luminous.mod.gui.windows.WindowBase;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Objects;
-import net.minecraft.class_1074;
-import net.minecraft.class_1792;
-import net.minecraft.class_2248;
-import net.minecraft.class_286;
-import net.minecraft.class_287;
-import net.minecraft.class_289;
-import net.minecraft.class_290;
-import net.minecraft.class_293;
-import net.minecraft.class_332;
-import net.minecraft.class_3544;
-import net.minecraft.class_3675;
-import net.minecraft.class_757;
-import net.minecraft.class_7923;
-import net.minecraft.class_9801;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.item.Item;
+import net.minecraft.block.Block;
+import net.minecraft.client.render.BufferRenderer;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.util.StringHelper;
+import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.registry.Registries;
+import net.minecraft.client.render.BuiltBuffer;
 
 public class ItemSelectWindow
 extends WindowBase {

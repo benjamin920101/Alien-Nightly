@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1747
- *  net.minecraft.class_1799
- *  net.minecraft.class_2480
- *  net.minecraft.class_327
- *  net.minecraft.class_332
- *  net.minecraft.class_4587
+ *  net.minecraft.item.BlockItem
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.block.ShulkerBoxBlock
+ *  net.minecraft.client.font.TextRenderer
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.util.math.MatrixStack
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
@@ -19,12 +19,12 @@
 package dev.luminous.asm.mixins;
 
 import dev.luminous.mod.modules.impl.misc.ShulkerViewer;
-import net.minecraft.class_1747;
-import net.minecraft.class_1799;
-import net.minecraft.class_2480;
-import net.minecraft.class_327;
-import net.minecraft.class_332;
-import net.minecraft.class_4587;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

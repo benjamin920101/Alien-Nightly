@@ -2,16 +2,16 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- *  net.minecraft.class_364
- *  net.minecraft.class_4068
- *  net.minecraft.class_434
- *  net.minecraft.class_435
- *  net.minecraft.class_437
- *  net.minecraft.class_442
- *  net.minecraft.class_4587
- *  net.minecraft.class_8030
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.client.gui.Element
+ *  net.minecraft.client.gui.Drawable
+ *  net.minecraft.client.gui.screen.DownloadingTerrainScreen
+ *  net.minecraft.client.gui.screen.ProgressScreen
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.client.gui.screen.TitleScreen
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.gui.ScreenRect
  *  org.ladysnake.satin.api.managed.ManagedShaderEffect
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
@@ -27,16 +27,16 @@ import dev.luminous.core.impl.ShaderManager;
 import dev.luminous.mod.modules.impl.client.ClickGui;
 import dev.luminous.mod.modules.impl.client.ClientSetting;
 import java.awt.Color;
-import net.minecraft.class_310;
-import net.minecraft.class_332;
-import net.minecraft.class_364;
-import net.minecraft.class_4068;
-import net.minecraft.class_434;
-import net.minecraft.class_435;
-import net.minecraft.class_437;
-import net.minecraft.class_442;
-import net.minecraft.class_4587;
-import net.minecraft.class_8030;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
+import net.minecraft.client.gui.screen.ProgressScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.ScreenRect;
 import org.ladysnake.satin.api.managed.ManagedShaderEffect;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

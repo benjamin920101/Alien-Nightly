@@ -3,32 +3,32 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1041
- *  net.minecraft.class_1074
- *  net.minecraft.class_1132
- *  net.minecraft.class_1268
- *  net.minecraft.class_155
- *  net.minecraft.class_2338
- *  net.minecraft.class_2350
- *  net.minecraft.class_239
- *  net.minecraft.class_239$class_240
- *  net.minecraft.class_310
- *  net.minecraft.class_329
- *  net.minecraft.class_3965
- *  net.minecraft.class_4093
- *  net.minecraft.class_412
- *  net.minecraft.class_434
- *  net.minecraft.class_435
- *  net.minecraft.class_437
- *  net.minecraft.class_442
- *  net.minecraft.class_4587
- *  net.minecraft.class_542
- *  net.minecraft.class_634
- *  net.minecraft.class_636
- *  net.minecraft.class_638
- *  net.minecraft.class_642
- *  net.minecraft.class_702
- *  net.minecraft.class_746
+ *  net.minecraft.client.util.Window
+ *  net.minecraft.client.resource.language.I18n
+ *  net.minecraft.server.integrated.IntegratedServer
+ *  net.minecraft.util.Hand
+ *  net.minecraft.SharedConstants
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.util.hit.HitResult
+ *  net.minecraft.util.hit.HitResult$Type
+ *  net.minecraft.client.MinecraftClient
+ *  net.minecraft.client.gui.hud.InGameHud
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.util.thread.ReentrantThreadExecutor
+ *  net.minecraft.client.gui.screen.multiplayer.ConnectScreen
+ *  net.minecraft.client.gui.screen.DownloadingTerrainScreen
+ *  net.minecraft.client.gui.screen.ProgressScreen
+ *  net.minecraft.client.gui.screen.Screen
+ *  net.minecraft.client.gui.screen.TitleScreen
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.client.RunArgs
+ *  net.minecraft.client.network.ClientPlayNetworkHandler
+ *  net.minecraft.client.network.ClientPlayerInteractionManager
+ *  net.minecraft.client.world.ClientWorld
+ *  net.minecraft.client.network.ServerInfo
+ *  net.minecraft.client.particle.ParticleManager
+ *  net.minecraft.client.network.ClientPlayerEntity
  *  org.ladysnake.satin.api.managed.ManagedShaderEffect
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
@@ -59,31 +59,31 @@ import dev.luminous.core.impl.ShaderManager;
 import dev.luminous.mod.modules.impl.client.ClientSetting;
 import dev.luminous.mod.modules.impl.player.InteractTweaks;
 import java.awt.Color;
-import net.minecraft.class_1041;
-import net.minecraft.class_1074;
-import net.minecraft.class_1132;
-import net.minecraft.class_1268;
-import net.minecraft.class_155;
-import net.minecraft.class_2338;
-import net.minecraft.class_2350;
-import net.minecraft.class_239;
-import net.minecraft.class_310;
-import net.minecraft.class_329;
-import net.minecraft.class_3965;
-import net.minecraft.class_4093;
-import net.minecraft.class_412;
-import net.minecraft.class_434;
-import net.minecraft.class_435;
-import net.minecraft.class_437;
-import net.minecraft.class_442;
-import net.minecraft.class_4587;
-import net.minecraft.class_542;
-import net.minecraft.class_634;
-import net.minecraft.class_636;
-import net.minecraft.class_638;
-import net.minecraft.class_642;
-import net.minecraft.class_702;
-import net.minecraft.class_746;
+import net.minecraft.client.util.Window;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.util.Hand;
+import net.minecraft.SharedConstants;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.thread.ReentrantThreadExecutor;
+import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
+import net.minecraft.client.gui.screen.ProgressScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.RunArgs;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.network.ClientPlayerEntity;
 import org.ladysnake.satin.api.managed.ManagedShaderEffect;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

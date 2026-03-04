@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1109
- *  net.minecraft.class_1113
- *  net.minecraft.class_1291
- *  net.minecraft.class_1293
- *  net.minecraft.class_332
- *  net.minecraft.class_3417
- *  net.minecraft.class_4587
- *  net.minecraft.class_6880
+ *  net.minecraft.client.sound.PositionedSoundInstance
+ *  net.minecraft.client.sound.SoundInstance
+ *  net.minecraft.entity.effect.StatusEffect
+ *  net.minecraft.entity.effect.StatusEffectInstance
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.sound.SoundEvents
+ *  net.minecraft.client.util.math.MatrixStack
+ *  net.minecraft.registry.entry.RegistryEntry
  *  org.lwjgl.glfw.GLFW
  *  org.lwjgl.opengl.GL11
  */
@@ -194,14 +194,14 @@ import dev.luminous.mod.modules.settings.impl.BindSetting;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
-import net.minecraft.class_1109;
-import net.minecraft.class_1113;
-import net.minecraft.class_1291;
-import net.minecraft.class_1293;
-import net.minecraft.class_332;
-import net.minecraft.class_3417;
-import net.minecraft.class_4587;
-import net.minecraft.class_6880;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 

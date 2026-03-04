@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
+ *  net.minecraft.entity.player.PlayerEntity
  *  org.apache.commons.io.IOUtils
  */
 package dev.luminous.core.impl;
@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import net.minecraft.class_1657;
+import net.minecraft.entity.player.PlayerEntity;
 import org.apache.commons.io.IOUtils;
 
 public class FriendManager

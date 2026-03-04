@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1747
- *  net.minecraft.class_2246
- *  net.minecraft.class_238
- *  net.minecraft.class_239
- *  net.minecraft.class_3965
- *  net.minecraft.class_4587
+ *  net.minecraft.item.BlockItem
+ *  net.minecraft.block.Blocks
+ *  net.minecraft.util.math.Box
+ *  net.minecraft.util.hit.HitResult
+ *  net.minecraft.util.hit.BlockHitResult
+ *  net.minecraft.client.util.math.MatrixStack
  */
 package dev.luminous.mod.modules.impl.player;
 
@@ -20,12 +20,12 @@ import dev.luminous.mod.modules.settings.impl.BooleanSetting;
 import dev.luminous.mod.modules.settings.impl.ColorSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
-import net.minecraft.class_1747;
-import net.minecraft.class_2246;
-import net.minecraft.class_238;
-import net.minecraft.class_239;
-import net.minecraft.class_3965;
-import net.minecraft.class_4587;
+import net.minecraft.item.BlockItem;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class AirPlace
 extends Module {

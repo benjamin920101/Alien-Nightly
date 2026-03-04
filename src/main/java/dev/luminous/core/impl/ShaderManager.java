@@ -3,13 +3,13 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.platform.GlStateManager
- *  com.mojang.blaze3d.platform.GlStateManager$class_4534
- *  com.mojang.blaze3d.platform.GlStateManager$class_4535
+ *  com.mojang.blaze3d.platform.GlStateManager$DstFactor
+ *  com.mojang.blaze3d.platform.GlStateManager$SrcFactor
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_276
- *  net.minecraft.class_279
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
+ *  net.minecraft.client.gl.Framebuffer
+ *  net.minecraft.client.gl.PostEffectProcessor
+ *  net.minecraft.util.Identifier
+ *  net.minecraft.client.MinecraftClient
  *  org.jetbrains.annotations.NotNull
  *  org.ladysnake.satin.api.managed.ManagedShaderEffect
  *  org.ladysnake.satin.api.managed.ShaderEffectManager
@@ -25,10 +25,10 @@ import dev.luminous.mod.modules.impl.render.ShaderModule;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.class_276;
-import net.minecraft.class_279;
-import net.minecraft.class_2960;
-import net.minecraft.class_310;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.util.Identifier;
+import net.minecraft.client.MinecraftClient;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.satin.api.managed.ManagedShaderEffect;
 import org.ladysnake.satin.api.managed.ShaderEffectManager;

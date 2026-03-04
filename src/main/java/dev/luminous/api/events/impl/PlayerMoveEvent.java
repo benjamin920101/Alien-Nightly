@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1313
- *  net.minecraft.class_243
+ *  net.minecraft.entity.MovementType
+ *  net.minecraft.util.math.Vec3d
  */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
 import dev.luminous.api.events.eventbus.Cancelable;
-import net.minecraft.class_1313;
-import net.minecraft.class_243;
+import net.minecraft.entity.MovementType;
+import net.minecraft.util.math.Vec3d;
 
 @Cancelable
 public class PlayerMoveEvent

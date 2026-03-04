@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2649
+ *  net.minecraft.network.packet.s2c.play.InventoryS2CPacket
  */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
-import net.minecraft.class_2649;
+import net.minecraft.network.packet.s2c.play.InventoryS2CPacket;
 
 public class InventoryS2CPacketEvent
 extends Event {

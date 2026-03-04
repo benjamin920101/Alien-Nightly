@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1802
+ *  net.minecraft.item.Items
  */
 package dev.luminous.mod.commands.impl;
 
@@ -13,7 +13,7 @@ import dev.luminous.mod.gui.windows.WindowsScreen;
 import dev.luminous.mod.gui.windows.impl.ItemSelectWindow;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.class_1802;
+import net.minecraft.item.Items;
 
 public class TradeCommand
 extends Command {

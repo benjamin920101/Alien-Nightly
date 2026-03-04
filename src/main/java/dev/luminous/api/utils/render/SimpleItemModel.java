@@ -4,14 +4,14 @@
  * Could not load the following classes:
  *  com.google.common.collect.ImmutableList
  *  it.unimi.dsi.fastutil.objects.ObjectArrayList
- *  net.minecraft.class_1058
- *  net.minecraft.class_1087
- *  net.minecraft.class_2350
- *  net.minecraft.class_2680
- *  net.minecraft.class_5819
- *  net.minecraft.class_777
- *  net.minecraft.class_806
- *  net.minecraft.class_809
+ *  net.minecraft.client.texture.Sprite
+ *  net.minecraft.client.render.model.BakedModel
+ *  net.minecraft.util.math.Direction
+ *  net.minecraft.block.BlockState
+ *  net.minecraft.util.math.random.Random
+ *  net.minecraft.client.render.model.BakedQuad
+ *  net.minecraft.client.render.model.json.ModelOverrideList
+ *  net.minecraft.client.render.model.json.ModelTransformation
  *  org.jetbrains.annotations.Nullable
  */
 package dev.luminous.api.utils.render;
@@ -19,14 +19,14 @@ package dev.luminous.api.utils.render;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
-import net.minecraft.class_1058;
-import net.minecraft.class_1087;
-import net.minecraft.class_2350;
-import net.minecraft.class_2680;
-import net.minecraft.class_5819;
-import net.minecraft.class_777;
-import net.minecraft.class_806;
-import net.minecraft.class_809;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.util.math.Direction;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.client.render.model.BakedQuad;
+import net.minecraft.client.render.model.json.ModelOverrideList;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import org.jetbrains.annotations.Nullable;
 
 public class SimpleItemModel

@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1657
- *  net.minecraft.class_332
- *  net.minecraft.class_3417
- *  net.minecraft.class_3419
- *  net.minecraft.class_4587
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.sound.SoundEvents
+ *  net.minecraft.sound.SoundCategory
+ *  net.minecraft.client.util.math.MatrixStack
  */
 package dev.luminous.mod.modules.impl.client;
 
@@ -30,11 +30,11 @@ import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
 import java.util.LinkedList;
-import net.minecraft.class_1657;
-import net.minecraft.class_332;
-import net.minecraft.class_3417;
-import net.minecraft.class_3419;
-import net.minecraft.class_4587;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class Notification
 extends Module {

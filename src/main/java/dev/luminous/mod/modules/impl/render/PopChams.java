@@ -3,8 +3,8 @@
  * 
  * Could not load the following classes:
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1657
- *  net.minecraft.class_4587
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.client.util.math.MatrixStack
  */
 package dev.luminous.mod.modules.impl.render;
 
@@ -22,8 +22,8 @@ import dev.luminous.mod.modules.settings.impl.EnumSetting;
 import dev.luminous.mod.modules.settings.impl.SliderSetting;
 import java.awt.Color;
 import java.util.concurrent.CopyOnWriteArrayList;
-import net.minecraft.class_1657;
-import net.minecraft.class_4587;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class PopChams
 extends Module {

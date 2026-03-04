@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_332
+ *  net.minecraft.client.gui.DrawContext
  */
 package dev.luminous.mod.gui.items;
 
@@ -21,7 +21,7 @@ import dev.luminous.mod.modules.impl.client.ClickGui;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.class_332;
+import net.minecraft.client.gui.DrawContext;
 
 public class Component
 extends Mod {

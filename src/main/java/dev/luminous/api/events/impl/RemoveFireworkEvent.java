@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1671
+ *  net.minecraft.entity.projectile.FireworkRocketEntity
  */
 package dev.luminous.api.events.impl;
 
 import dev.luminous.api.events.Event;
-import net.minecraft.class_1671;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
 
 public class RemoveFireworkEvent
 extends Event {

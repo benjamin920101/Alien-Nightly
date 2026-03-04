@@ -2,23 +2,23 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_124
- *  net.minecraft.class_1294
- *  net.minecraft.class_1297
- *  net.minecraft.class_1657
- *  net.minecraft.class_1799
- *  net.minecraft.class_1887
- *  net.minecraft.class_1890
- *  net.minecraft.class_1921
- *  net.minecraft.class_1934
- *  net.minecraft.class_243
- *  net.minecraft.class_308
- *  net.minecraft.class_327
- *  net.minecraft.class_332
- *  net.minecraft.class_3532
- *  net.minecraft.class_640
- *  net.minecraft.class_6880
- *  net.minecraft.class_9304
+ *  net.minecraft.util.Formatting
+ *  net.minecraft.entity.effect.StatusEffects
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.PlayerEntity
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.client.render.RenderLayer
+ *  net.minecraft.world.GameMode
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.client.render.DiffuseLighting
+ *  net.minecraft.client.font.TextRenderer
+ *  net.minecraft.client.gui.DrawContext
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.client.network.PlayerListEntry
+ *  net.minecraft.registry.entry.RegistryEntry
+ *  net.minecraft.component.type.ItemEnchantmentsComponent
  *  org.jetbrains.annotations.NotNull
  *  org.joml.Vector4d
  */
@@ -41,23 +41,23 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Objects;
-import net.minecraft.class_124;
-import net.minecraft.class_1294;
-import net.minecraft.class_1297;
-import net.minecraft.class_1657;
-import net.minecraft.class_1799;
-import net.minecraft.class_1887;
-import net.minecraft.class_1890;
-import net.minecraft.class_1921;
-import net.minecraft.class_1934;
-import net.minecraft.class_243;
-import net.minecraft.class_308;
-import net.minecraft.class_327;
-import net.minecraft.class_332;
-import net.minecraft.class_3532;
-import net.minecraft.class_640;
-import net.minecraft.class_6880;
-import net.minecraft.class_9304;
+import net.minecraft.util.Formatting;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.world.GameMode;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector4d;
 

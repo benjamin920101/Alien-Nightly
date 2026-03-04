@@ -3,27 +3,27 @@
  * 
  * Could not load the following classes:
  *  it.unimi.dsi.fastutil.objects.Object2IntMap$Entry
- *  net.minecraft.class_1799
- *  net.minecraft.class_1887
- *  net.minecraft.class_1890
- *  net.minecraft.class_1893
- *  net.minecraft.class_5321
- *  net.minecraft.class_6880
- *  net.minecraft.class_9304
- *  net.minecraft.class_9334
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.enchantment.Enchantments
+ *  net.minecraft.registry.RegistryKey
+ *  net.minecraft.registry.entry.RegistryEntry
+ *  net.minecraft.component.type.ItemEnchantmentsComponent
+ *  net.minecraft.component.DataComponentTypes
  */
 package dev.luminous.api.utils.more;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.util.Set;
-import net.minecraft.class_1799;
-import net.minecraft.class_1887;
-import net.minecraft.class_1890;
-import net.minecraft.class_1893;
-import net.minecraft.class_5321;
-import net.minecraft.class_6880;
-import net.minecraft.class_9304;
-import net.minecraft.class_9334;
+import net.minecraft.item.ItemStack;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.component.DataComponentTypes;
 
 public class EnchantmentUtil {
     public static int getLevel(class_1799 stack, class_5321<class_1887> enchantmentRegistryKey) {

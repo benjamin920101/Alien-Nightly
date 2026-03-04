@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1297
- *  net.minecraft.class_1922
- *  net.minecraft.class_4184
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.world.BlockView
+ *  net.minecraft.client.render.Camera
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Shadow
  *  org.spongepowered.asm.mixin.injection.At
@@ -20,9 +20,9 @@ import dev.luminous.mod.modules.impl.player.FreeLook;
 import dev.luminous.mod.modules.impl.player.Freecam;
 import dev.luminous.mod.modules.impl.render.CameraClip;
 import dev.luminous.mod.modules.impl.render.MotionCamera;
-import net.minecraft.class_1297;
-import net.minecraft.class_1922;
-import net.minecraft.class_4184;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.BlockView;
+import net.minecraft.client.render.Camera;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
